@@ -10,7 +10,22 @@ personalized guidance. Use only synthetic personal, medical and financial data.
 The hosted build enforces `WEWISE_RETRIEVAL_ONLY=1`: chat uses real source
 retrieval; it cannot call a model even if an ambient API key exists. Translation
 retains original text with a visible label. WorkBuddy credentials can be added in
-a later, explicitly configured deployment. JEV remains disconnected.
+a later, explicitly configured deployment. JEV remains disconnected. The current runtime uses pinned local multilingual E5
+embeddings fused with BM25 and a private Tencent MemoryCore mirror of approved
+preferences; no remote embedding/model service receives queries in this mode.
+
+## Verified complete-scope runtime
+
+Runtime `e318e7e6b823e160362e5f6631dee8fad233c3c8` is deployed as
+`dpl_52H4xDs9CYHBshWEcxJCQfPQtz5z`, with frontend `index-BU7hyZzQ.js` and
+backend 0.3.0. GitHub CI, 16 baseline public API groups and 12 expanded public API groups
+passed. The [expanded receipt](docs/qa/expanded-public-api.json) verifies actual
+semantic retrieval, Tencent approved-preference reuse/deletion, private source
+ownership, PDF/ZIP bytes and isolated insurer transitions. Later UI copy/brand
+refinements need separate asset readback; see [verification](VERIFICATION.md).
+
+Private memory and semantic asset installation/resume instructions are in
+[deploy/LOCAL_RETRIEVAL_SERVICES.md](deploy/LOCAL_RETRIEVAL_SERVICES.md).
 
 ## Hosting and limits
 

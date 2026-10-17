@@ -1,7 +1,63 @@
-# Verification receipt - 17 October 2026
+# WeWise verification receipts
+
+## Latest complete-scope repair receipt
+
+This receipt covers runtime commit
+`e318e7e6b823e160362e5f6631dee8fad233c3c8`. Later documentation or privacy-copy
+changes are a separate release until their build/deployment is checked. The older
+receipts below are preserved as historical evidence; they do not describe the
+current feature count or hosted memory configuration.
+
+| Check | Observed result | Evidence and limit |
+|---|---|---|
+| Combined local backend | **299 passed, 3 skipped** | Executable evaluation assigns cases exclusively: **161 task**, **138 attack** passes; optional integrations account for the three skips. These are named synthetic regression cases, not general accuracy or security guarantees. See [evaluation report](eval/report.md). |
+| Gateway | **12 passed** | Transport/origin/cookie/routing checks; not insurer integration. |
+| TypeScript / production build | **Passed** | Optional 3D/simulator chunks remain separately loaded. A build does not establish device permissions or production readiness. |
+| Local full-stack acceptance | **12/12 passed** | `scripts/verify-expanded-preview.py` exercised actual API/data/files/conversations/claim FSM and isolation using private synthetic workspaces. |
+| GitHub Ubuntu CI | **Passed** for `e318e7e6b823e160362e5f6631dee8fad233c3c8` | [CI run 39046828702](https://github.com/pennythewise/WeWise/actions/runs/39046828702). No live model-provider or insurer call is part of this result. |
+| Vercel frontend | **READY** | Deployment `dpl_52H4xDs9CYHBshWEcxJCQfPQtz5z`; public alias serves `index-BU7hyZzQ.js` for this runtime. This is the verified runtime, not a claim about a later copy-only release. |
+| Hosted backend | **0.3.0**, actual local E5 retrieval and Tencent projection verified | Hosted state reports the local semantic retrieval engine and verified Tencent sidecar. The private approval ledger remains authoritative; this does not establish upstream history/backup erasure. |
+| Public baseline acceptance | **16/16 passed** | Actual public source/page retrieval, private account/file boundaries and generated PDF/ZIP bytes, not button presence alone. |
+| Expanded public acceptance | **12/12 passed** | Final receipt at **2026-10-17 15:57:30.885902 UTC**, duration **297.656 s**: [expanded public API receipt](docs/qa/expanded-public-api.json). Actual E5 retrieval, verified Tencent preference reuse/delete, isolated FSM, original sources and generated PDF/ZIP were exercised. This is separate from the twelve local groups. |
+| Rendered journeys | **Desktop and 390px local/public tracker checked** | Connected preparation stages, separately labelled insurer simulation and old-record migration display were verified in a real browser. The [public 390px tracker](docs/qa/claim-tracker-mobile.jpg) had no horizontal overflow. This does not establish every device/browser combination. |
+
+### Actual streamed-agent measurement
+
+`scripts/measure-agent.py` ran twelve actual local HTTP/NDJSON turns against the
+retrieval-only service. The sequence includes ambiguous policy selection,
+clarification/resume and two policy corrections, plus coverage observations,
+buying needs, draft preparation, tracking, delay explanation, incident guidance,
+urgent contacts and an out-of-scope refusal. It validates plans against the actual
+34-adapter `/tools` registry and checks citations against the authenticated
+original document pages. The REST tool adapter is not an MCP transport.
+
+- **12/12 acceptance checks and requested goals**, **12/12 valid plans**,
+  **18 planned tool calls**, **12/12 exact original-page quote checks**.
+- Time to first streamed event: p50 **17.50 ms**, p95 **19.39 ms**.
+- Time to final result: p50 **86.69 ms**, p95 **5285.13 ms**.
+- External generation calls: **0**, under enforced retrieval-only mode.
+  Model token usage and model cost are **unmeasured/null**, not estimated as free.
+- Receipt: [local agent measurements](docs/qa/agent-measurements-local.json).
+  Disposable conversations, claim and policy originals were removed; the session
+  was signed out. Cookies, review tokens and full private response payloads are
+  excluded from the report.
+
+These are twelve selected local acceptance turns, with actual local embedding
+work, not a random sample, statistical SLA, generated first-token benchmark,
+production load result or insurer task-success rate. No live model accuracy,
+WorkBuddy entitlement, JEV cloud decision or insurer outcome was measured.
+
+The [requirement register](docs/REQUIREMENTS_STATUS.md) distinguishes executable
+hackathon behavior, synthetic insurer/agent behavior, deferred API-backed features,
+later product scope and unmeasured competition targets. Real insurer submission,
+bank SSO, phone transfer, sales/commission operation, certified translation and
+production privacy/compliance are not established. Physical microphone/camera
+permission behavior remains a separate device check.
+
+## Historical receipt - 17 October 2026
 
 Public deployment verification is recorded in [DEPLOYMENT.md](DEPLOYMENT.md).
-The earlier local receipt below remains the baseline.
+The earlier local receipt below remains a historical baseline.
 
 ## Feature acceptance audit - 17 October 2026
 

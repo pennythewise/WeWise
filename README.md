@@ -19,7 +19,7 @@ take precedence where they differ.
 - Saved/temporary PDF/image extraction, CPU OCR, private hybrid retrieval,
   source/report review, claim PDF/ZIP exports and approved memory are implemented.
 - The API-backed app includes a connected claim tracker, separate insurer simulator,
-  buying/renewal calculators, saved conversations and34 bounded tool adapters.
+  buying/renewal calculators, saved conversations and 34 bounded tool adapters.
   The inspector displays actual streamed execution and source evidence.
 - WorkBuddy Token Hub/Claude/Qwen-compatible adapters are ready. A real model
   key and exact model ID are still needed for live generation.
@@ -28,3 +28,16 @@ take precedence where they differ.
 
 Use synthetic personal data only. The project is WeBank-inspired; it is not an
 official bank product or proof of any insurer sales/integration relationship.
+
+## Teammate walkthrough
+
+1. Open `/me` and create a private synthetic demo workspace.
+2. Open the seeded policy, review its original schedule and confirm the key facts.
+3. In Claims, save a synthetic Japan outpatient incident. The tracker shows the
+   current preparation stage, responsible party, missing documents and next step.
+4. Open **Simulated insurer flow → Play the separate synthetic story** to test
+   receipt, review, additional documents, delay, decision and appeal without
+   uploading a complete claim. This never changes actual insurer status.
+5. Ask a policy question and open **Inspect execution** for actual steps and
+   original-page evidence. Explore cover, report review and the document vault
+   through the sidebar or Me on mobile.

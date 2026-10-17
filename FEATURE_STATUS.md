@@ -7,9 +7,9 @@ Mainland China policies only; Japan accidental outpatient treatment is the deepl
 
 | Working app feature | Honest boundary |
 |---|---|
-| Private accounts, PDF/image OCR, field correction, source-term and report review, vault, temporary uploads | Synthetic personal data only; unknown extraction confidence stays unknown. Temporary access ends at24h, purge occurs on access/startup/cleanup. Historical snapshots are separate. |
+| Private accounts, PDF/image OCR, field correction, source-term and report review, vault, temporary uploads | Synthetic personal data only; unknown extraction confidence stays unknown. Temporary access ends at 24h, purge occurs on access/startup/cleanup. Historical snapshots are separate. |
 | Local multilingual E5 + BM25 hybrid retrieval with quoted original pages | Local assets must be installed and health-checked. Exact source extracts are not claim approval or general semantic understanding. |
-| Saved conversations, correction/resume,34 bounded tool adapters, streamed inspector | Deterministic execution with schema/ownership/intent gates; no fabricated LLM reasoning. |
+| Saved conversations, correction/resume, 34 bounded tool adapters, streamed inspector | Deterministic execution with schema/ownership/intent gates; no fabricated LLM reasoning. |
 | Portfolio cards, coverage evidence, active claim tasks, expiry and premium history | Missing evidence does not establish uninsured status; limits are not asset values. |
 | Needs capture, approved-memory reuse, side-by-side advocate/judge criteria, out-of-pocket and surrender arithmetic, renewal comparison | Disclosed rules and reviewed inputs; no live quote, whole-market best, regulated sale or guaranteed renewal. |
 | Grab-inspired connected claim stages, actor/next action, notifications, delay and appeal guidance | Real preparation and independently simulated insurer progress remain separate. No insurer status integration. |

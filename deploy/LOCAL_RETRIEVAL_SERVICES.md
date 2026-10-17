@@ -47,6 +47,8 @@ backend. Installing assets alone does not change the existing running process.
 
 Preserve the data directory when checking out the exact reviewed app commit.
 Install `backend/requirements.lock.txt` in the existing virtual environment.
+The current Sandbox uses a uv-managed environment; from `/vercel/WeWise` run
+`uv pip install --python .venv/bin/python -r backend/requirements.lock.txt`.
 After stopping only that app's own uvicorn process, run its fixed
 `deploy/ensure_backend.py`. The helper resumes MemoryCore first, enables the
 pinned local embedding directory, and starts the backend with external models
