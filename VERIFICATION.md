@@ -30,6 +30,9 @@ CUA in-app browser was used against the actual frontend/API, not HTML screenshot
 alone. Desktop and 390/360px layouts were inspected. The flow under test was:
 login -> policy/source review -> cited answer -> incident/evidence review ->
 reviewed download -> isolated simulator, with buying/memory/guest-help branches.
+Page identity was WeWise/微晓 at the expected localhost URL; meaningful content
+rendered with no framework overlay. The final fresh-tab console error/warning
+list was empty. Browser viewport emulation was restored after the checks.
 
 Verified interactions include actual multipart evidence upload, correction and
 confirmation (missing count decreased), incomplete draft PDF/ZIP, cross-border
