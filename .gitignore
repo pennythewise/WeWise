@@ -4,3 +4,15 @@ dist
 .DS_Store
 .claude-flow/
 .shots/
+.venv/
+.env
+.env.*
+!.env.example
+backend/data/
+backend/vendor/
+backend/.data/
+data/
+__pycache__/
+.pytest_cache/
+test-results/
+*.log

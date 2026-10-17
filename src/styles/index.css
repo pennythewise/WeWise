@@ -36,3 +36,6 @@
 
 /* App column is a size container so cards respond to the column, not the viewport (PRD §2.4). */
 .app-col { container-type: inline-size; }
+
+/* The simulator notice occupies its own row, clear of menus and page controls. */
+.simulator-viewport > [data-layout] { height:100%; }

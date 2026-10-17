@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/gateway.mjs": { "maxDuration": 120 }
+  },
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/gateway?__wewise_path=:path*" },
+    { "source": "/((?!assets/).*)", "destination": "/index.html" }
+  ]
+}

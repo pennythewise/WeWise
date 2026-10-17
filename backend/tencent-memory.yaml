@@ -1,0 +1,27 @@
+# Private standalone TencentDB Agent Memory, pinned by scripts/setup-memory.ps1.
+# This is an approved-preferences projection; extraction, profiling and tool
+# capture are intentionally disabled. No LLM credential is required here.
+deployMode: standalone
+stateBackend: local
+server:
+  host: 127.0.0.1
+  port: 8420
+  corsOrigins: []
+llm:
+  baseUrl: http://127.0.0.1:9/v1
+  apiKey: ""
+  model: disabled
+memory:
+  capture:
+    enabled: false
+  extraction:
+    enabled: false
+  llm:
+    enabled: false
+  embedding:
+    enabled: false
+  bm25:
+    enabled: true
+    language: zh
+skill:
+  enabled: false
