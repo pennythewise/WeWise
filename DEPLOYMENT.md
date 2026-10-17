@@ -45,10 +45,27 @@ a later, explicitly configured deployment. JEV remains disconnected.
 - A real hosted stop/snapshot/resume preserved a test session, approved memory
   and the exact uploaded image bytes. The test document/memory were then deleted.
 
-Latest checks: **162 backend passed, 3 optional local Tencent checks skipped**;
-**12 gateway tests passed**; **11 public API smoke groups passed**; production
-build passed. Provider credentials/calls and device microphone/camera permission
-flows were not tested. Public screenshots are in `docs/qa/public-*`.
+Latest feature audit: **200 backend passed, 3 optional local Tencent checks
+skipped**; **12 gateway tests passed**; **16 public API smoke groups passed**;
+production build passed. The same backend/gateway/build checks passed on Ubuntu
+in [GitHub CI](https://github.com/pennythewise/WeWise/actions/runs/39034878560)
+for the exact runtime commit below. The duplicate push event was cancelled by
+concurrency; the PR-event test/build steps succeeded.
+
+The public smoke additionally verifies Chinese sales-pattern screening,
+unconfirmed-policy gap handling, conditional incident evidence, persisted export
+downloads and uploaded acknowledgement provenance with owner-scoped originals.
+It verifies real PDF/ZIP bytes, not merely download-button presence.
+Provider credentials/calls and device microphone/camera permission flows were
+not tested. Existing public screenshots are in `docs/qa/public-*`.
+
+Final rendered recheck passed on desktop and 360/390px mobile: actionable chat
+cards/citations, policy-family correction, conditional evidence, saved exports,
+source-linked assistance notice, acknowledgement provenance and mobile tools.
+Long generated emails wrap without horizontal overflow. The guided simulator
+keeps its mode through navigation/reload and has a visible bilingual disclosure
+with a working native return link. Unknown legacy destinations show no inferred
+phone number or universal notification deadline.
 
 ## Operator reference
 
@@ -56,10 +73,12 @@ Vercel project: `wewise-retrieval-preview`,
 `prj_GoRHgw5cWYIxfUyezkvtMSC0x0Nc` in team
 `team_cwo7Qhim3NHIsrsySpEQXfXn`.
 
-Verified deployment: `dpl_3GXqRZwQdv7DNrc2yZBFz19L9u6U`, source
-`d390a4fd4f5c1b3dc1b7837f0acde64dcb9cce97`, branch
+Verified deployment: `dpl_BQ2jLeZCWmLnYusbqSLZhJxhx8hB`, source
+`90b81cf2e26266b26473c66a2c0f93165e9c2c3b`, branch
 `codex/live-hackathon-assistant`, PR https://github.com/pennythewise/WeWise/pull/1 .
-Later documentation/test-script commits do not change the deployed runtime.
+Later documentation commits do not change the deployed runtime. The hosted
+backend is checked out at the same exact source commit; its existing private
+data directory was preserved during the verified service restart.
 
 Named backend: `wewise-preview` in `sin1`; code `/vercel/WeWise`, private data
 `/vercel/wewise-data`. `deploy/ensure_backend.py` starts only the fixed installed
