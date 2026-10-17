@@ -1,0 +1,115 @@
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { AppIcon } from '@/components/AppIcon';
+import { Badge, CardShell, Notice } from '@/components/ui';
+import { useTx } from '@/i18n/useTx';
+import { useClaimStore } from '../claims/claimStore';
+import { EvidenceScene } from './EvidenceScene';
+import { READY_AFTER_MS, STEPS } from './captureSteps';
+import { useCaptureStore } from './captureStore';
+
+/** C8 AR-assisted evidence capture (frontend mock): guided shots over a synthetic scene or the device camera. */
+export function CaptureEvidence() {
+  const { t } = useTranslation();
+  const { tx } = useTx();
+  const { shots, add, retake, attach, attached } = useCaptureStore();
+  const okIds = shots.filter((s) => s.ok).map((s) => s.stepId);
+  const stepIdx = Math.max(0, STEPS.findIndex((s) => !okIds.includes(s.id)));
+  const done = okIds.length === STEPS.length;
+  const step = STEPS[done ? STEPS.length - 1 : stepIdx];
+
+  const [ready, setReady] = useState(false);
+  const [flash, setFlash] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [cam, setCam] = useState<MediaStream | null>(null);
+  const video = useRef<HTMLVideoElement>(null);
+
+  // "AR assist": the guide settles after a moment; shooting before that gives a blurry, rejected shot.
+  useEffect(() => {
+    setReady(false); setMsg(null);
+    const id = setTimeout(() => setReady(true), READY_AFTER_MS);
+    return () => clearTimeout(id);
+  }, [step.id]);
+  useEffect(() => { if (video.current && cam) video.current.srcObject = cam; }, [cam]);
+  useEffect(() => () => cam?.getTracks().forEach((tr) => tr.stop()), [cam]);
+
+  const shutter = () => {
+    setFlash(true); setTimeout(() => setFlash(false), 140);
+    const time = '14:3' + (2 + okIds.length);
+    if (!ready) { add({ stepId: step.id, ok: false, time, reason: 'early' }); setMsg(t('capture.blurry')); return; }
+    add({ stepId: step.id, ok: true, time }); setMsg(null);
+  };
+  const useCamera = async () => {
+    try { setCam(await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })); } catch { setMsg(t('capture.noCamera')); }
+  };
+  const attachAll = () => { attach(); useClaimStore.getState().addEvidence(okIds.length); };
+
+  return (
+    <div className="space-y-4" data-screen="capture">
+      <Notice tone="info">{t('capture.demo')}</Notice>
+
+      <div className="flex items-center justify-between gap-2">
+        <Badge tone={ready ? 'ok' : 'warn'} icon={ready ? 'check' : 'clock'}>{ready ? tx(step.ready) : t('capture.holdSteady')}</Badge>
+        <span className="rounded-full bg-ink px-2.5 py-1 text-xs font-semibold text-white">{Math.min(okIds.length + 1, STEPS.length)} / {STEPS.length}</span>
+      </div>
+
+      <div className="relative aspect-[4/5] overflow-hidden rounded-card border border-cardline bg-ink" data-testid="ar-viewport">
+        {cam ? <video ref={video} autoPlay playsInline muted className="h-full w-full object-cover" /> : <EvidenceScene {...step.zoom} />}
+        {/* AR overlay */}
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          {['left-4 top-4 border-l-4 border-t-4', 'right-4 top-4 border-r-4 border-t-4', 'bottom-4 left-4 border-b-4 border-l-4', 'bottom-4 right-4 border-b-4 border-r-4'].map((c) => (
+            <span key={c} className={`absolute h-10 w-10 rounded-sm ${c} ${ready ? 'border-[#4ADE80]' : 'border-white'} transition-colors`} />
+          ))}
+          {!ready && <span className="absolute inset-x-6 top-0 h-0.5 animate-scan bg-[#8CA3EF] shadow-[0_0_12px_#8CA3EF]" />}
+          <span className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/80" />
+        </div>
+        {flash && <div className="absolute inset-0 bg-white" />}
+      </div>
+
+      <p className="rounded-input bg-ink px-3 py-2 text-[13px] leading-snug text-white" aria-live="polite"><strong>{done ? '' : `${tx(step.title)} · `}</strong>{done ? t('capture.allDone') : tx(step.guide)}</p>
+
+      {msg && <Notice tone="warn">{msg}</Notice>}
+
+      {!done ? (
+        <div className="flex gap-2">
+          <button type="button" onClick={shutter} className="btn-primary flex-1"><AppIcon name="scan" size={18} />{t('capture.shoot')}</button>
+          {!cam && <button type="button" onClick={useCamera} className="btn-secondary">{t('capture.useCamera')}</button>}
+        </div>
+      ) : null}
+
+      <CardShell title={t('capture.shots')} icon="file" right={<span className="text-[13px] font-semibold text-brand">{okIds.length} / {STEPS.length}</span>}>
+        <ul className="grid grid-cols-2 gap-2.5">
+          {STEPS.map((s) => {
+            const shot = shots.find((x) => x.stepId === s.id);
+            return (
+              <li key={s.id} className="overflow-hidden rounded-input border border-cardline bg-white" data-shot={s.id} data-ok={shot?.ok ? '1' : shot ? '0' : ''}>
+                <div className="relative h-20 overflow-hidden bg-wash">{shot ? <EvidenceScene {...s.zoom} className="!transition-none" /> : <span className="absolute inset-0 flex items-center justify-center text-muted"><AppIcon name="scan" size={22} /></span>}
+                  {shot && !shot.ok && <span className="absolute inset-0 bg-white/60 backdrop-blur-sm" />}</div>
+                <div className="space-y-1 px-2.5 py-2">
+                  <p className="text-xs font-semibold text-ink">{tx(s.title)}</p>
+                  {shot ? (
+                    <>
+                      <Badge tone={shot.ok ? 'ok' : 'danger'} icon={shot.ok ? 'check' : 'close'}>{shot.ok ? t('capture.sharp') : t('capture.blurryShort')}</Badge>
+                      <p className="text-[11px] text-muted">{shot.ok ? `${shot.time} · ${t('capture.meta')}` : t('capture.retake')}</p>
+                      {(shot.ok || true) && <button type="button" className="min-h-[32px] text-xs font-semibold text-primary" onClick={() => retake(s.id)}>{t('capture.retakeBtn')}</button>}
+                    </>
+                  ) : <p className="text-xs text-muted">{t('capture.pending')}</p>}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </CardShell>
+
+      {done && (
+        <CardShell title={t('capture.packTitle')} icon="shield" tone={attached ? undefined : undefined}>
+          <ul className="space-y-1 text-[13px] text-body">{['hash', 'time', 'place', 'plate'].map((k) => <li key={k} className="flex gap-2"><AppIcon name="check" size={14} className="mt-1 shrink-0 text-ok" />{t(`capture.pack.${k}`)}</li>)}</ul>
+          {attached ? (
+            <div className="mt-3 space-y-2"><Badge tone="ok">{t('capture.attached')}</Badge><Link to="/claims/clm_mei_001" className="btn-secondary w-full">{t('capture.openClaim')}</Link></div>
+          ) : <button type="button" className="btn-primary mt-3 w-full" onClick={attachAll}>{t('capture.attach')}</button>}
+        </CardShell>
+      )}
+    </div>
+  );
+}
