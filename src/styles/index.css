@@ -1,0 +1,38 @@
+@import './tokens.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--wb-wash);
+    color: var(--wb-text);
+    font-family: var(--wb-font);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible { outline: 3px solid var(--wb-focus); outline-offset: 4px; border-radius: 4px; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex min-h-control items-center justify-center gap-2 rounded-control bg-primary px-5 py-[11px] text-[15px] font-semibold text-white disabled:opacity-50;
+  }
+  .btn-secondary {
+    @apply inline-flex min-h-control items-center justify-center gap-2 rounded-control border border-secline bg-white px-5 py-[11px] text-[15px] font-medium text-primary disabled:opacity-50;
+  }
+  .btn-compact { @apply min-h-[38px] px-[14px] py-[7px] text-[13px]; }
+  .icon-btn {
+    @apply inline-flex h-touch w-touch items-center justify-center rounded-control text-ink hover:bg-wash;
+  }
+  .card { @apply rounded-card border border-cardline bg-white p-[18px]; }
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-full border border-secline bg-bluewash px-2.5 py-[3px] text-xs font-medium text-brand;
+  }
+}
+
+/* App column is a size container so cards respond to the column, not the viewport (PRD §2.4). */
+.app-col { container-type: inline-size; }

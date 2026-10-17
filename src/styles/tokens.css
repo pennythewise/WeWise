@@ -1,0 +1,60 @@
+/*
+ * WeWise design tokens.
+ * Source of truth: webank-insurance-ui/assets/tokens.css (v1.0.0). Values copied verbatim.
+ * Tokens marked [guess] are NOT in the brand folder and were chosen for this app.
+ */
+:root {
+  /* ── Brand folder values ── */
+  --wb-primary: #3A5ECF;
+  --wb-brand: #1A4F99;
+  --wb-logo-red: #D80C18; /* logo only */
+  --wb-text: #333333;
+  --wb-muted: #616161;
+  --wb-white: #FFFFFF;
+  --wb-wash: #F5F7FA;
+  --wb-surface: #FAFBFC;
+  --wb-border: #DADFE6;
+  --wb-ink: #1D2943;
+  --wb-bluewash: #EAF0FC;
+  --wb-success: #167C59;
+  --wb-warning: #9B5A10;
+  --wb-focus: #8CA3EF;
+  --wb-card-border: #E0E7F1;
+  --wb-secondary-border: #A8B7E4;
+  --wb-document-text: #61718C;
+  --wb-font: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  --wb-radius-card: 12px;
+  --wb-radius-summary: 11px;
+  --wb-radius-control: 9px;
+  --wb-radius-input: 8px;
+  --wb-radius-shell: 18px;
+  --wb-control-height: 46px;
+  --wb-input-height: 44px;
+  --wb-touch-target: 44px;
+  --wb-content-padding: 20px;
+  --wb-icon-size: 22px;
+  --wb-nav-icon-size: 24px;
+  --wb-space-1: 4px;
+  --wb-space-2: 8px;
+  --wb-space-3: 12px;
+  --wb-space-4: 16px;
+  --wb-space-5: 20px;
+  --wb-space-6: 24px;
+
+  /* ── [guess] not in the brand folder ── */
+  --wb-danger: #B42318;            /* [guess] brand folder has no red-for-error; logo red is logo-only */
+  --wb-danger-bg: #FDECEA;         /* [guess] */
+  --wb-success-bg: #F0F7F3;        /* from folder's success notice recipe, promoted to a token */
+  --wb-warning-bg: #FBF3E8;        /* [guess] pale wash for --wb-warning */
+  --wb-shadow-card: 0 1px 2px rgba(29, 41, 67, .06), 0 8px 24px rgba(29, 41, 67, .08); /* [guess] "restrained shadow" */
+  --app-max-width: 430px;          /* PRD §2 */
+  --inspector-width: 380px;        /* [guess] */
+  --nav-width: 220px;              /* [guess] */
+  --rail-width: 64px;              /* [guess] */
+  --header-height: 56px;           /* folder: 56px desktop / 53px mobile header */
+  --tabbar-height: 64px;           /* folder: bottom nav 64px base */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
