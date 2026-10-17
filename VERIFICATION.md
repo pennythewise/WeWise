@@ -1,10 +1,30 @@
 # Verification receipt - 17 October 2026
 
 Public deployment verification is recorded in [DEPLOYMENT.md](DEPLOYMENT.md).
-The earlier local receipt below remains the baseline. Latest deployment changes:
-162 backend tests passed, 3 optional local Tencent checks skipped, 12 Node gateway
-tests passed. Eleven public API groups and desktop/mobile browser flows passed;
-public raster OCR and a real stop/resume persistence check also passed.
+The earlier local receipt below remains the baseline.
+
+## Feature acceptance audit - 17 October 2026
+
+- Final combined backend: **200 passed, 3 skipped**, exit 0 in 103.92 seconds.
+  The skipped checks need the optional local Tencent sidecar, which was unavailable
+  during this audit. The only warning is the upstream Starlette TestClient
+  deprecation. No live model call was made.
+- Functional category: 108 passed, 3 optional skips. Adversarial category:
+  108 passed, 1 optional skip. Categories overlap; do not sum them as unique cases.
+- Gateway: **12 passed**. TypeScript and production frontend build passed.
+  Optional simulator/3D chunks remain lazy-loaded and trigger the size advisory.
+- New reproductions cover current/confirmed portfolio evidence, relevant verbatim
+  retrieval, Chinese sales patterns, fresh policy imports, exact owned wording
+  bytes and honest deletion/snapshot disclosures.
+- UI acceptance fixes expose portfolio observations, family correction, chat
+  guidance cards, conditional evidence, insurer source links, persisted exports,
+  acknowledgement provenance, comparison limitations and mobile extra tools.
+  Optional 3D has a local error boundary; unsupported WebGL hardware is not tested.
+- Earlier public URL checks passed eleven API groups, desktop/mobile journeys,
+  real raster OCR and stop/resume persistence. New deployment receipts are tracked
+  separately in DEPLOYMENT.md; a local build does not prove a hosted release.
+
+## Earlier local baseline
 
 Environment: local Windows, Python 3.12 virtual environment, Node 24.19, React/Vite,
 FastAPI at `http://127.0.0.1:8017`, browser development app at

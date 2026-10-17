@@ -100,11 +100,12 @@ def _doc_valid(document):
     return path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == document["sha256"]
 
 
-def _policy_supported(policy):
-    fields = json.loads(policy["fields_json"])
+def _policy_supported(db, policy):
     title = str(policy["title"]).lower()
-    version_match = fields.get("product_id", fields.get("catalog_product_id")) == "allianz_changyou_2023" or fields.get("source_url") == WORDING_URL
-    return version_match and ("畅游" in title or "changyou" in title) and ("安联" in policy["insurer"] or "allianz" in policy["insurer"].lower())
+    identity_match = ("畅游" in title or "changyou" in title) and ("安联" in policy["insurer"] or "allianz" in policy["insurer"].lower())
+    # Support comes from the customer's owned, byte-verified reviewed contract,
+    # not an internal seed identifier or an editable name/URL assertion.
+    return identity_match and any(document["is_wording"] and document["exists"] for document in _policy_files(db, policy))
 
 
 def _policy_files(db, policy):
@@ -162,7 +163,7 @@ def _checklist(db, claim, policy, evidence):
     return entries
 
 
-def _prescreen(claim, policy):
+def _prescreen(db, claim, policy):
     incident = json.loads(claim["incident_json"])
     checks = []
     if not policy:
@@ -179,7 +180,7 @@ def _prescreen(claim, policy):
     japan = str(incident.get("country", "")).lower() in ("japan", "jp", "日本")
     territory_known = japan and any(term in destination for term in ("japan", "日本", "worldwide", "全球", "asia", "亚洲"))
     checks.append({"id": "territory", "status": "pass" if territory_known else "unresolved", "detail": "Japan matches the confirmed schedule destination; contract exclusions remain to be checked." if territory_known else "The schedule territory does not establish this destination. Confirm with insurer."})
-    supported = _policy_supported(policy) and claim["benefit"] == "outpatient_accident" and incident.get("treatment_type") == "outpatient"
+    supported = _policy_supported(db, policy) and claim["benefit"] == "outpatient_accident" and incident.get("treatment_type") == "outpatient"
     checks.append({"id": "reviewed_rule", "status": "pass" if supported else "unresolved", "detail": "Reviewed Allianz 2023 accident-outpatient preparation path." if supported else "This policy/benefit is outside the deeply reviewed hackathon path. Export a draft and ask the insurer for its checklist."})
     checks.append({"id": "contract_conditions", "status": "unresolved", "detail": "Selected benefits, reasonable/necessary expenses, hospital definition, exclusions and insurer assessment still apply."})
     result = "possible_exclusion" if any(c["status"] == "possible_exclusion" for c in checks) else "potentially_relevant" if current and supported and territory_known else "insufficient_information"
@@ -200,7 +201,7 @@ def _view(db, claim, policy):
     return {"id": claim["id"], "policy_id": claim["policy_id"], "policy_revision": claim["policy_revision"], "current_policy_revision": policy["revision"] if policy else None,
             "policy_title": policy["title"] if policy else "Removed policy", "revision": claim["revision"], "benefit": claim["benefit"], "incident": json.loads(claim["incident_json"]),
             "confirmed_revision": claim["confirmed_revision"] if current else None, "actual_status": actual, "status": actual, "checklist": checklist, "evidence": evidence,
-            "missing": [x["category"] for x in checklist if x["missing"]], "prescreen": _prescreen(claim, policy), "updates": updates, "simulation": {"label": "SIMULATED - no insurer connection", "events": simulations},
+            "missing": [x["category"] for x in checklist if x["missing"]], "prescreen": _prescreen(db, claim, policy), "updates": updates, "simulation": {"label": "SIMULATED - no insurer connection", "events": simulations},
             "exports": exports, "created_at": claim["created_at"], "updated_at": claim["updated_at"], "official_channel_url": CLAIM_CHANNEL_URL, "disclosure": DISCLOSURE}
 
 
@@ -491,7 +492,7 @@ def preview_claim(claim_id: str, payload: PreviewRequest, user=Depends(current_u
                 raise HTTPException(409, "Confirm the current policy and all case facts before a prepared package. A labelled draft can still be exported.")
             if snapshot["missing"]:
                 raise HTTPException(409, {"message": "Required evidence is missing or not user-confirmed.", "missing": snapshot["missing"]})
-            if not _policy_supported(policy) or claim["benefit"] != "outpatient_accident":
+            if not _policy_supported(db, policy) or claim["benefit"] != "outpatient_accident":
                 raise HTTPException(409, "This contract/benefit needs a reviewed insurer-specific checklist. Export a labelled draft.")
         # Claim facts already live in the owned case; approval storage needs only
         # action controls plus a hash, not another persistent copy of health data.
@@ -667,11 +668,19 @@ def compare_products(payload: CompareRequest, user=Depends(current_user)):
 
 @router.post("/buying/mis-selling-check")
 def check_selling(payload: SellingCheck):
-    rules = [("guaranteed_payout", r"guaranteed?\s+(?:claim|payout|return)|一定赔|保证赔|保证收益|包赔", "An unsupported guarantee needs contract evidence and licensed review."),
-             ("non_disclosure", r"(?:do not|don't|no need to)\s+(?:disclose|mention|declare)|不用告知|隐瞒|无需告知", "Do not omit requested facts or encourage non-disclosure."),
-             ("pressure", r"(?:buy|sign)\s+(?:now|immediately)|马上签|立即购买|最后机会", "Pressure language can prevent informed comparison; request time and written terms."),
-             ("universal_best", r"best for everyone|适合所有人|最便宜.*最好", "Suitability depends on the person's needs; cheapest is not automatically best.")]
-    flags = [{"id": key, "message": message} for key, pattern, message in rules if re.search(pattern, payload.text, re.I)]
+    # Bounded surface patterns only. Mask a few explicit negations so ordinary
+    # warnings such as "不能保证赔付" and "无需立即购买" do not become sales flags.
+    screened = re.sub(r"(?:不能|无法|不会|不应|不作|不做|不)(?:提供|作出)?(?:任何)?(?:保证|承诺|确保)[^。！？!?\n，,；;]{0,24}(?:赔付|理赔|获赔|赔偿|收益|赔)", "", payload.text)
+    screened = re.sub(r"\b(?:no|not|never|cannot|can't|do not|don't)\s+(?:a\s+)?guarantee(?:d|s)?[^.!?\n,;]{0,40}(?:claim|payout|payment|return|coverage)\b", "", screened, flags=re.I)
+    screened = re.sub(r"(?:不要|不得|不可|不能|勿)\s*隐瞒", "", screened)
+    screened = re.sub(r"\b(?:do not|don't|never)\s+(?:hide|conceal)\s+(?:your\s+)?(?:condition|illness|medical history)\b", "", screened, flags=re.I)
+    screened = re.sub(r"(?:不用|不必|不需要|不要|无需|不应|不能|不得)\s*(?:今天|今日|现在|马上|立即|立刻)?\s*(?:购买|投保|签约|下单)", "", screened)
+    screened = re.sub(r"\b(?:no need to|do not|don't|not required to)\s+(?:buy|sign|purchase)\s+(?:now|today|immediately)\b", "", screened, flags=re.I)
+    rules = [("guaranteed_payout", r"\bguarantee(?:d|s)?(?:\s+(?:a|your|the|full|100%|successful|all)){0,4}\s+(?:claim|payout|payment|return|coverage)\b|\b100\s*%\s+guaranteed\b|(?:保证|承诺|确保)[^。！？!?\n，,；;]{0,16}(?:赔付|理赔|获赔|赔偿|收益)|(?:一定|肯定|必定|必然|绝对)(?:会|能|可以)?(?:赔|获赔|理赔)|保证赔|包赔|(?:百分之百|100\s*[%％])[^。！？!?\n，,；;]{0,6}(?:赔付|获赔|理赔)", "An unsupported guarantee needs contract evidence and licensed review."),
+             ("non_disclosure", r"(?:do not|don't|no need to|need not|don't need to|do not need to)\s+(?:fully\s+|truthfully\s+)?(?:disclose|mention|declare)|(?:hide|conceal)\s+(?:your\s+)?(?:condition|illness|medical history)|(?:不用|无需|不必|不要|可以不|不需要)\s*(?:如实|主动|全部|完全)?\s*(?:告知|申报|披露)|隐瞒", "Do not omit requested facts or encourage non-disclosure."),
+             ("pressure", r"\b(?:buy|sign|purchase)\s+(?:now|today|immediately)\b|\b(?:must|have to)\s+(?:buy|sign|purchase)\b|\bact\s+now\b|(?:今天|今日|现在|马上|立即|立刻)\s*(?:就|必须|务必|一定要|得)?\s*(?:购买|投保|签约|下单)|(?:必须|务必|一定要)\s*(?:今天|今日|现在|马上|立即|立刻)?\s*(?:购买|投保|签约|下单)|马上签|最后机会", "Pressure language can prevent informed comparison; request time and written terms."),
+             ("universal_best", r"best for everyone|适合所有人|最便宜[^。！？!?\n]{0,30}最好", "Suitability depends on the person's needs; cheapest is not automatically best.")]
+    flags = [{"id": key, "message": message} for key, pattern, message in rules if re.search(pattern, screened, re.I)]
     return {"flags": flags, "result": "review_needed" if flags else "no_pattern_detected", "notice": "Pattern screening only; absence of a flag does not prove compliance or suitability. No text is saved."}
 
 

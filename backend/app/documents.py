@@ -1,7 +1,7 @@
 """Real local document ingestion with per-page provenance and owner checks."""
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 import hashlib
 import io
 import json
@@ -181,7 +181,7 @@ def document_dict(row, include_pages=False):
     result = {k: row[k] for k in ("id", "kind", "claim_id", "name", "media_type", "size", "sha256", "ocr_status", "created_at")}
     pages = json.loads(row["pages_json"])
     result.update({"page_count": len(pages), "file_url": f"/api/documents/{row['id']}/file", "saved": True,
-                   "retention": "Explicitly saved until you delete it; local demo has no external backups."})
+                   "retention": "Explicitly saved in the current app store until you delete it. Deletion does not erase separately retained deployment snapshots or copies already downloaded."})
     if include_pages:
         result["pages"] = pages
         result["extracted_fields"] = field_candidates(pages, row["id"])
@@ -359,7 +359,7 @@ def delete_document(document_id: str, user=Depends(current_user)):
         if path.parent == UPLOAD_DIR.resolve():
             path.unlink(missing_ok=True)
         audit(db, user["id"], "document_deleted", "document", document_id, {"retrieval_removed": True, "local_original_removed": True})
-    return {"ok": True, "deleted_id": document_id, "retrieval_removed": True, "backup_notice": "Local hackathon store has no configured external backups."}
+    return {"ok": True, "deleted_id": document_id, "retrieval_removed": True, "backup_notice": "Removed from the current app store and retrieval. Separately retained deployment snapshots and copies already downloaded are not erased by this action."}
 
 
 @router.delete("/policies/{policy_id}")
@@ -458,20 +458,32 @@ def update_policy(policy_id: str, payload: PolicyUpdate, user=Depends(current_us
 def portfolio(user=Depends(current_user)):
     with get_db() as db:
         policies = [policy_dict(db, row) for row in db.execute("SELECT * FROM policies WHERE user_id=? ORDER BY end_date", (user["id"],))]
+    today = datetime.now(timezone(timedelta(hours=8))).date()
     coverage = {}
+    evidenced = {}
     renewals = []
     for p in policies:
         coverage.setdefault(p["family"], []).append({"policy_id": p["id"], "title": p["title"], "confirmed": p["confirmed"]})
+        # An imported card is not evidence of current cover until its critical
+        # facts have been reviewed and its recorded period includes today.
+        if p["confirmed"]:
+            try:
+                current = date.fromisoformat(p["start_date"]) <= today <= date.fromisoformat(p["end_date"])
+            except ValueError:
+                current = False
+            if current:
+                evidenced.setdefault(p["family"], []).append(p["id"])
         if p["end_date"]:
             try:
-                days = (date.fromisoformat(p["end_date"]) - date.today()).days
+                days = (date.fromisoformat(p["end_date"]) - today).days
                 if days <= 30:
                     renewals.append({"policy_id": p["id"], "title": p["title"], "days_remaining": days, "status": "expired" if days < 0 else "review_due", "notice": "A reminder does not renew or extend cover."})
             except ValueError:
                 pass
     return {"policies": policies, "coverage_by_family": coverage, "renewals": renewals,
-            "analysis": {"status": "needs_review", "gaps": [{"family": f, "status": "not_evidenced", "explanation": "No confirmed document in this portfolio demonstrates this cover; this is not proof you are uninsured."} for f in ["medical", "critical_illness", "accident", "travel", "motor", "home"] if f not in coverage],
-                         "overlaps": [{"family": f, "policy_ids": [p["policy_id"] for p in ps], "status": "possible_overlap_needs_clause_review"} for f, ps in coverage.items() if len(ps) > 1],
+            "date_basis": today.isoformat(), "timezone": "Asia/Shanghai",
+            "analysis": {"status": "needs_review", "gaps": [{"family": f, "status": "not_evidenced", "explanation": "No confirmed document with a currently recorded policy period in this portfolio demonstrates this cover; this is not proof you are uninsured."} for f in ["medical", "critical_illness", "accident", "travel", "motor", "home"] if f not in evidenced],
+                         "overlaps": [{"family": f, "policy_ids": ids, "status": "possible_overlap_needs_clause_review"} for f, ids in evidenced.items() if len(ids) > 1],
                          "notice": "Insurance limits are not asset values and are never summed as wealth or guaranteed combined reimbursement."}}
 
 

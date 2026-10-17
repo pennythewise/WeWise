@@ -102,6 +102,22 @@ def terms_for(query: str) -> list[str]:
     return list(dict.fromkeys(t for t in terms if t not in {"the", "this", "that", "what", "with", "does", "your", "have", "please", "policy", "保险", "保单"}))[:70]
 
 
+def retrieval_intents(query: str) -> tuple[bool, bool, bool]:
+    lower = query.lower()
+    medical = any(term in lower for term in ("outpatient", "medical", "injur", "fell", "fall", "slip", "门诊", "医疗", "摔", "受伤"))
+    documents = any(term in lower for term in ("document", "evidence", "checklist", "材料", "证明", "清单"))
+    exclusions = any(term in lower for term in ("exclude", "exclusion", "免责", "不赔", "除外"))
+    return medical, documents, exclusions
+
+
+def is_medical_document_section(text: str) -> bool:
+    # Match a source-described application list, never a page/product constant.
+    # A mere reference to a medical record in an exclusion is not a checklist.
+    return (any(term in text for term in ("境外医疗", "门诊", "medical", "outpatient"))
+            and any(term in text for term in ("下列证明和资料", "申请人须", "required documents", "documents required"))
+            and any(term in text for term in ("病历", "医疗费用原始凭证", "medical record", "expense receipt")))
+
+
 def retrieve(db, user_id: str, policy_id: str, query: str, limit: int = 5) -> tuple[list[dict], str]:
     documents = [r[0] for r in db.execute("SELECT pd.document_id FROM policy_documents pd JOIN policies p ON p.id=pd.policy_id WHERE p.id=? AND p.user_id=?", (policy_id, user_id))]
     if not documents:
@@ -119,6 +135,7 @@ def retrieve(db, user_id: str, policy_id: str, query: str, limit: int = 5) -> tu
     except sqlite3.OperationalError:
         pass
     frequencies = {term: sum(term in row["text"].lower() for row in rows) for term in terms}
+    medical_query, document_query, exclusion_query = retrieval_intents(query)
     scored = []
     for row in rows:
         lower = row["text"].lower()
@@ -133,18 +150,22 @@ def retrieve(db, user_id: str, policy_id: str, query: str, limit: int = 5) -> tu
                 matched.append(term)
         if row["id"] in fts_ranks:
             score += 1.0 / (1 + fts_ranks[row["id"]])
-        medical_query = any(x in query.lower() for x in ["outpatient", "medical", "门诊", "医疗", "摔"])
-        document_query = any(x in query.lower() for x in ["document", "evidence", "材料", "证明", "清单"])
         if medical_query:
             if any(x in lower for x in ["病历", "医疗费用原始", "费用凭证", "境外医疗"]):
                 score *= 1.4
             if any(x in lower[:200] for x in ["死亡证明", "继承权", "户籍注销"]):
                 score *= .15
-            if document_query and any(x in lower for x in ["申请人须", "下列证明和资料"]) and "境外医疗" in lower[:220]:
+            if document_query and is_medical_document_section(lower):
                 score *= 6
         if score > 0 and matched:
             scored.append((score, row))
     scored.sort(key=lambda item: (-item[0], item[1]["page"], item[1]["id"]))
+    if medical_query and document_query and not exclusion_query:
+        relevant_lists = [item for item in scored if is_medical_document_section(item[1]["text"].lower())]
+        if relevant_lists:
+            # Do not pad a specific evidence answer with unrelated vehicle,
+            # death-definition or benefit paragraphs merely to fill a top-k.
+            scored = relevant_lists
     result = []
     total = 0
     for _, row in scored[:limit]:
@@ -296,7 +317,24 @@ async def assistance_summary(payload: AssistanceSummaryRequest, user=Depends(cur
         return assistance_template(payload, "Draft translation was unavailable or failed validation. Original facts are retained; this is not a translation.")
 
 
-def extractive_answer(citations: list[dict], locale: str) -> str:
+def verbatim_window(quote: str, query: str, size: int = 400) -> tuple[str, bool]:
+    """A compact contiguous source span; the full citation stays unchanged."""
+    if len(quote) <= size:
+        return quote, False
+    medical, documents, _ = retrieval_intents(query)
+    if medical and documents and is_medical_document_section(quote.lower()):
+        start = quote.find("在申请")
+        if start < 0:
+            start = 0
+    else:
+        matches = [quote.lower().find(term) for term in terms_for(query) if term in quote.lower()]
+        anchor = min(matches) if matches else 0
+        start = max(0, quote.rfind("\n", 0, anchor) + 1)
+    start = min(start, max(0, len(quote) - size))
+    return quote[start:start + size], True
+
+
+def extractive_answer(citations: list[dict], locale: str, query: str = "") -> str:
     if locale == "zh":
         intro = "已检索到以下原文。当前为检索摘录模式，未由语言模型生成个人保障结论："
         footer = "请核对完整条款、附加批单及事实。若仍不明确，请通过保险公司官方渠道确认。"
@@ -308,8 +346,10 @@ def extractive_answer(citations: list[dict], locale: str) -> str:
         footer = "Check the full wording, endorsements and facts; use the insurer's official channel if anything remains unclear."
     snippets = []
     for c in citations[:3]:
-        # Quote is a verbatim prefix and exact page is retained in the source viewer.
-        snippets.append(f"[{c['id']}] p.{c['page']}: {c['quote'][:900]}")
+        # No source text is rewritten. Ellipsis explicitly marks a partial
+        # excerpt; full source/conditional language remains in the citation.
+        excerpt, partial = verbatim_window(c["quote"], query)
+        snippets.append(f"[{c['id']}] p.{c['page']}: {excerpt}" + ("\n…" if partial else ""))
     return intro + "\n\n" + "\n\n".join(snippets) + "\n\n" + footer
 
 
@@ -379,7 +419,7 @@ async def chat(payload: ChatRequest, user=Depends(current_user)):
     if not citations:
         trace.append({"stage": "verify", "status": "abstained", "detail": "No relevant owned passage found; no clause invented."})
         return {**base, "answer": "现有文件中没有找到足够相关的条款，无法判断。请补充完整条款/批单或联系保险公司确认。" if locale == "zh" else "I could not find sufficient relevant evidence in these documents. Upload the full wording/endorsements or ask the insurer to clarify.", "engine": "retrieval_only", "uncertainty": "insufficient_evidence"}
-    answer = extractive_answer(citations, locale)
+    answer = extractive_answer(citations, locale, message)
     engine, used = "retrieval_only", citations[:3]
     config = ai_config()
     if config["configured"]:

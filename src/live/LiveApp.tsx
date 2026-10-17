@@ -10,7 +10,7 @@ export type Locale = 'zh' | 'en';
 export interface User { id: string; email: string; display_name: string }
 interface AppContext {
   locale: Locale; t: (zh: string, en: string) => string; user: User | null; ready: boolean;
-  health: any; refreshUser: () => Promise<void>; trace: any[]; setTrace: (trace: any[]) => void;
+  health: any; refreshUser: () => Promise<void>; trace: any[]; setTrace: (trace: any[]) => void; openInspector: () => void;
 }
 const Context = createContext<AppContext>(null!);
 export const useLive = () => useContext(Context);
@@ -54,7 +54,7 @@ function Frame() {
     { to: '/me', icon: 'user', zh: '我的', en: 'Me' },
   ];
   const active = (to: string) => to === '/' ? location.pathname === '/' || location.pathname.startsWith('/polic') || location.pathname === '/upload' : location.pathname.startsWith(to);
-  return <Context.Provider value={{ locale, t, user, ready, health, refreshUser, trace, setTrace }}>
+  return <Context.Provider value={{ locale, t, user, ready, health, refreshUser, trace, setTrace, openInspector: () => setInspector(true) }}>
     <div className="live-shell">
       <aside className="live-sidebar">
         <Link to="/" aria-label="WeWise home"><img src={logo} alt="WeBank 微众银行" className="live-logo" /></Link>

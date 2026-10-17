@@ -85,6 +85,13 @@ def main():
         expect(b.get(f"/api/documents/{policy['document_id']}/file"), 404)
         checks["cross_account_policy_and_file_denial"] = "pass"
 
+        portfolio = expect(a.get("/api/portfolio")).json()
+        assert "travel" in {item["family"] for item in portfolio["analysis"]["gaps"]}, "An unreviewed card cannot establish current cover."
+        checks["unconfirmed_policy_does_not_hide_portfolio_gap"] = "pass"
+        selling = expect(a.post("/api/buying/mis-selling-check", json={"text": "保证100%赔付，不用如实告知，今天必须购买"})).json()
+        assert {item["id"] for item in selling["flags"]} >= {"guaranteed_payout", "non_disclosure", "pressure"}
+        checks["chinese_guarantee_disclosure_and_pressure_screen"] = "pass"
+
         gate = expect(a.post("/api/chat", json={"message": "What outpatient claim documents are needed?", "policy_id": pid, "locale": "en"})).json()
         assert gate["clarification"]["type"] == "confirm_policy"
         expect(a.patch(f"/api/policies/{pid}", json={"fields": {}, "confirmed": True}))
@@ -97,12 +104,16 @@ def main():
         checks["fact_gate_and_source_page_citations"] = "pass"
 
         case_id = None
+        acknowledgement_id = None
         try:
             case = expect(a.post("/api/claims", json={"policy_id": pid, "incident": {
                 "date": "2026-10-17", "country": "Japan", "city": "Tokyo",
                 "description": "SYNTHETIC deployment smoke: fictional walking slip and outpatient visit. No real patient.",
-                "treatment_type": "outpatient"}})).json()
+                "treatment_type": "outpatient", "third_party_involved": True}})).json()
             case_id = case["id"]
+            assert next(item for item in case["checklist"] if item["category"] == "incident_evidence")["conditional"] is True
+            assert case["official_channel_url"].startswith("https://") and case["prescreen"]["notice"]
+            checks["conditional_incident_evidence_and_official_channel"] = "pass"
             expect(b.get(f"/api/claims/{case_id}"), 404)
             form = expect(a.post(f"/api/claims/{case_id}/generate-form", json={})).json()
             assert form["document_id"]
@@ -118,11 +129,27 @@ def main():
             expect(b.get(export["pdf_url"]), 404)
             expect(a.post(f"/api/claims/{case_id}/export", json={"token": preview["token"], "confirmed": True}), 409)
             checks["real_synthetic_form_pdf_zip_single_use_token"] = "pass"
+            fresh_case = expect(a.get(f"/api/claims/{case_id}")).json()
+            saved = next(item for item in fresh_case["exports"] if item["id"] == export["export_id"])
+            assert expect(a.get(saved["pdf_url"])).content == pdf
+            checks["saved_export_retrievable_after_case_reload"] = "pass"
+            acknowledgement_bytes = b"SYNTHETIC acknowledgement fixture. No insurer issued this document."
+            acknowledgement = expect(a.post("/api/documents", data={"kind": "evidence", "claim_id": case_id}, files={"file": ("SYNTHETIC-acknowledgement.txt", acknowledgement_bytes, "text/plain")})).json()
+            acknowledgement_id = acknowledgement.get("document", acknowledgement)["id"]
+            update = expect(a.post(f"/api/claims/{case_id}/updates", json={"provenance": "acknowledgement_uploaded", "document_id": acknowledgement_id, "note": "SYNTHETIC tester-uploaded acknowledgement; no insurer verification."})).json()
+            assert update["actual_status"] == "DRAFT"
+            recorded = next(item for item in update["updates"] if item["document_id"] == acknowledgement_id)
+            assert recorded["provenance"] == "acknowledgement_uploaded" and "not insurer verified" in recorded["label"]
+            assert expect(a.get(f"/api/documents/{acknowledgement_id}/file")).content == acknowledgement_bytes
+            expect(b.get(f"/api/documents/{acknowledgement_id}/file"), 404)
+            checks["uploaded_acknowledgement_provenance_and_owned_original"] = "pass"
             simulation = expect(a.post(f"/api/claims/{case_id}/simulation", json={"stage": "RECEIVED"})).json()
             assert simulation["actual_status"] == "DRAFT"
             assert simulation["simulation"]["events"][0]["is_simulated"] is True
             checks["insurer_simulation_separate_from_actual_status"] = "pass"
         finally:
+            if acknowledgement_id:
+                expect(a.delete(f"/api/documents/{acknowledgement_id}"))
             if case_id:
                 expect(a.delete(f"/api/claims/{case_id}?confirmed=true"))
             expect(a.post("/api/auth/logout", json={}))

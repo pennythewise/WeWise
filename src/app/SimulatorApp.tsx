@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import type { ReactNode } from 'react';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AppShell } from './AppShell';
 import { PortfolioHome } from '@/features/home/PortfolioHome';
 import { PolicyList } from '@/features/policies/PolicyList';
@@ -10,11 +11,23 @@ import { MemoryPage } from '@/features/settings/MemoryPage';
 import { CaptureEvidence } from '@/features/capture/CaptureEvidence';
 import { About } from '@/features/settings/About';
 
+/** Keep preset routes explicit after Link/useNavigate and on a later reload. */
+function SimulatorModeGuard({children}:{children:ReactNode}) {
+  const location=useLocation();
+  const params=new URLSearchParams(location.search);
+  if(params.get('mode')!=='simulator') {
+    params.set('mode','simulator');
+    return <Navigate replace state={location.state} to={{pathname:location.pathname,search:`?${params.toString()}`,hash:location.hash}}/>;
+  }
+  return <>{children}</>;
+}
+
 // AppShell is the layout route; pages render inside PhoneFrame via <Outlet/>.
 export default function App() {
   return (
     <><div className="fixed inset-x-0 top-0 z-[100] bg-warning px-4 py-2 text-center text-xs text-white">引导模拟器 · 此模式全部办理结果与对话均为预设演示 <a href="/" className="ml-3 underline">返回真实功能</a></div>
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <SimulatorModeGuard>
       <Routes>
         <Route element={<AppShell />}>
           <Route path="/" element={<PortfolioHome />} />
@@ -29,6 +42,7 @@ export default function App() {
           <Route path="*" element={<PortfolioHome />} />
         </Route>
       </Routes>
+      </SimulatorModeGuard>
     </BrowserRouter></>
   );
 }
