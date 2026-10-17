@@ -475,23 +475,23 @@ def portfolio(user=Depends(current_user)):
                          "notice": "Insurance limits are not asset values and are never summed as wealth or guaranteed combined reimbursement."}}
 
 
-def seed_demo_documents():
-    """Seed real public wording plus an obviously synthetic schedule for usr_mei."""
+def seed_demo_documents(user_id: str = "usr_mei"):
+    """Seed public wording and synthetic facts into one server-selected account."""
     with get_db() as db:
-        if not db.execute("SELECT id FROM users WHERE id='usr_mei'").fetchone():
+        if not db.execute("SELECT id FROM users WHERE id=?", (user_id,)).fetchone():
             return
-        existing = db.execute("SELECT * FROM policies WHERE user_id='usr_mei' ORDER BY created_at LIMIT 1").fetchone()
+        existing = db.execute("SELECT * FROM policies WHERE user_id=? ORDER BY created_at LIMIT 1", (user_id,)).fetchone()
         wording_path = ROOT / "backend" / "fixtures" / "allianz-changyou-2023-wording.pdf"
         if existing:
             if wording_path.is_file() and not db.execute("SELECT d.id FROM documents d JOIN policy_documents pd ON pd.document_id=d.id WHERE pd.policy_id=? AND d.name='Allianz-public-2023-wording.pdf'", (existing["id"],)).fetchone():
-                wording = save_document(db, "usr_mei", wording_path.read_bytes(), "Allianz-public-2023-wording.pdf", "application/pdf", "policy")
+                wording = save_document(db, user_id, wording_path.read_bytes(), "Allianz-public-2023-wording.pdf", "application/pdf", "policy")
                 db.execute("INSERT INTO policy_documents VALUES(?,?)", (existing["id"], wording["id"]))
                 db.execute("UPDATE policies SET confirmed=0,revision=revision+1,updated_at=? WHERE id=?", (now_iso(), existing["id"]))
             for document in db.execute("SELECT d.* FROM documents d JOIN policy_documents pd ON pd.document_id=d.id WHERE pd.policy_id=? AND d.name='Allianz-public-2023-wording.pdf'", (existing["id"],)).fetchall():
                 if any(page.get("extractor_version", 1) < 2 for page in json.loads(document["pages_json"])):
                     pages, status = extract_pages(Path(document["storage_path"]).read_bytes(), "application/pdf")
                     db.execute("UPDATE documents SET pages_json=?,text=?,ocr_status=? WHERE id=?", (json.dumps(pages, ensure_ascii=False), "\n".join(p["text"] for p in pages), status, document["id"]))
-                    index_document(db, document["id"], "usr_mei", pages)
+                    index_document(db, document["id"], user_id, pages)
                     db.execute("UPDATE policies SET confirmed=0,revision=revision+1,updated_at=? WHERE id=?", (now_iso(), existing["id"]))
             return
         schedule_text = """SYNTHETIC DEMONSTRATION — NOT AN ISSUED POLICY
@@ -513,13 +513,13 @@ There is no insurer partnership, issued policy, verified live product sale or pa
         page.insert_textbox(fitz.Rect(36, 35, 560, 810), schedule_text, fontsize=11, fontname="china-s", lineheight=1.5)
         raw = doc.tobytes()
         doc.close()
-        schedule = save_document(db, "usr_mei", raw, "SYNTHETIC-Japan-policy-schedule.pdf", "application/pdf", "policy")
+        schedule = save_document(db, user_id, raw, "SYNTHETIC-Japan-policy-schedule.pdf", "application/pdf", "policy")
         fields = field_candidates(json.loads(schedule["pages_json"]), schedule["id"])
         fields["synthetic"] = True
         fields["catalog_product_id"] = "allianz_changyou_2023"
         fields["source_url"] = "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf"
         policy = create_policy(db, schedule, fields)
         if wording_path.is_file():
-            wording = save_document(db, "usr_mei", wording_path.read_bytes(), "Allianz-public-2023-wording.pdf", "application/pdf", "policy")
+            wording = save_document(db, user_id, wording_path.read_bytes(), "Allianz-public-2023-wording.pdf", "application/pdf", "policy")
             db.execute("INSERT INTO policy_documents VALUES(?,?)", (policy["id"], wording["id"]))
-        audit(db, "usr_mei", "synthetic_demo_seeded", "policy", policy["id"], {"confirmed": False, "real_insurer_connection": False})
+        audit(db, user_id, "synthetic_demo_seeded", "policy", policy["id"], {"confirmed": False, "real_insurer_connection": False})

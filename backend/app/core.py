@@ -166,6 +166,26 @@ def login(payload: Credentials, request: Request, response: Response):
     return {"user": user}
 
 
+@router.post("/demo")
+def private_demo(request: Request, response: Response):
+    """Start a fresh, isolated synthetic workspace without shared credentials."""
+    auth_rate_limit(request)
+    if os.getenv("WEWISE_DEMO_WORKSPACES", "1") != "1":
+        raise HTTPException(404, "Synthetic demo workspaces are disabled.")
+    user_id = uid("usr_")
+    user = {"id": user_id, "email": f"demo+{user_id}@wewise.test", "display_name": "林美 · Private synthetic demo"}
+    with get_db() as db:
+        db.execute("INSERT INTO users VALUES(?,?,?,?,?)", (user_id, user["email"], hash_password(secrets.token_urlsafe(40)), user["display_name"], now_iso()))
+    # Import after module initialization: document ownership primitives live here.
+    from .documents import seed_demo_documents
+    seed_demo_documents(user_id)
+    with get_db() as db:
+        set_session(db, user_id, response)
+        audit(db, user_id, "private_synthetic_workspace_started", details={"shared_account": False})
+    return {"user": user, "synthetic": True, "shared_account": False,
+            "notice": "This private synthetic workspace uses a browser session. Signing out ends access; start another demo or register a separate account. Never upload real personal data."}
+
+
 @router.get("/me")
 def me(user=Depends(current_user)):
     return {"user": user}

@@ -24,9 +24,26 @@ Open http://127.0.0.1:5173. Synthetic demo login:
 These are local seeded test accounts, not production authentication credentials.
 Use only synthetic customer documents in this hackathon build.
 
+The **Start a private synthetic demo** button creates a separate account,
+session and copy of the example documents for each tester. It does not use the
+shared local login. The demo session lasts up to 12 hours; signing out ends
+access to that workspace. Use a separate registered account when a password-based
+return visit is needed. Neither option verifies an email address.
+
 `pnpm build` produces the SPA. Restart the backend after building to serve the
 complete application at http://127.0.0.1:8017. The `/api` endpoints use the same
 origin, HttpOnly session cookies and owner-constrained queries.
+
+For an HTTPS teammate preview, set `WEWISE_SEED_DEMO=0`,
+`WEWISE_DEMO_WORKSPACES=1`, `WEWISE_RETRIEVAL_ONLY=1`, `COOKIE_SECURE=1`,
+`WEWISE_ENV=production` and `WEWISE_ALLOWED_ORIGINS` to the exact public HTTPS
+origin. Set `WEWISE_DATA_DIR` to the deployment's writable storage directory.
+Retrieval-only enforcement overrides any ambient provider keys and disables model
+requests, including translation requests. The preview remains synthetic-data-only.
+If the deployment has temporary storage, its separate deployment receipt must state
+when account and uploaded-document data may reset. Without a deployed private
+Tencent sidecar, leave its URL and credential unset; approved memory then uses
+the local ledger and the health report names that engine accurately.
 
 ## WorkBuddy Token Hub connection
 

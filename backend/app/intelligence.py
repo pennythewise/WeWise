@@ -35,6 +35,10 @@ DISCLAIMER = {
 
 
 def ai_config() -> dict:
+    if os.getenv("WEWISE_RETRIEVAL_ONLY", "0") == "1":
+        return {"provider": "disabled", "configured": False, "model": None,
+                "configuration_issue": "retrieval_only_enforced", "engine": "retrieval_only",
+                "retrieval_only_enforced": True, "live_verified": False}
     provider = os.getenv("AI_PROVIDER", "anthropic").lower()
     key = os.getenv("ANTHROPIC_API_KEY", "") if provider == "anthropic" else os.getenv("AI_API_KEY", "")
     model = os.getenv("AI_MODEL", "claude-sonnet-4-5" if provider == "anthropic" else "qwen-plus" if provider == "qwen" else "")
@@ -250,8 +254,10 @@ def assistance_template(payload: AssistanceSummaryRequest, notice: str) -> dict:
 
 @router.post("/assistance-summary")
 async def assistance_summary(payload: AssistanceSummaryRequest, user=Depends(current_user)):
-    if not ai_config()["configured"]:
-        return assistance_template(payload, "No model API is configured. Original facts are retained; this is not a translation.")
+    config = ai_config()
+    if not config["configured"]:
+        notice = "This deployment enforces retrieval mode; external model calls are disabled. Original facts are retained; this is not a translation." if config.get("retrieval_only_enforced") else "No model API is configured. Original facts are retained; this is not a translation."
+        return assistance_template(payload, notice)
     if not payload.consent_external_processing:
         return assistance_template(payload, "Review the facts and explicitly consent to external AI processing before requesting a draft translation.")
     if INJECTION.search(payload.text):
@@ -389,7 +395,7 @@ async def chat(payload: ChatRequest, user=Depends(current_user)):
             # Never return provider response bodies, credentials or request content.
             trace.append({"stage": "model", "status": "fallback", "detail": f"API unavailable ({type(exc).__name__}); source extracts retained."})
     else:
-        trace.append({"stage": "model", "status": "unconfigured", "detail": "No API key configured. This answer uses actual local retrieval only."})
+        trace.append({"stage": "model", "status": "disabled" if config.get("retrieval_only_enforced") else "unconfigured", "detail": "This deployment enforces retrieval mode; external model calls are disabled." if config.get("retrieval_only_enforced") else "No API key configured. This answer uses actual local retrieval only."})
     with get_db() as db:
         # A concurrent correction/deletion invalidates the prepared response.
         fresh = db.execute("SELECT revision,confirmed FROM policies WHERE id=? AND user_id=?", (policy["id"], user["id"])).fetchone()

@@ -15,7 +15,7 @@ def client(tmp_path, monkeypatch):
     monkeypatch.setattr(workflows, "UPLOAD_DIR", tmp_path / "uploads")
     monkeypatch.setattr(workflows, "EXPORT_DIR", tmp_path / "exports")
     monkeypatch.setenv("WEWISE_SEED_DEMO", "1")
-    for name in ("AI_API_KEY", "ANTHROPIC_API_KEY", "TENCENT_MEMORY_URL", "TDAI_GATEWAY_API_KEY"):
+    for name in ("AI_API_KEY", "ANTHROPIC_API_KEY", "TENCENT_MEMORY_URL", "TDAI_GATEWAY_API_KEY", "WEWISE_RETRIEVAL_ONLY", "WEWISE_DEMO_WORKSPACES"):
         monkeypatch.delenv(name, raising=False)
     core._login_limits.clear()
     with TestClient(create_app()) as test_client:
