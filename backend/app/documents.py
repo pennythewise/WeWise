@@ -41,7 +41,7 @@ def clean_pdf_text(text: str) -> str:
     return "\n".join(lines).strip()
 
 
-def ocr_image(image: bytes) -> str:
+def ocr_result(image: bytes):
     global _ocr, _ocr_error
     if _ocr_error:
         raise RuntimeError(_ocr_error)
@@ -54,7 +54,11 @@ def ocr_image(image: bytes) -> str:
             _ocr_error = "CPU OCR engine is unavailable; use a text PDF or manually enter facts."
             raise RuntimeError(_ocr_error)
     result, _ = _ocr(image)
-    return "\n".join(str(item[1]) for item in (result or []))
+    return result or []
+
+
+def ocr_image(image: bytes) -> str:
+    return "\n".join(str(item[1]) for item in ocr_result(image))
 
 
 def extract_pages(raw: bytes, media_type: str) -> tuple[list[dict], str]:
@@ -79,6 +83,8 @@ def extract_pages(raw: bytes, media_type: str) -> tuple[list[dict], str]:
         for index, page in enumerate(doc):
             text = clean_pdf_text(page.get_text("text"))
             method, warnings = "pdf_text", []
+            spans = [{"text": span["text"], "bbox": list(span["bbox"]), "coordinate_space": "pdf_points", "confidence": None}
+                     for block in page.get_text("dict").get("blocks", []) for line in block.get("lines", []) for span in line.get("spans", []) if span.get("text", "").strip()]
             if len(text) < 30:
                 if ocr_count >= 12:
                     warnings.append("OCR page quota reached. Split the document or enter missing facts manually.")
@@ -88,7 +94,9 @@ def extract_pages(raw: bytes, media_type: str) -> tuple[list[dict], str]:
                         width, height = page.rect.width, page.rect.height
                         scale = min(2.0, 2400 / max(width, height, 1))
                         pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), alpha=False)
-                        text = ocr_image(pix.tobytes("png"))
+                        recognized = ocr_result(pix.tobytes("png"))
+                        text = "\n".join(str(item[1]) for item in recognized)
+                        spans = [{"text": str(item[1]), "bbox": [[float(x), float(y)] for x,y in item[0]], "coordinate_space": "rendered_image_pixels", "image_size": [pix.width, pix.height], "confidence": float(item[2]) if len(item) > 2 else None} for item in recognized]
                         method = "cpu_ocr"
                         ocr_count += 1
                         if not text.strip():
@@ -99,7 +107,7 @@ def extract_pages(raw: bytes, media_type: str) -> tuple[list[dict], str]:
             total_chars += len(text)
             if total_chars > MAX_TEXT:
                 raise HTTPException(422, "Extracted text exceeds the processing quota.")
-            pages.append({"page": index + 1, "text": text, "method": method, "warnings": warnings, "extractor_version": 2})
+            pages.append({"page": index + 1, "text": text, "method": method, "warnings": warnings, "spans": spans, "extractor_version": 3})
         status = "manual_required" if any(p["method"] == "manual_required" for p in pages) else "ocr_extracted" if ocr_count else "text_extracted"
         return pages, status
 
@@ -158,6 +166,12 @@ def field_candidates(pages: list[dict], document_id: str) -> dict:
         "recorded_diagnosis": r"(?:Diagnosis|诊断|診断)\s*[:：]\s*([^\n]{1,180})",
         "hospital": r"(?:Hospital|医疗机构|医院|病院)\s*[:：]\s*([^\n]{1,160})",
         "expense_total": r"(?:Total\s*(?:amount|expense)?|费用合计|合计金额|総額)\s*[:：]\s*([^\n]{1,100})",
+        "patient_name": r"(?:Patient(?:\s+name)?|患者姓名|病人姓名|患者氏名|患者)\s*[:：]\s*([^\n]{1,80})",
+        "currency": r"(?:Currency|币种|货币|通貨)\s*[:：]\s*([A-Za-z]{3}|人民币|日元|美元|欧元)",
+        "annual_income": r"(?:Annual\s+income|年收入)\s*[:：]\s*([^\n]{1,100})",
+        "monthly_income": r"(?:Monthly\s+income|月收入)\s*[:：]\s*([^\n]{1,100})",
+        "assets_total": r"(?:Total\s+assets|资产合计|总资产)\s*[:：]\s*([^\n]{1,100})",
+        "liabilities_total": r"(?:Total\s+liabilities|负债合计|总负债)\s*[:：]\s*([^\n]{1,100})",
     }
     for key, pattern in patterns.items():
         for page in pages:
@@ -166,6 +180,22 @@ def field_candidates(pages: list[dict], document_id: str) -> dict:
                 fields[key] = match.group(1).strip()
                 fields["critical_sources"][key] = {"document_id": document_id, "page": page["page"], "quote": match.group(0)}
                 break
+    # Normalize explicitly printed dates, preserving the exact source quote.
+    date_labels = {"start_date": r"Start\s*date|生效日期|保险起期", "end_date": r"End\s*date|到期日期|保险止期", "treatment_date": r"Treatment\s*date|就诊日期|诊疗日期|診療日"}
+    for key, label in date_labels.items():
+        if key in fields:
+            continue
+        for page in pages:
+            match = re.search(r"(?:" + label + r")\s*[:：]\s*(\d{4})[年/.-](\d{1,2})[月/.-](\d{1,2})日?", page["text"], re.I)
+            if match:
+                try:
+                    fields[key] = date(*map(int, match.groups())).isoformat()
+                except ValueError:
+                    continue
+                fields["critical_sources"][key] = {"document_id": document_id, "page": page["page"], "quote": match.group(0)}
+                break
+    if fields.get("currency"):
+        fields["currency"] = {"人民币": "CNY", "日元": "JPY", "美元": "USD", "欧元": "EUR"}.get(fields["currency"], fields["currency"].upper())
     if "安联" in text and not fields.get("insurer"):
         fields["insurer"] = "安联人寿保险有限公司"
     for page in pages:
@@ -225,9 +255,10 @@ def create_policy(db, document, fields=None):
 @router.post("/documents")
 def upload_document(file: UploadFile = File(...), kind: str = Form("policy"), claim_id: str | None = Form(None), policy_id: str | None = Form(None), save: bool = Form(True), user=Depends(current_user)):
     if not save:
-        raise HTTPException(422, "Only explicitly saved uploads are supported. Select Save to portfolio/case to continue.")
-    if kind not in {"policy", "evidence"}:
-        raise HTTPException(422, "Document kind must be policy or evidence.")
+        from .lifecycle import upload_temporary
+        return upload_temporary(file=file, kind=kind, user=user)
+    if kind not in {"policy", "evidence", "medical_report", "financial_report"}:
+        raise HTTPException(422, "Document kind must be policy, evidence, medical_report or financial_report.")
     raw = file.file.read(MAX_SIZE + 1)
     if not raw or len(raw) > MAX_SIZE:
         raise HTTPException(413, "Upload a nonempty document of at most 15 MB.")
@@ -267,6 +298,8 @@ def upload_document(file: UploadFile = File(...), kind: str = Form("policy"), cl
             else:
                 policy = create_policy(db, document)
         audit(db, user["id"], "document_saved", "document", document["id"], {"kind": kind, "bytes": len(raw), "ocr_status": document["ocr_status"]})
+        from .lifecycle import consent
+        consent(db, user["id"], "save_document_until_deleted", True, document["id"])
         return {"document": document_dict(document, True), "policy": policy_dict(db, policy) if policy else None}
 
 

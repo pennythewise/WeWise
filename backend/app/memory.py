@@ -170,6 +170,9 @@ def update_preferences(payload: PreferenceUpdate, user=Depends(current_user)):
         values = memory_preferences(db, user["id"])
         values.update(payload.model_dump(exclude_none=True))
         db.execute("INSERT INTO preferences VALUES(?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET locale=excluded.locale,memory_enabled=excluded.memory_enabled,updated_at=excluded.updated_at", (user["id"], values["locale"], int(values["memory_enabled"]), now_iso()))
+        if payload.memory_enabled is not None:
+            from .lifecycle import consent
+            consent(db, user["id"], "approved_memory_personalization", payload.memory_enabled)
         audit(db, user["id"], "preferences_updated", details={"fields": list(payload.model_dump(exclude_none=True))})
     if payload.memory_enabled is not None:
         sync_approved_memory(user["id"])
@@ -228,3 +231,37 @@ def audit_events(user=Depends(current_user)):
     with get_db() as db:
         rows = db.execute("SELECT * FROM audit_log WHERE user_id=? ORDER BY created_at DESC LIMIT 200", (user["id"],)).fetchall()
     return {"events": [{"id": r["id"], "action": r["action"], "entity_type": r["entity_type"], "entity_id": r["entity_id"], "created_at": r["created_at"], "details": json.loads(r["details_json"])} for r in rows]}
+
+
+def needs_defaults(user_id):
+    """Only explicit enabled preferences; never infer wealth from reports."""
+    rows, engine = approved_context(user_id)
+    defaults, provenance = {}, []
+    for row in rows:
+        key, value = row["key"], str(row["value"])
+        used = False
+        if key == "budget_preferences":
+            match = re.search(r"(?:CNY|RMB|人民币|预算|budget|¥|￥)?\s*(\d+(?:\.\d+)?)", value, re.I)
+            if match and 0 <= float(match.group(1)) <= 10000000:
+                defaults["budget"] = float(match.group(1))
+                used = True
+        elif key == "travel_preferences":
+            if re.search(r"japan|日本", value, re.I):
+                defaults["destination"] = "Japan"
+            defaults["notes"] = value
+            used = True
+        elif key == "communication_preferences":
+            defaults["communication_preferences"] = value
+            used = True
+        if used:
+            provenance.append({"key": key, "value": value, "source": "user_approved"})
+    return {"defaults": defaults, "provenance": provenance, "engine": engine,
+            "notice": "Defaults come only from your enabled approved preferences. Edit them for this purchase; no medical or financial report is used to infer a budget. Current explicit inputs take priority."}
+
+
+@router.get("/needs/defaults")
+def get_needs_defaults(user=Depends(current_user)):
+    result = needs_defaults(user["id"])
+    with get_db() as db:
+        audit(db, user["id"], "approved_preferences_reused_for_needs", "memory", None, {"categories": [p["key"] for p in result["provenance"]]})
+    return result

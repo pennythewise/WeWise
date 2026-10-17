@@ -1,68 +1,23 @@
 # Implementation boundaries
 
-Public retrieval-only preview: https://wewise-retrieval-preview.vercel.app/me .
-Each tester starts a separate synthetic workspace. This register describes the code, not production acceptance. See the verification
-receipt for executed checks. Mainland China only; Japan is the primary overseas
-incident example. API credentials are supplied later by the team.
+Current requirement-by-requirement register: [docs/REQUIREMENTS_STATUS.md](docs/REQUIREMENTS_STATUS.md).
+Executed evidence: [VERIFICATION.md](VERIFICATION.md), [eval/report.md](eval/report.md).
 
-| Scope | Implemented behavior | Boundary |
-|---|---|---|
-| Agent core / F1 | API-backed chat, deterministic intent routes, cards, source links and actual trace | Model generation requires a key/model; no JEV service connected |
-| A1 | Saved PDF/image/TXT extraction with page provenance; actual RapidOCR CPU scans; editable facts | OCR can fail and needs confirmation; saved uploads only |
-| A2 / A4 | Policy questions, original-source evidence, CN/EN UI and conditional model explanations | Retrieval mode is labelled; model translations need API and review |
-| A3 / D2 | Portfolio observations, same-family overlap and categories not evidenced by confirmed, currently dated policies | Expired, future or unreviewed cards do not establish current cover; no proof of uninsured status or actuarial analysis |
-| D1 / D3 | Private policy portfolio and optional clickable 3D visualization | Insurance limits are not asset values; 3D is illustrative |
-| Buying B1/B2 | Needs/budget capture and feature comparison of three official published travel-wording references | No invented premiums, selected limits, availability or whole-market best |
-| B3 / B5 | Reviewed PDF agent brief; source-bound tradeoffs and deterministic mis-selling phrase flags | No real lead delivery; agent callback is simulated |
-| B4 | Date-derived renewal reminders and needs reconfirmation | No policy transaction or automatic extension |
-| C1/C2 | Japan outpatient incident guide, role/fact capture, conditional wording precheck | Preparation support, no claim eligibility/payout decision |
-| C3/C4 | Conditional documents, actual evidence files/type review, generated reviewed form, snapshot-bound PDF/ZIP | Draft exports show missing evidence; prepared export is not submission |
-| C5 | User-reported/acknowledgement-uploaded updates with provenance | Insurer receipt/review/decision/payment timeline lives in separate simulator |
-| C6 | Japan contacts/forms and reviewed cross-border assistance package | No provider contact or certified translation implied |
-| C7 | Guest urgent help, direct human/emergency links, browser speech playback/input, reviewable assistance draft | No PSTN AI phone number, conversational call centre or live transfer |
-| C8 | Camera evidence capture with permission and upload | Guided capture only; no AR damage measurement/valuation |
-| E1 / E5 confirmation | Ownership checks and expiring, single-use confirmations tied to exact snapshots | AI text cannot authorize or execute insurer actions |
-| E2 / E3 | HttpOnly sessions, scoped data/retrieval/files, redaction, quarantine and prompt/data separation | Synthetic preview; separately retained hosting snapshots need a retention/erasure policy before real data |
-| E4 | Known citations, current source/revision, numbers and guarantee checks; abstention/extractive fallback | Does not prove full semantic entailment or zero hallucination |
-| E5 voice input | Browser voice feature detection, stop and text fallback | Requires device support/permission; browser speech provider may process audio |
-| E6 | Direct official human channels accessible before AI help | No external message/call sent by the app |
-| E7 / F4 | Audit metadata and opt-in approved-memory view/edit/delete in the hosted private ledger; optional Tencent sidecar locally verified in the earlier receipt | Tencent is not hosted here; no automatic health/chat memory or upstream history purge claim |
-| F2 / F3 | Clarification, unsupported/out-of-scope replies and actual inspector events | No invented model call, elapsed time or JEV confidence |
-| Evidence | Functional/attack tests, gateway tests, public smoke and browser flows; branch CI runs backend, gateway and production build | Optional Tencent checks require the sidecar; provider protocol fixtures are not live-model tests |
-| Delivery | Public retrieval-only full-stack preview, reproducible dependencies, runbook and reviewable source branch | Organiser email, new pitch deck and recorded demo video are not completed by this change |
+Mainland China policies only; Japan accidental outpatient treatment is the deeply reviewed example. Other insurance families offer sourced reference guidance and draft preparation until their exact issued contract is reviewed.
 
-The plan used E5 for both voice and sensitive confirmation; those are identified
-explicitly above to avoid conflating the two features.
+| Working app feature | Honest boundary |
+|---|---|
+| Private accounts, PDF/image OCR, field correction, source-term and report review, vault, temporary uploads | Synthetic personal data only; unknown extraction confidence stays unknown. Temporary access ends at24h, purge occurs on access/startup/cleanup. Historical snapshots are separate. |
+| Local multilingual E5 + BM25 hybrid retrieval with quoted original pages | Local assets must be installed and health-checked. Exact source extracts are not claim approval or general semantic understanding. |
+| Saved conversations, correction/resume,34 bounded tool adapters, streamed inspector | Deterministic execution with schema/ownership/intent gates; no fabricated LLM reasoning. |
+| Portfolio cards, coverage evidence, active claim tasks, expiry and premium history | Missing evidence does not establish uninsured status; limits are not asset values. |
+| Needs capture, approved-memory reuse, side-by-side advocate/judge criteria, out-of-pocket and surrender arithmetic, renewal comparison | Disclosed rules and reviewed inputs; no live quote, whole-market best, regulated sale or guaranteed renewal. |
+| Grab-inspired connected claim stages, actor/next action, notifications, delay and appeal guidance | Real preparation and independently simulated insurer progress remain separate. No insurer status integration. |
+| Reviewed PDF/ZIP claim and cross-border packages, exact consent previews | Downloads to the user only. Actual status stays PREPARED_NOT_SUBMITTED. |
+| Approved-memory CRUD and private Tencent mirror | SQLite approval ledger remains authoritative. Hosting health/readback must verify Tencent activation; no automatic sensitive memory or historical erasure claim. |
+| Calm interactive guidance, speech/text, guided multi-photo evidence capture | Rule-based in-app conversation and device-supported speech/camera. No live phone transfer, dispatch, medical diagnosis or AR measurement. |
+| WorkBuddy/Claude/Qwen and advisory JEV adapters | User deferred both credentials. Retrieval-only hosting disables external calls even if keys exist. Semantic translation and generative dialogue remain key-deferred. |
 
-## Safety self-assessment
+Insurer receipts, decisions, timelines, payouts and agent callbacks are explicitly simulated. Bank SSO, real insurer submission/status, regulated commission collection, real phone transfer, family delegation and animated avatar remain later integrations.
 
-The app controls access and confirmations in application code. Model output has
-no tools or credentials and cannot submit a claim, contact an agent, transfer a
-call, move money, underwrite, issue cover or decide a payout. Preparation and
-insurer simulation remain separate states. Customer documents are stored in an
-private backend directory and are not bundled into the public frontend.
-
-Deletion removes current originals, retrieval derivatives and affected local
-packages; it revokes stale action snapshots. Downloaded copies are outside the
-app's control, and deletion does not guarantee immediate erasure from deployment
-snapshots. Where separately configured, Tencent's current mirror is replaced
-and rechecked against the approval ledger, including concurrent edits/deletes.
-Upstream version-history and backup erasure need additional work before
-processing real personal data.
-
-Known limits: no live model credential/entitlement test, no JEV service, no bank
-SSO or insurer API, no production encryption/key management or regulated sales
-operation, no certified translation. The hackathon must use synthetic identities
-and medical/financial evidence. Medical-report extraction does not diagnose a
-condition; budget comparisons are not general financial advice.
-
-## Demo sequence
-
-1. Guest urgent help: safety and direct human contacts remain accessible.
-2. Login, open real wording + synthetic schedule, correct and confirm facts.
-3. Ask a policy question, open its exact source page and actual trace.
-4. Create the incident; upload and confirm synthetic evidence.
-5. Show missing-item/draft boundary, then the complete reviewed-package path.
-6. Download PDF/ZIP; show PREPARED_NOT_SUBMITTED separately from simulator.
-7. Compare sourced wording, export agent brief, label callback simulated.
-8. Approve/edit/delete a preference and show actual private memory readback.
+The source and preview do not establish production/regulatory readiness, actual insurer decisions, a submitted organiser package, a sent email or a completed demo video. Physical camera/microphone checks require a team device and permission.

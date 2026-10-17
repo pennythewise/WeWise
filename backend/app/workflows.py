@@ -22,6 +22,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from .core import get_db, current_user, now_iso, uid, DATA_DIR, UPLOAD_DIR, ROOT, audit
 from .exports import pdf_bytes, zip_bytes
+from . import claims_tracker as tracking
+from .insurance_features import DOCUMENT_LABELS, requirements, incident_library, estimate_cost, comparison, match_agents, DEMO_AGENTS
 
 router = APIRouter(prefix="/api", tags=["workflows"])
 WORDING_URL = "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf"
@@ -54,6 +56,7 @@ CATEGORIES = {
     "discharge_record": "Inpatient discharge record / 住院出院记录",
     "other": "Additional evidence / 补充材料",
 }
+CATEGORIES.update(DOCUMENT_LABELS)
 CRITICAL_FIELDS = ["date", "country", "description", "treatment_type"]
 
 
@@ -69,6 +72,11 @@ def init_workflow_db():
         CREATE TABLE IF NOT EXISTS workflow_actions(token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL,entity_id TEXT NOT NULL,action TEXT NOT NULL,payload_json TEXT NOT NULL,snapshot_hash TEXT NOT NULL,expires_at REAL NOT NULL,used_at TEXT,created_at TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS workflow_exports(id TEXT PRIMARY KEY,user_id TEXT NOT NULL,claim_id TEXT,kind TEXT NOT NULL,mode TEXT NOT NULL,pdf_path TEXT NOT NULL,zip_path TEXT,snapshot_json TEXT NOT NULL,sha256 TEXT NOT NULL,created_at TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS buying_callbacks(id TEXT PRIMARY KEY,user_id TEXT NOT NULL,brief_export_id TEXT NOT NULL,created_at TEXT NOT NULL);
+        """)
+        tracking.init_tables(db)
+        db.executescript("""
+        CREATE TABLE IF NOT EXISTS policy_premium_history(id TEXT PRIMARY KEY,user_id TEXT NOT NULL,policy_id TEXT NOT NULL REFERENCES policies(id) ON DELETE CASCADE,year INTEGER NOT NULL,premium REAL NOT NULL,currency TEXT NOT NULL,source_note TEXT NOT NULL,document_id TEXT REFERENCES documents(id) ON DELETE CASCADE,provenance TEXT NOT NULL,created_at TEXT NOT NULL,UNIQUE(user_id,policy_id,year,currency));
+        CREATE TABLE IF NOT EXISTS buying_needs(user_id TEXT PRIMARY KEY,needs_json TEXT NOT NULL,updated_at TEXT NOT NULL);
         """)
         db.execute("DELETE FROM workflow_actions WHERE expires_at<=?", (time.time(),))
 
@@ -102,10 +110,41 @@ def _doc_valid(document):
 
 def _policy_supported(db, policy):
     title = str(policy["title"]).lower()
-    identity_match = ("畅游" in title or "changyou" in title) and ("安联" in policy["insurer"] or "allianz" in policy["insurer"].lower())
+    identity_match = policy["family"] == "travel" and ("畅游" in title or "changyou" in title) and ("安联" in policy["insurer"] or "allianz" in policy["insurer"].lower())
     # Support comes from the customer's owned, byte-verified reviewed contract,
     # not an internal seed identifier or an editable name/URL assertion.
-    return identity_match and any(document["is_wording"] and document["exists"] for document in _policy_files(db, policy))
+    return identity_match and any(document["is_wording"] and document["exists"] for document in _policy_files(db, policy)) and _selected_outpatient_benefit(db, policy)
+
+
+def _selected_outpatient_benefit(db, policy):
+    fields = json.loads(policy["fields_json"])
+    def normalized(value):
+        return re.sub(r"\s+", "", str(value)).casefold()
+    primary = db.execute("SELECT * FROM documents WHERE id=? AND user_id=?", (policy["document_id"], policy["user_id"])).fetchone()
+    if not primary or not _doc_valid(primary):
+        return False
+    pages = json.loads(primary["pages_json"])
+    for item in fields.get("benefits", []):
+        name = item.get("name", "") if isinstance(item, dict) else str(item)
+        if not re.search(r"accidental\s+outpatient|意外伤害医疗|意外医疗", name, re.I):
+            continue
+        source = item.get("source") if isinstance(item, dict) else None
+        quotes = []
+        if isinstance(source, dict) and source.get("document_id") == policy["document_id"] and _verified_fact_source(db, policy, source):
+            quotes.append(str(source["quote"]))
+        elif source is None:
+            # Older clients submitted reviewed benefits as strings. Recover the
+            # source only by matching that text to a printed selected-benefit
+            # line on the actual primary schedule, with whitespace normalized.
+            for page in pages:
+                lines = page["text"].splitlines()
+                quotes.extend("\n".join(lines[i:i+2]) for i in range(len(lines)) if re.search(r"selected\s+benefit\s*[:：]|已选(?:择)?(?:保障|责任)|已投保|所选(?:保障|责任)", lines[i], re.I))
+        for quoted in quotes:
+            selected = re.search(r"selected\s+benefit\s*[:：]|已选(?:择)?(?:保障|责任)|已投保|所选(?:保障|责任)", quoted, re.I)
+            benefit = re.search(r"accidental\s+outpatient|意外伤害医疗|意外医疗", quoted, re.I)
+            if selected and benefit and normalized(name) in normalized(quoted):
+                return True
+    return False
 
 
 def _policy_files(db, policy):
@@ -139,12 +178,11 @@ def _evidence(db, claim, policy):
 
 def _checklist(db, claim, policy, evidence):
     incident = json.loads(claim["incident_json"])
-    required = ["policy", "identity", "travel_proof", "medical_record", "original_expense", "claim_form"]
-    conditional = []
-    if incident.get("treatment_type") == "inpatient":
-        conditional.append("discharge_record")
-    if incident.get("police_involved") or incident.get("third_party_involved"):
-        conditional.append("incident_evidence")
+    family = policy["family"] if policy else "other"
+    reference = requirements(family, claim["benefit"], incident)
+    required = [item["id"] for item in reference if not item["condition"]]
+    conditional = [item["id"] for item in reference if item["condition"]]
+    reviewed = bool(policy and _policy_supported(db, policy) and claim["benefit"] == "outpatient_accident" and incident.get("treatment_type") == "outpatient")
     entries = []
     for category in required + conditional:
         matching = [item for item in evidence if item["category"] == category and item["exists"]]
@@ -152,15 +190,63 @@ def _checklist(db, claim, policy, evidence):
         # A verified imported policy is actual owned evidence, not a mock checklist tick.
         if category == "policy" and policy and policy["confirmed"] and claim["policy_revision"] == policy["revision"]:
             files = _policy_files(db, policy)
-            if any(d["document_id"] == policy["document_id"] and d["exists"] for d in files) and any(d["is_wording"] and d["exists"] for d in files):
+            has_primary = any(d["document_id"] == policy["document_id"] and d["exists"] for d in files)
+            has_exact_wording = any(d["is_wording"] and d["exists"] for d in files)
+            reviewed_identity = policy["family"] == "travel" and ("畅游" in policy["title"] or "changyou" in policy["title"].lower()) and ("安联" in policy["insurer"] or "allianz" in policy["insurer"].lower())
+            if has_primary and (has_exact_wording or not reviewed_identity):
                 confirmed.extend({"document_id": d["document_id"]} for d in files if d["exists"])
             else:
                 confirmed = []
         entries.append({"category": category, "label": CATEGORIES[category], "required": True, "conditional": category in conditional,
                         "condition": "Inpatient treatment" if category == "discharge_record" else "Relevant police/third-party incident" if category == "incident_evidence" else None,
                         "accepted_document_ids": [item["document_id"] for item in confirmed], "uploaded_document_ids": [item["document_id"] for item in matching], "confirmed": bool(confirmed), "missing": not bool(confirmed),
-                        "source": {"url": WORDING_URL, "section": "4.3", "page": 12}, "note": "User preparation check only; insurer may request additional documents or originals."})
+                        "source": {"url": WORDING_URL, "section": "4.3", "page": 12} if reviewed else {"url": next((i["source_url"] for i in reference if i["id"] == category), None), "section": None, "page": None},
+                        "rule_status": "reviewed_example" if reviewed else "reference_only", "where_to_get": next((i["where_to_get"] for i in reference if i["id"] == category), "Issuer / your records"),
+                        "note": "User preparation check only; insurer may request additional documents or originals." if reviewed else "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."})
     return entries
+
+
+def _validation(claim, policy, checklist, evidence):
+    """Flag factual conflicts for correction; do not diagnose or decide entitlement."""
+    incident = json.loads(claim["incident_json"])
+    issues, warnings = [], []
+    def flag(item, code, message):
+        issues.append({"document_id": item["document_id"], "code": code, "message": message, "source": "User-reviewed document fields"})
+    for item in evidence:
+        if not item["confirmed"]:
+            continue
+        fields = item["fields"]
+        named = fields.get("patient_name") or fields.get("insured_name")
+        if named and policy and re.sub(r"\s", "", str(named)).casefold() != re.sub(r"\s", "", str(policy["insured_name"])).casefold():
+            flag(item, "PATIENT_NAME_MISMATCH", "The reviewed patient / insured name differs from the confirmed policy. Check spelling, identity and role; do not assume fraud.")
+        dates = {}
+        for key in ("admission_date", "discharge_date", "treatment_date", "document_date"):
+            if fields.get(key):
+                try:
+                    dates[key] = date.fromisoformat(str(fields[key]))
+                except ValueError:
+                    flag(item, "INVALID_DATE", f"The reviewed {key.replace('_', ' ')} is not a valid ISO date.")
+        if dates.get("admission_date") and dates.get("discharge_date") and dates["discharge_date"] < dates["admission_date"]:
+            flag(item, "DISCHARGE_BEFORE_ADMISSION", "The discharge date is earlier than the admission date. Check the original record.")
+        if dates.get("treatment_date") and incident.get("date"):
+            try:
+                if dates["treatment_date"] < date.fromisoformat(incident["date"]):
+                    flag(item, "TREATMENT_BEFORE_INCIDENT", "The treatment date is before the recorded incident. Check both original facts.")
+            except ValueError:
+                pass
+        amount = fields.get("expense_total", fields.get("total_amount"))
+        if amount not in (None, ""):
+            try:
+                amount = float(str(amount).replace(",", ""))
+                if not 0 <= amount <= 100000000:
+                    flag(item, "INVALID_AMOUNT", "The reviewed expense amount is outside the supported range.")
+                elif incident.get("expenses") is not None and fields.get("currency") == incident.get("currency") and abs(amount - incident["expenses"]) > .01:
+                    flag(item, "EXPENSE_AMOUNT_MISMATCH", "This reviewed expense total differs from the incident total in the same recorded currency. Check whether it is a partial invoice.")
+            except (ValueError, TypeError):
+                flag(item, "INVALID_AMOUNT", "The reviewed expense total is not numeric; retain the original and correct the field.")
+    if policy and policy["family"] != "travel":
+        warnings.append("This is an educational family checklist; exact policy-specific preparation rules are not reviewed.")
+    return {"inconsistencies": issues, "warnings": warnings, "ready": not any(i["missing"] for i in checklist) and not issues}
 
 
 def _prescreen(db, claim, policy):
@@ -176,6 +262,42 @@ def _prescreen(db, claim, policy):
     except (ValueError, KeyError, TypeError):
         checks.append({"id": "policy_period", "status": "unresolved", "detail": "Confirm incident and policy dates."})
     fields = json.loads(policy["fields_json"])
+    reviewed_terms = fields.get("reviewed_terms", [])
+    waiting_term = next((t for t in reviewed_terms if isinstance(t, dict) and t.get("type") == "waiting" and t.get("provenance") == "user_reviewed" and _verified_fact_source(db, policy, t.get("source"))), None)
+    waiting = {"known": False, "start": policy["start_date"], "eligible_from": None, "incident_date": incident.get("date"), "days": None, "satisfied": None, "source": None}
+    waiting_days = fields.get("waiting_period_days")
+    waiting_source = fields.get("waiting_period_source") or fields.get("critical_sources", {}).get("waiting_period_days")
+    if waiting_days is None and waiting_term:
+        try:
+            waiting_days = float(waiting_term["value"])
+            waiting_source = waiting_term["source"]
+        except (ValueError, TypeError, KeyError):
+            values = re.findall(r"(?<!\d)(\d{1,4})\s*(?:天|日|calendar\s+days|days)(?![A-Za-z])", str(waiting_term.get("value", "")), re.I)
+            if len(set(values)) == 1:
+                waiting_days = int(values[0])
+                waiting_source = waiting_term["source"]
+    if isinstance(waiting_days, (int, float)) and not isinstance(waiting_days, bool) and 0 <= waiting_days <= 3650 and int(waiting_days) == waiting_days and _verified_fact_source(db, policy, waiting_source):
+        # A reviewed numeric field still needs its number to occur in the quoted
+        # source. Dates and elapsed time are always computed by code.
+        if re.search(r"(?<!\d)" + str(int(waiting_days)) + r"(?!\d)", str(waiting_source.get("quote", ""))):
+            try:
+                eligible = date.fromisoformat(policy["start_date"]) + timedelta(days=int(waiting_days))
+                satisfied = date.fromisoformat(incident["date"]) >= eligible
+                waiting.update(known=True, eligible_from=eligible.isoformat(), days=int(waiting_days), satisfied=satisfied, source=waiting_source)
+                checks.append({"id": "waiting_period", "status": "pass" if satisfied else "possible_exclusion", "detail": f"Recorded start {policy['start_date']} + source-reviewed {int(waiting_days)} calendar days = {eligible.isoformat()}; incident {incident['date']}. The insurer must confirm the applicable cause / benefit."})
+            except (ValueError, KeyError):
+                pass
+    if not waiting["known"]:
+        checks.append({"id": "waiting_period", "status": "unresolved", "detail": "No source-verified waiting-period number is available for this benefit. No zero-day period is assumed."})
+    exclusions = []
+    for item in fields.get("exclusions", []) if isinstance(fields.get("exclusions"), list) else []:
+        if isinstance(item, dict) and _verified_fact_source(db, policy, item.get("source")):
+            exclusions.append({"text": item.get("text", item["source"]["quote"]), "source": item["source"], "status": "needs_insurer_interpretation"})
+    for item in reviewed_terms:
+        if isinstance(item, dict) and item.get("type") == "exclusion" and _verified_fact_source(db, policy, item.get("source")):
+            exclusions.append({"text": item["source"]["quote"], "source": item["source"], "status": "needs_insurer_interpretation"})
+    selected_benefit = _selected_outpatient_benefit(db, policy)
+    checks.append({"id": "selected_benefit", "status": "pass" if selected_benefit else "unresolved", "detail": "The primary schedule contains a reviewed selected accidental-outpatient benefit line." if selected_benefit else "The applicable selected benefit is not established by the primary schedule; wording alone is not proof it was purchased."})
     destination = str(fields.get("destination", "")).lower()
     japan = str(incident.get("country", "")).lower() in ("japan", "jp", "日本")
     territory_known = japan and any(term in destination for term in ("japan", "日本", "worldwide", "全球", "asia", "亚洲"))
@@ -184,8 +306,22 @@ def _prescreen(db, claim, policy):
     checks.append({"id": "reviewed_rule", "status": "pass" if supported else "unresolved", "detail": "Reviewed Allianz 2023 accident-outpatient preparation path." if supported else "This policy/benefit is outside the deeply reviewed hackathon path. Export a draft and ask the insurer for its checklist."})
     checks.append({"id": "contract_conditions", "status": "unresolved", "detail": "Selected benefits, reasonable/necessary expenses, hospital definition, exclusions and insurer assessment still apply."})
     result = "possible_exclusion" if any(c["status"] == "possible_exclusion" for c in checks) else "potentially_relevant" if current and supported and territory_known else "insufficient_information"
-    return {"result": result, "checks": checks, "sources": [{"url": WORDING_URL, "section": "4.2-4.3", "pages": [11, 12]}], "is_approval": False,
-            "notice": "For this wording, outpatient claims should notify assistance as soon as possible within 15 days; inpatient/medical transport needs immediate notice. Contact the insurer to confirm current instructions. Emergency care must not wait for evidence."}
+    exact = _policy_supported(db, policy)
+    return {"result": result, "checks": checks, "waiting_period": waiting, "exclusions": exclusions, "expenses": {"reported": incident.get("expenses"), "currency": incident.get("currency"), "insurer_pays": None, "notice": "Reported expense is not an eligible or payable amount. No payout is estimated from an unverified limit."},
+            "sources": [{"url": WORDING_URL, "section": "4.2-4.3", "pages": [11, 12]}] if exact else [], "is_approval": False,
+            "notice": "For this wording, outpatient claims should notify assistance as soon as possible within 15 days; inpatient/medical transport needs immediate notice. Contact the insurer to confirm current instructions. Emergency care must not wait for evidence." if exact else "The exact policy reporting instructions are not reviewed here. Contact the official insurer promptly; do not delay emergency care or assume a universal deadline."}
+
+
+def _verified_fact_source(db, policy, source):
+    if not isinstance(source, dict) or not source.get("quote") or not source.get("document_id") or not isinstance(source.get("page"), int):
+        return False
+    from .documents import INJECTION
+    if INJECTION.search(source["quote"]):
+        return False
+    row = db.execute("SELECT d.* FROM documents d JOIN policy_documents pd ON pd.document_id=d.id WHERE d.id=? AND d.user_id=? AND pd.policy_id=?", (source["document_id"], policy["user_id"], policy["id"])).fetchone()
+    if not row or not _doc_valid(row):
+        return False
+    return any(p.get("page") == source["page"] and source["quote"] in p.get("text", "") for p in json.loads(row["pages_json"]))
 
 
 def _view(db, claim, policy):
@@ -198,11 +334,14 @@ def _view(db, claim, policy):
         update["label"] = "User reported" if update["provenance"] == "user_reported" else "Acknowledgement uploaded - not insurer verified"
     simulations = [dict(r) | {"label": "SIMULATED", "is_simulated": True} for r in db.execute("SELECT id,stage,note,created_at FROM claim_simulations WHERE claim_id=? AND user_id=? ORDER BY created_at", (claim["id"], claim["user_id"]))]
     exports = [dict(r) | {"pdf_url": f"/api/exports/{r['id']}/pdf", "zip_url": f"/api/exports/{r['id']}/zip"} for r in db.execute("SELECT id,mode,created_at FROM workflow_exports WHERE claim_id=? AND user_id=? ORDER BY created_at DESC", (claim["id"], claim["user_id"]))]
+    validation = _validation(claim, policy, checklist, evidence)
+    tracker = tracking.build(db, claim, policy, checklist, evidence, exports, validation)
     return {"id": claim["id"], "policy_id": claim["policy_id"], "policy_revision": claim["policy_revision"], "current_policy_revision": policy["revision"] if policy else None,
-            "policy_title": policy["title"] if policy else "Removed policy", "revision": claim["revision"], "benefit": claim["benefit"], "incident": json.loads(claim["incident_json"]),
+            "policy_title": policy["title"] if policy else "Removed policy", "policy_family": policy["family"] if policy else "other", "revision": claim["revision"], "benefit": claim["benefit"], "incident": json.loads(claim["incident_json"]),
             "confirmed_revision": claim["confirmed_revision"] if current else None, "actual_status": actual, "status": actual, "checklist": checklist, "evidence": evidence,
             "missing": [x["category"] for x in checklist if x["missing"]], "prescreen": _prescreen(db, claim, policy), "updates": updates, "simulation": {"label": "SIMULATED - no insurer connection", "events": simulations},
-            "exports": exports, "created_at": claim["created_at"], "updated_at": claim["updated_at"], "official_channel_url": CLAIM_CHANNEL_URL, "disclosure": DISCLOSURE}
+            "exports": exports, "validation": validation, "tracker": tracker, "notifications": tracking.notifications(db, claim),
+            "created_at": claim["created_at"], "updated_at": claim["updated_at"], "official_channel_url": CLAIM_CHANNEL_URL, "disclosure": DISCLOSURE}
 
 
 class StrictModel(BaseModel):
@@ -223,6 +362,11 @@ class Incident(StrictModel):
     expenses: float | None = Field(default=None, ge=0, le=100000000)
     currency: str = Field(default="JPY", max_length=8)
     english_summary: str = Field(default="", max_length=4000)
+    event_type: str = Field(default="", max_length=80)
+    prior_reimbursement: bool = False
+    disability: bool = False
+    death: bool = False
+    minor: bool = False
 
 
 class ClaimCreate(StrictModel):
@@ -238,7 +382,7 @@ class ClaimPatch(StrictModel):
 
 
 class EvidenceConfirmation(StrictModel):
-    category: Literal["policy", "identity", "travel_proof", "medical_record", "original_expense", "claim_form", "incident_evidence", "discharge_record", "other"]
+    category: str = Field(min_length=1, max_length=80)
     confirmed: bool = False
     fields: dict[str, str | int | float | bool | None] = Field(default_factory=dict, max_length=30)
 
@@ -261,7 +405,7 @@ class ActionConfirmation(StrictModel):
 
 
 class SimulationRequest(StrictModel):
-    stage: Literal["RECEIVED", "IN_REVIEW", "INFO_REQUESTED", "APPROVED", "DECLINED", "PAID"] = "RECEIVED"
+    stage: Literal["RECEIVED", "IN_REVIEW", "INFO_REQUESTED", "ASSESSMENT", "APPROVED", "DECLINED", "PAID"] = "RECEIVED"
 
 
 class UpdateRequest(StrictModel):
@@ -370,7 +514,7 @@ def delete_claim(claim_id: str, confirmed: bool = Query(False), user=Depends(cur
             path = Path(document["storage_path"]).resolve()
             if UPLOAD_DIR.resolve() in path.parents:
                 path.unlink(missing_ok=True)
-        for table in ("claim_evidence", "claim_updates", "claim_simulations", "workflow_exports"):
+        for table in ("claim_evidence", "claim_updates", "claim_simulations", "workflow_exports", "claim_simulator_state", "claim_simulation_details", "claim_notifications"):
             db.execute(f"DELETE FROM {table} WHERE claim_id=? AND user_id=?", (claim_id, user["id"]))
         db.execute("DELETE FROM workflow_actions WHERE entity_id=? AND user_id=?", (claim_id, user["id"]))
         db.execute("DELETE FROM claims WHERE id=? AND user_id=?", (claim_id, user["id"]))
@@ -380,6 +524,8 @@ def delete_claim(claim_id: str, confirmed: bool = Query(False), user=Depends(cur
 
 @router.put("/claims/{claim_id}/evidence/{document_id}")
 def confirm_evidence(claim_id: str, document_id: str, payload: EvidenceConfirmation, user=Depends(current_user)):
+    if payload.category not in CATEGORIES:
+        raise HTTPException(422, "Select a supported evidence category.")
     if len(_json(payload.fields)) > 20000:
         raise HTTPException(422, "Evidence fields are too large.")
     with get_db() as db:
@@ -492,7 +638,10 @@ def preview_claim(claim_id: str, payload: PreviewRequest, user=Depends(current_u
                 raise HTTPException(409, "Confirm the current policy and all case facts before a prepared package. A labelled draft can still be exported.")
             if snapshot["missing"]:
                 raise HTTPException(409, {"message": "Required evidence is missing or not user-confirmed.", "missing": snapshot["missing"]})
-            if not _policy_supported(db, policy) or claim["benefit"] != "outpatient_accident":
+            validation = _validation(claim, policy, snapshot["checklist"], snapshot["evidence"])
+            if validation["inconsistencies"]:
+                raise HTTPException(409, {"message": "Resolve reviewed document inconsistencies first.", "inconsistencies": validation["inconsistencies"]})
+            if not _policy_supported(db, policy) or claim["benefit"] != "outpatient_accident" or snapshot["incident"].get("treatment_type") != "outpatient":
                 raise HTTPException(409, "This contract/benefit needs a reviewed insurer-specific checklist. Export a labelled draft.")
         # Claim facts already live in the owned case; approval storage needs only
         # action controls plus a hash, not another persistent copy of health data.
@@ -602,11 +751,125 @@ def add_update(claim_id: str, payload: UpdateRequest, user=Depends(current_user)
 @router.post("/claims/{claim_id}/simulation")
 def simulate_claim(claim_id: str, payload: SimulationRequest, user=Depends(current_user)):
     with get_db() as db:
-        _claim(db, claim_id, user["id"])
-        notes = {"RECEIVED": "SIMULATED receipt; no insurer received this case.", "IN_REVIEW": "SIMULATED review; no underwriting/claim review occurred.", "INFO_REQUESTED": "SIMULATED request for supplementary evidence.", "APPROVED": "SIMULATED approval; no claim decision occurred.", "DECLINED": "SIMULATED decline; no claim decision occurred.", "PAID": "SIMULATED payment; no money moved."}
-        db.execute("INSERT INTO claim_simulations VALUES(?,?,?,?,?,?)", (uid("sim_"), claim_id, user["id"], payload.stage, notes[payload.stage], now_iso()))
+        db.execute("BEGIN IMMEDIATE")
+        claim, _ = _claim(db, claim_id, user["id"])
+        tracking.playback(db, claim, payload.stage)
         audit(db, user["id"], "isolated_insurer_simulation", "claim", claim_id, {"stage": payload.stage, "is_simulated": True})
         return _view(db, *_claim(db, claim_id, user["id"]))
+
+
+class SimulationTransition(StrictModel):
+    stage: Literal["IN_REVIEW", "INFO_REQUESTED", "ASSESSMENT", "APPROVED", "DECLINED", "APPEAL_REQUESTED", "PAID"]
+    confirmed: bool
+
+
+class SimulationAdvance(StrictModel):
+    days: int = Field(ge=1, le=30)
+    outcome: Literal["approved", "declined"] = "approved"
+
+
+@router.post("/claims/{claim_id}/simulation/submit-preview")
+def preview_simulated_submission(claim_id: str, user=Depends(current_user)):
+    with get_db() as db:
+        claim, policy = _claim(db, claim_id, user["id"])
+        snapshot = _snapshot(db, claim, policy, "prepared", "simulate_claim_submit", "SIMULATED insurer only")
+        validation = _validation(claim, policy, snapshot["checklist"], snapshot["evidence"])
+        if not policy or not policy["confirmed"] or claim["policy_revision"] != policy["revision"] or claim["confirmed_revision"] != claim["revision"] or not validation["ready"]:
+            raise HTTPException(409, "Prepare and review the current case first. The separate preset scenario can still demonstrate insurer stages without asserting readiness.")
+        controls = {"mode": "prepared", "recipient": "SIMULATED insurer only", "action": "simulate_claim_submit"}
+        result = _make_token(db, user["id"], claim_id, "simulate_claim_submit", controls, _hash(snapshot))
+        preview = {"recipient": "SIMULATED insurer only", "action": "Create a synthetic simulator receipt; nothing is sent externally", "claim_id": claim_id, "revision": claim["revision"], "documents": [{"category": e["category"], "name": e["name"]} for e in snapshot["evidence"]], "is_simulated": True}
+        result.update(preview=preview, payload=preview)
+        return result
+
+
+@router.post("/claims/{claim_id}/simulation/submit")
+def confirm_simulated_submission(claim_id: str, payload: ActionConfirmation, user=Depends(current_user)):
+    if not payload.confirmed:
+        raise HTTPException(409, "Explicitly confirm the simulated action.")
+    with get_db() as db:
+        db.execute("BEGIN IMMEDIATE")
+        claim, policy = _claim(db, claim_id, user["id"])
+        hashed = hashlib.sha256(payload.token.encode()).hexdigest()
+        existing = tracking.state(db, claim)
+        # The same confirmed operation is idempotent even after its short-lived
+        # review token expires. A different user's token cannot find this row.
+        if existing and existing["confirmation_hash"] == hashed:
+            return _view(db, claim, policy)
+        token = _read_token(db, payload.token, user["id"], "simulate_claim_submit")
+        if token["entity_id"] != claim_id:
+            raise HTTPException(409, "This confirmation is for a different case.")
+        snapshot = _snapshot(db, claim, policy, "prepared", "simulate_claim_submit", "SIMULATED insurer only")
+        if _hash(snapshot) != token["snapshot_hash"]:
+            raise HTTPException(409, "Case or documents changed. Review a fresh simulation preview.")
+        if existing:
+            raise HTTPException(409, "A simulator receipt already exists for this case. Continue its existing timeline.")
+        tracking.start(db, claim, token_hash=hashed, mode="user_confirmed_demo")
+        tracking.transition(db, claim, "RECEIVED")
+        db.execute("UPDATE workflow_actions SET used_at=?,payload_json='{}' WHERE token_hash=? AND user_id=?", (now_iso(), hashed, user["id"]))
+        audit(db, user["id"], "simulated_submission_confirmed_no_external_delivery", "claim", claim_id, {"is_simulated": True})
+        return _view(db, claim, policy)
+
+
+@router.post("/claims/{claim_id}/simulation/transition")
+def transition_simulator(claim_id: str, payload: SimulationTransition, user=Depends(current_user)):
+    if not payload.confirmed:
+        raise HTTPException(409, "Confirm this simulator change.")
+    with get_db() as db:
+        db.execute("BEGIN IMMEDIATE")
+        claim, policy = _claim(db, claim_id, user["id"])
+        tracking.transition(db, claim, payload.stage)
+        audit(db, user["id"], "simulated_stage_transition", "claim", claim_id, {"stage": payload.stage, "is_simulated": True})
+        return _view(db, claim, policy)
+
+
+@router.post("/claims/{claim_id}/simulation/advance")
+def advance_simulator(claim_id: str, payload: SimulationAdvance, user=Depends(current_user)):
+    with get_db() as db:
+        db.execute("BEGIN IMMEDIATE")
+        claim, policy = _claim(db, claim_id, user["id"])
+        tracking.advance(db, claim, payload.days, payload.outcome)
+        audit(db, user["id"], "simulation_clock_advanced", "claim", claim_id, {"days": payload.days, "is_simulated": True})
+        return _view(db, claim, policy)
+
+
+@router.get("/claims/{claim_id}/explanation")
+def explain_claim_status(claim_id: str, mode: Literal["actual", "simulation"] = "actual", user=Depends(current_user)):
+    with get_db() as db:
+        claim, policy = _claim(db, claim_id, user["id"])
+        clause = None
+        for document in _policy_files(db, policy):
+            if document["is_wording"] and document["exists"]:
+                row = _owned(db, "documents", document["document_id"], user["id"])
+                page = next((p for p in json.loads(row["pages_json"]) if p["page"] == 12), None)
+                quote = next((line.strip() for line in page["text"].splitlines() if "医疗费用原始凭证" in line), None) if page else None
+                if quote:
+                    clause = {"document_id": document["document_id"], "page": 12, "section": "4.3", "quote": quote, "source_url": WORDING_URL, "notice": "Actual source document requirement; it does not make the synthetic decision an actual insurer decision."}
+                    break
+        return tracking.explanation(db, claim, mode, CLAIM_CHANNEL_URL, WORDING_URL, clause)
+
+
+@router.post("/claims/{claim_id}/notifications/{notification_id}/ack")
+def acknowledge_notification(claim_id: str, notification_id: str, user=Depends(current_user)):
+    with get_db() as db:
+        claim, _ = _claim(db, claim_id, user["id"])
+        row = db.execute("SELECT id FROM claim_notifications WHERE id=? AND claim_id=? AND user_id=?", (notification_id, claim_id, user["id"])).fetchone()
+        if not row:
+            raise HTTPException(404, "Notification not found.")
+        db.execute("UPDATE claim_notifications SET read_at=COALESCE(read_at,?) WHERE id=? AND claim_id=? AND user_id=?", (now_iso(), notification_id, claim_id, user["id"]))
+        return {"ok": True, "notifications": tracking.notifications(db, claim)}
+
+
+@router.get("/claims/{claim_id}/notifications")
+def list_notifications(claim_id: str, user=Depends(current_user)):
+    with get_db() as db:
+        claim, _ = _claim(db, claim_id, user["id"])
+        return {"notifications": tracking.notifications(db, claim)}
+
+
+@router.get("/incidents")
+def incidents(family: str = Query("", max_length=40), country: str = Query("China", max_length=80)):
+    return incident_library(family, country)
 
 
 class Needs(StrictModel):
@@ -616,10 +879,37 @@ class Needs(StrictModel):
     priorities: list[str] = Field(default_factory=lambda: ["accidental_medical", "emergency_assistance"], max_length=20)
     purpose: str = Field(default="leisure", max_length=100)
     notes: str = Field(default="", max_length=2000)
+    goal: str = Field(default="", max_length=300)
+    dependants: int = Field(default=0, ge=0, le=30)
+    risk_tolerance: Literal["low", "medium", "high", "unspecified"] = "unspecified"
+    age: int | None = Field(default=None, ge=0, le=120)
+    occupation: str = Field(default="", max_length=120)
+    existing_cover: str = Field(default="", max_length=1000)
+    language: str = Field(default="zh", max_length=10)
+    city: str = Field(default="", max_length=100)
+
+
+class ReviewedTerms(StrictModel):
+    product_id: str = Field(default="", max_length=100)
+    limit: float | None = Field(default=None, ge=0, le=1000000000)
+    deductible: float | None = Field(default=None, ge=0, le=1000000000)
+    coinsurance_percent: float | None = Field(default=None, ge=0, le=100)
+    premium: float | None = Field(default=None, ge=0, le=1000000000)
+    waiting_days: int | None = Field(default=None, ge=0, le=3650)
+    eligible: bool | None = None
+    confirmed: bool = False
+    source_note: str = Field(default="", max_length=1000)
+
+
+class CostScenario(StrictModel):
+    bill_amount: float = Field(ge=0, le=1000000000)
+    currency: Literal["CNY", "JPY", "USD"] = "CNY"
+    terms: list[ReviewedTerms] = Field(default_factory=list, max_length=3)
 
 
 class CompareRequest(StrictModel):
     needs: Needs
+    scenario: CostScenario | None = None
 
 
 class Contact(StrictModel):
@@ -633,6 +923,7 @@ class BriefPreview(StrictModel):
     selected_product_ids: list[str] = Field(default_factory=list, max_length=5)
     contact: Contact = Field(default_factory=Contact)
     consent_to_include_contact: bool = False
+    agent_id: str | None = Field(default=None, max_length=100)
 
 
 class CallbackRequest(StrictModel):
@@ -661,9 +952,42 @@ def compare_products(payload: CompareRequest, user=Depends(current_user)):
     products.sort(key=lambda x: (-x["score"], x["id"]))
     with get_db() as db:
         audit(db, user["id"], "catalogue_comparison_computed", "comparison", None, {"family": needs["family"], "product_count": len(products)})
+        db.execute("INSERT INTO buying_needs VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET needs_json=excluded.needs_json,updated_at=excluded.updated_at", (user["id"], _json(needs), now_iso()))
         existing = [dict(row) for row in db.execute("SELECT id,title,family,confirmed,end_date FROM policies WHERE user_id=? AND family=?", (user["id"], needs["family"]))]
+    debate = comparison(products, needs, payload.scenario.model_dump() if payload.scenario else None)
     return {"needs": needs, "products": products, "criteria": priorities, "existing_cover": existing, "existing_cover_notice": "Your existing cover may already meet this need. Review it before considering another policy.",
-            "judge": {"type": "deterministic_feature_match", "price_used": False, "claims_probability_used": False}, "disclosure": "Educational comparison of a limited reference catalogue. Not licensed advice, a live quote or proof of current sale. A proposed licensed partner must perform suitability and final advice. Commercial commission does not affect this score."}
+            **debate, "disclosure": "Educational comparison of a limited reference catalogue. Not licensed advice, a live quote or proof of current sale. A proposed licensed partner must perform suitability and final advice. Commercial commission does not affect this score."}
+
+
+@router.get("/buying/needs")
+def saved_buying_needs(user=Depends(current_user)):
+    with get_db() as db:
+        row = db.execute("SELECT needs_json,updated_at FROM buying_needs WHERE user_id=?", (user["id"],)).fetchone()
+        return {"needs": json.loads(row["needs_json"]) if row else None, "updated_at": row["updated_at"] if row else None, "source": "User-entered buying form, not automatically approved long-term memory"}
+
+
+@router.delete("/buying/needs")
+def delete_saved_buying_needs(user=Depends(current_user)):
+    with get_db() as db:
+        db.execute("DELETE FROM buying_needs WHERE user_id=?", (user["id"],))
+        audit(db, user["id"], "buying_form_defaults_deleted", "buying")
+    return {"ok": True, "notice": "Current saved buying-form defaults deleted. Exported briefs and approved memory are separate and can be managed independently."}
+
+
+class CostEstimate(StrictModel):
+    bill_amount: float = Field(ge=0, le=1000000000)
+    currency: Literal["CNY", "JPY", "USD"] = "CNY"
+    terms: ReviewedTerms
+
+
+@router.post("/buying/cost-estimate")
+def cost_estimate(payload: CostEstimate, user=Depends(current_user)):
+    return estimate_cost(payload.bill_amount, payload.currency, payload.terms.model_dump())
+
+
+@router.get("/buying/agents")
+def demo_agent_directory(language: str = Query("zh", max_length=10), city: str = Query("", max_length=100)):
+    return match_agents(language, city)
 
 
 @router.post("/buying/mis-selling-check")
@@ -691,8 +1015,11 @@ def preview_brief(payload: BriefPreview, user=Depends(current_user)):
         raise HTTPException(422, "Unknown product reference.")
     if any(payload.contact.model_dump().values()) and not payload.consent_to_include_contact:
         raise HTTPException(409, "Explicitly approve including selected contact information.")
+    matched_agent = next((a for a in DEMO_AGENTS if a["id"] == payload.agent_id), None) if payload.agent_id else None
+    if payload.agent_id and not matched_agent:
+        raise HTTPException(422, "Unknown demonstration agent.")
     snapshot = {"needs": payload.needs.model_dump(), "selected_product_ids": payload.selected_product_ids, "contact": payload.contact.model_dump() if payload.consent_to_include_contact else {}, "consent_to_include_contact": payload.consent_to_include_contact,
-                "recipient": "User download only", "excluded": ["Original medical records", "Financial statements", "Full portfolio", "Conversation history", "Personal memory"], "no_external_delivery": True, "partner_status": "Proposed licensed partner demonstration - no real partner connection"}
+                "recipient": "User download only", "matched_demo_agent": matched_agent, "excluded": ["Original medical records", "Financial statements", "Full portfolio", "Conversation history", "Personal memory"], "no_external_delivery": True, "partner_status": "Proposed licensed partner demonstration - no real partner connection"}
     with get_db() as db:
         result = _make_token(db, user["id"], "buying_brief", "export_agent_brief", snapshot, _hash(snapshot))
         audit(db, user["id"], "agent_brief_preview_created", "buying")
@@ -744,5 +1071,92 @@ def renewal_reminders(user=Depends(current_user)):
             except ValueError:
                 continue
             if days <= 60:
-                items.append(dict(row) | {"days_until_expiry": days, "state": "expired" if days < 0 else "review_due", "steps": ["Reconfirm changed circumstances", "Review existing and proposed cover", "Discuss with licensed agent", "Record a new policy only after issuance evidence"], "renewed": False})
+                history = _premium_history(db, row["id"], user["id"])
+                items.append(dict(row) | {"days_until_expiry": days, "state": "expired" if days < 0 else "review_due", "steps": ["Reconfirm changed circumstances", "Review existing and proposed cover", "Discuss with licensed agent", "Record a new policy only after issuance evidence"], "premium_history": history["entries"], "hikes": history["hikes"], "hike_warning": bool(history["hikes"]), "renewed": False})
     return {"date_basis": today.isoformat(), "timezone": "Asia/Shanghai", "reminders": items, "notice": "A reminder or handoff does not renew, extend or issue a policy."}
+
+
+def _premium_history(db, policy_id, user_id):
+    entries = [dict(row) for row in db.execute("SELECT id,year,premium,currency,source_note,document_id,provenance,created_at FROM policy_premium_history WHERE policy_id=? AND user_id=? ORDER BY year,currency", (policy_id, user_id))]
+    hikes, previous = [], {}
+    for entry in entries:
+        before = previous.get(entry["currency"])
+        if before and before["premium"] > 0 and entry["premium"] > before["premium"]:
+            hikes.append({"from_year": before["year"], "to_year": entry["year"], "change_percent": round((entry["premium"] - before["premium"]) / before["premium"] * 100, 2), "currency": entry["currency"], "notice": "An increase in your user-reviewed entries; compare benefit / term changes and obtain the insurer's explanation. This is not a regulatory cap or predicted renewal price."})
+        previous[entry["currency"]] = entry
+    return {"entries": entries, "hikes": hikes, "notice": "User-reviewed historical premiums, not insurer-verified quotes. Different currencies are never combined. A record does not renew or extend cover."}
+
+
+class PremiumEntry(StrictModel):
+    year: int = Field(ge=1900, le=2200)
+    premium: float = Field(ge=0, le=1000000000)
+    currency: Literal["CNY", "JPY", "USD"] = "CNY"
+    source_note: str = Field(min_length=1, max_length=1000)
+    document_id: str | None = Field(default=None, max_length=100)
+    confirmed: bool
+
+
+@router.get("/policies/{policy_id}/premium-history")
+def premium_history(policy_id: str, user=Depends(current_user)):
+    with get_db() as db:
+        _owned(db, "policies", policy_id, user["id"])
+        return _premium_history(db, policy_id, user["id"])
+
+
+@router.post("/policies/{policy_id}/premium-history")
+def save_premium_history(policy_id: str, payload: PremiumEntry, user=Depends(current_user)):
+    if not payload.confirmed or not payload.source_note.strip():
+        raise HTTPException(409, "Review the exact historical premium and its source before saving.")
+    with get_db() as db:
+        _owned(db, "policies", policy_id, user["id"])
+        if payload.document_id:
+            document = _owned(db, "documents", payload.document_id, user["id"])
+            if not _doc_valid(document):
+                raise HTTPException(409, "The supporting original is unavailable.")
+        db.execute("INSERT INTO policy_premium_history VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id,policy_id,year,currency) DO UPDATE SET premium=excluded.premium,source_note=excluded.source_note,document_id=excluded.document_id,created_at=excluded.created_at", (uid("prm_"), user["id"], policy_id, payload.year, payload.premium, payload.currency, payload.source_note, payload.document_id, "user_reviewed", now_iso()))
+        audit(db, user["id"], "historical_premium_user_reviewed", "policy", policy_id, {"year": payload.year, "currency": payload.currency})
+        return _premium_history(db, policy_id, user["id"])
+
+
+class RenewalComparison(StrictModel):
+    policy_id: str = Field(min_length=1, max_length=100)
+    proposed_product_id: str = Field(min_length=1, max_length=100)
+
+
+@router.post("/buying/renewal-compare")
+def compare_renewal(payload: RenewalComparison, user=Depends(current_user)):
+    proposed = next((p for p in CATALOG if p["id"] == payload.proposed_product_id), None)
+    if not proposed:
+        raise HTTPException(422, "Choose a product from the limited reference catalogue.")
+    with get_db() as db:
+        policy = _owned(db, "policies", payload.policy_id, user["id"])
+        history = _premium_history(db, policy["id"], user["id"])
+        return {"existing": {k: policy[k] for k in ("id", "title", "family", "start_date", "end_date", "confirmed")}, "premium_history": history, "proposed": proposed,
+                "questions": ["Have your needs, dependants, occupation, travel or health disclosures changed?", "Does the new offer preserve existing benefits, exclusions, continuity and waiting-period treatment?", "Obtain a written current quote and compare the same term, limits, deductible and co-pay.", "Review non-renewal / cancellation / free-look conditions in the exact contract with a licensed agent."],
+                "no_extension": True, "notice": "Comparison and a reminder do not renew, cancel, issue or extend any policy. The reference is not proof of sale or an actual renewal offer."}
+
+
+class SurrenderCheck(StrictModel):
+    premiums_paid: float = Field(ge=0, le=1000000000)
+    cash_value: float = Field(ge=0, le=1000000000)
+    new_premium: float | None = Field(default=None, ge=0, le=1000000000)
+    current_premium: float | None = Field(default=None, ge=0, le=1000000000)
+    lost_benefits: list[str] = Field(default_factory=list, max_length=20)
+    currency: Literal["CNY", "JPY", "USD"] = "CNY"
+    confirmed: bool
+    source_note: str = Field(min_length=1, max_length=1000)
+
+
+@router.post("/buying/surrender-check")
+def surrender_check(payload: SurrenderCheck, user=Depends(current_user)):
+    if not payload.confirmed or not payload.source_note.strip():
+        raise HTTPException(409, "Confirm the actual cash-value statement and comparable premium period first.")
+    if any(len(value) > 300 for value in payload.lost_benefits):
+        raise HTTPException(422, "A benefit description is too long.")
+    loss = max(0, round(payload.premiums_paid - payload.cash_value, 2))
+    return {"engine": "deterministic_arithmetic", "currency": payload.currency, "capital_loss": loss,
+            "loss_percent": round(loss / payload.premiums_paid * 100, 2) if payload.premiums_paid else None,
+            "annual_premium_change": round(payload.new_premium - payload.current_premium, 2) if payload.new_premium is not None and payload.current_premium is not None else None,
+            "lost_benefits": payload.lost_benefits, "source_note": payload.source_note,
+            "cooling_off_notice": "Check the exact issued contract and official seller for any free-look / cancellation right, start date, period and deductions. No universal number of days is assumed.",
+            "warnings": ["Cash value is user reviewed, not independently verified by the insurer.", "Past protection consumed and time value are not included in this simple paid-premium-minus-cash-value comparison.", "Replacement can restart underwriting or waiting periods and lose guarantees or existing benefits. Compare written terms before any irreversible surrender.", "The app cannot surrender, refund, purchase or move money. Discuss the actual policy with a licensed professional."], "action_executed": False}

@@ -3,14 +3,18 @@ import { BrowserRouter, Link, NavLink, Outlet, Route, Routes, useLocation } from
 import { AppIcon, type IconName } from '@/components/AppIcon';
 import logo from '@/assets/webank-logo.png';
 import { api, errorText } from './api';
-import { Home, PolicyPage, UploadPage, ChatPage, ClaimsPage, ClaimPage, EmergencyPage, BuyPage, MePage, SourcePage, CapturePage, VisualPage, AboutPage } from './pages';
+import { Home, PolicyPage, UploadPage, ClaimsPage, ClaimPage, EmergencyPage, BuyPage, MePage, SourcePage, CapturePage, VisualPage, AboutPage, ReportPage, IncidentLibraryPage } from './pages';
+import ChatWorkspace from './ChatWorkspace';
+import InspectorPanel from './InspectorPanel';
 import './live.css';
+import './workspace.css';
 
 export type Locale = 'zh' | 'en';
 export interface User { id: string; email: string; display_name: string }
 interface AppContext {
   locale: Locale; t: (zh: string, en: string) => string; user: User | null; ready: boolean;
   health: any; refreshUser: () => Promise<void>; trace: any[]; setTrace: (trace: any[]) => void; openInspector: () => void;
+  traceId: string | null; setTraceId: (id: string | null) => void;
 }
 const Context = createContext<AppContext>(null!);
 export const useLive = () => useContext(Context);
@@ -40,6 +44,7 @@ function Frame() {
   const [health, setHealth] = useState<any>(null);
   const [healthError, setHealthError] = useState('');
   const [trace, setTrace] = useState<any[]>([]);
+  const [traceId, setTraceId] = useState<string | null>(null);
   const [inspector, setInspector] = useState(false);
   const location = useLocation();
   const t = useCallback((zh: string, en: string) => locale === 'zh' ? zh : en, [locale]);
@@ -47,6 +52,7 @@ function Frame() {
   useEffect(() => { void refreshUser(); void api('/health').then(setHealth).catch((e) => setHealthError(errorText(e))); }, [refreshUser]);
   useEffect(() => { document.documentElement.lang = locale === 'zh' ? 'zh-CN' : 'en'; try { localStorage.setItem('wewise.live.locale', locale); } catch { /* optional preference */ } }, [locale]);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [location.pathname]);
+  useEffect(() => { setTrace([]); setTraceId(null); setInspector(false); }, [user?.id]);
   const navigation: { to: string; icon: IconName; zh: string; en: string }[] = [
     { to: '/', icon: 'home', zh: '首页', en: 'Home' },
     { to: '/ask', icon: 'chat', zh: '保障助手', en: 'Assistant' },
@@ -54,13 +60,13 @@ function Frame() {
     { to: '/me', icon: 'user', zh: '我的', en: 'Me' },
   ];
   const active = (to: string) => to === '/' ? location.pathname === '/' || location.pathname.startsWith('/polic') || location.pathname === '/upload' : location.pathname.startsWith(to);
-  return <Context.Provider value={{ locale, t, user, ready, health, refreshUser, trace, setTrace, openInspector: () => setInspector(true) }}>
+  return <Context.Provider value={{ locale, t, user, ready, health, refreshUser, trace, setTrace, traceId, setTraceId, openInspector: () => setInspector(true) }}>
     <div className="live-shell">
       <aside className="live-sidebar">
         <Link to="/" aria-label="WeWise home"><img src={logo} alt="WeBank 微众银行" className="live-logo" /></Link>
         <div className="live-brand"><strong>WeWise</strong><span>{t('让保障更清楚，让理赔少一点慌张', 'Clarity for your cover. Support for your claim.')}</span></div>
         <nav aria-label={t('主导航', 'Main navigation')}>{navigation.map(n => <NavLink key={n.to} to={n.to} end={n.to === '/'} className={active(n.to) ? 'selected' : ''}><AppIcon name={n.icon} /><span>{t(n.zh, n.en)}</span></NavLink>)}</nav>
-        <div className="live-sidebar-extra"><Link to="/buy"><AppIcon name="umbrella" />{t('探索保障', 'Explore cover')}</Link><Link to="/visual"><AppIcon name="shield" />{t('可选 3D 概览', 'Optional 3D view')}</Link><Link to="/capture"><AppIcon name="scan" />{t('拍摄证据', 'Capture evidence')}</Link><Link to="/about"><AppIcon name="info" />{t('能力与来源', 'Capabilities & sources')}</Link></div>
+        <div className="live-sidebar-extra"><Link to="/buy"><AppIcon name="umbrella" />{t('探索保障', 'Explore cover')}</Link><Link to="/incidents"><AppIcon name="file" />{t('事故指引', 'Incident guidance')}</Link><Link to="/reports"><AppIcon name="scan" />{t('报告核对', 'Report review')}</Link><Link to="/visual"><AppIcon name="shield" />{t('可选 3D 概览', 'Optional 3D view')}</Link><Link to="/capture"><AppIcon name="scan" />{t('拍摄证据', 'Capture evidence')}</Link><Link to="/about"><AppIcon name="info" />{t('能力与来源', 'Capabilities & sources')}</Link></div>
         <div className="live-sidebar-footer"><span>{t('独立黑客松项目 · WeBank 风格适配', 'Independent hackathon · WeBank-inspired')}</span><a href="/?mode=simulator">{t('打开预设引导模拟器 ↗', 'Open guided simulator ↗')}</a></div>
       </aside>
       <div className="live-body">
@@ -70,13 +76,13 @@ function Frame() {
         <main className="live-main" id="main"><Outlet /></main>
         <nav className="live-bottom-nav" aria-label={t('底部导航', 'Bottom navigation')}>{navigation.map(n => <NavLink key={n.to} to={n.to} end={n.to === '/'} className={active(n.to) ? 'selected' : ''}><AppIcon name={n.icon} size={24} /><span>{t(n.zh, n.en)}</span></NavLink>)}</nav>
       </div>
-      {inspector ? <aside className="live-inspector"><div className="live-section-title"><h2>{t('实际运行记录', 'Actual agent inspector')}</h2><button className="live-icon-btn" aria-label="Close inspector" onClick={() => setInspector(false)}><AppIcon name="close" /></button></div><Notice>{t('显示后端返回的记录；不生成演示耗时或虚构模型调用。', 'Backend-returned records only; no invented timings or model calls.')}</Notice><dl className="live-facts"><dt>API</dt><dd>{health?.status ?? 'unavailable'}</dd><dt>AI</dt><dd>{health?.ai?.configured ? health.ai.model : t('未配置模型 · 检索模式', 'Model not configured · retrieval mode')}</dd><dt>OCR</dt><dd>{health?.ocr?.engine ?? '—'}</dd><dt>JEV</dt><dd>{health?.jev?.configured ? 'Configured' : t('未配置 · 规则路由', 'Not configured · rules routing')}</dd></dl>{trace.length ? trace.map((item, i) => <div className="live-trace" key={i}><strong>{item.stage ?? item.tool ?? `Step ${i + 1}`}</strong><span>{item.status}</span><p>{typeof item.detail === 'string' ? item.detail : JSON.stringify(item.detail ?? item)}</p></div>) : <p className="live-muted">{t('发起一次提问后，这里会显示实际检索与回答记录。', 'Ask a question to view actual retrieval and response records.')}</p>}</aside> : null}
+      {inspector ? <InspectorPanel onClose={() => setInspector(false)}/> : null}
     </div>
   </Context.Provider>;
 }
 
 export default function LiveApp() {
   return <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><Routes><Route element={<Frame />}>
-    <Route index element={<Home />} /><Route path="policies" element={<Home />} /><Route path="policies/:id" element={<PolicyPage />} /><Route path="upload" element={<UploadPage />} /><Route path="ask" element={<ChatPage />} /><Route path="claims" element={<ClaimsPage />} /><Route path="claims/:id" element={<ClaimPage />} /><Route path="emergency" element={<EmergencyPage />} /><Route path="buy" element={<BuyPage />} /><Route path="me" element={<MePage />} /><Route path="memory" element={<MePage />} /><Route path="documents/:id" element={<SourcePage />} /><Route path="capture" element={<CapturePage />} /><Route path="visual" element={<VisualPage />} /><Route path="about" element={<AboutPage />} /><Route path="*" element={<Home />} />
+    <Route index element={<Home />} /><Route path="policies" element={<Home />} /><Route path="policies/:id" element={<PolicyPage />} /><Route path="upload" element={<UploadPage />} /><Route path="ask" element={<ChatWorkspace />} /><Route path="claims" element={<ClaimsPage />} /><Route path="claims/:id" element={<ClaimPage />} /><Route path="emergency" element={<EmergencyPage />} /><Route path="buy" element={<BuyPage />} /><Route path="me" element={<MePage />} /><Route path="memory" element={<MePage />} /><Route path="documents/:id" element={<SourcePage />} /><Route path="capture" element={<CapturePage />} /><Route path="visual" element={<VisualPage />} /><Route path="reports" element={<ReportPage />} /><Route path="incidents" element={<IncidentLibraryPage />} /><Route path="about" element={<AboutPage />} /><Route path="*" element={<Home />} />
   </Route></Routes></BrowserRouter>;
 }

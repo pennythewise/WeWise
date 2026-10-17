@@ -13,6 +13,8 @@ import subprocess
 import time
 import urllib.request
 
+from ensure_memory import ensure_memory
+
 PROJECT = Path('/vercel/WeWise')
 DATA = Path('/vercel/wewise-data')
 HEALTH = 'http://127.0.0.1:8017/api/health'
@@ -30,6 +32,7 @@ def ready() -> bool:
 
 def main() -> None:
     DATA.mkdir(parents=True, exist_ok=True)
+    memory_environment = ensure_memory()
     with (DATA / 'backend-start.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         if ready():
@@ -48,16 +51,20 @@ def main() -> None:
             'COOKIE_SECURE': '1',
             'WEWISE_ALLOWED_ORIGINS': os.getenv('PUBLIC_ORIGIN', 'https://wewise-retrieval-preview.vercel.app'),
         })
-        # The public retrieval preview uses its approved local ledger. Tencent
-        # memory is only enabled after a separate hosted service is configured.
-        environment.pop('TENCENT_MEMORY_URL', None)
-        environment.pop('TDAI_GATEWAY_API_KEY', None)
+        # Runtime installation is an operator action. Requests only resume the
+        # pinned local services and never download weights or package source.
+        embedding_dir = DATA / 'models/multilingual-e5-small'
+        if not (embedding_dir / 'model_quantized.onnx').is_file() or not (embedding_dir / 'tokenizer.json').is_file():
+            raise RuntimeError('Pinned local embedding assets require operator installation.')
+        environment['WEWISE_EMBEDDING_DIR'] = str(embedding_dir)
+        environment.update(memory_environment)
         with (DATA / 'backend.log').open('ab') as output:
             process = subprocess.Popen(
                 [str(executable), '-m', 'uvicorn', 'backend.app.main:app', '--host', '0.0.0.0', '--port', '8017', '--proxy-headers', '--forwarded-allow-ips', '*'],
                 cwd=PROJECT, env=environment, stdin=subprocess.DEVNULL,
                 stdout=output, stderr=subprocess.STDOUT, start_new_session=True,
             )
+        (DATA / 'backend.pid').write_text(str(process.pid))
         for _ in range(75):
             if ready():
                 print('backend_started')

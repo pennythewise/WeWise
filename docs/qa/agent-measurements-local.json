@@ -1,0 +1,1013 @@
+{
+  "measured_at": "2026-10-17T15:48:26.348300+00:00",
+  "environment": "local real HTTP / NDJSON",
+  "synthetic_only": true,
+  "limits": [
+    "Twelve selected acceptance turns, not a random sample or statistical SLA.",
+    "First streamed event is not a generated first token.",
+    "No external model or insurer call is made. Token usage and model cost are unmeasured, not estimated as free."
+  ],
+  "cases": [
+    {
+      "id": "clarify_policy",
+      "message": "What outpatient evidence does my policy require?",
+      "requested_goal": "policy_question",
+      "actual_goal": "policy_question",
+      "goal_match": true,
+      "first_event_ms": 17.56,
+      "time_to_final_ms": 53.57,
+      "event_count": 5,
+      "plan": {
+        "valid": true,
+        "step_count": 0,
+        "tools": [],
+        "errors": []
+      },
+      "citation_checks": [],
+      "citation_count": 0,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 17.56
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 31.54
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 31.63
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 45.93
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 46.02
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "resume_original_question",
+      "message": "Use my first travel policy.",
+      "requested_goal": "policy_question",
+      "actual_goal": "policy_question",
+      "goal_match": true,
+      "first_event_ms": 16.93,
+      "time_to_final_ms": 11531.1,
+      "event_count": 12,
+      "plan": {
+        "valid": true,
+        "step_count": 3,
+        "tools": [
+          "policy_get",
+          "policy_search_clauses",
+          "policy_explain"
+        ],
+        "errors": []
+      },
+      "citation_checks": [
+        {
+          "match": true,
+          "page": 12,
+          "quote_length": 451,
+          "source_ref": "d604e5104e"
+        }
+      ],
+      "citation_count": 1,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 16.93
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 31.0
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 31.09
+        },
+        {
+          "stage": "replan",
+          "status": "ok",
+          "received_ms": 45.29
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "policy_get",
+          "step_id": "s1",
+          "received_ms": 45.37
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "policy_get",
+          "step_id": "s1",
+          "latency_ms": 15,
+          "received_ms": 72.47
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "policy_search_clauses",
+          "step_id": "s2",
+          "received_ms": 72.54
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "policy_search_clauses",
+          "step_id": "s2",
+          "latency_ms": 11375,
+          "received_ms": 11465.84
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "policy_explain",
+          "step_id": "s3",
+          "received_ms": 11465.92
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "policy_explain",
+          "step_id": "s3",
+          "latency_ms": 46,
+          "received_ms": 11515.35
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 11515.44
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 11530.92
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "correct_to_other_policy",
+      "message": "Correction, use the other policy. What outpatient evidence is needed?",
+      "requested_goal": "policy_question",
+      "actual_goal": "policy_question",
+      "goal_match": true,
+      "first_event_ms": 19.82,
+      "time_to_final_ms": 174.8,
+      "event_count": 12,
+      "plan": {
+        "valid": true,
+        "step_count": 3,
+        "tools": [
+          "policy_get",
+          "policy_search_clauses",
+          "policy_explain"
+        ],
+        "errors": []
+      },
+      "citation_checks": [
+        {
+          "match": true,
+          "page": 1,
+          "quote_length": 319,
+          "source_ref": "561c0d25a5"
+        }
+      ],
+      "citation_count": 1,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 19.82
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 34.07
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 34.15
+        },
+        {
+          "stage": "replan",
+          "status": "ok",
+          "received_ms": 48.9
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "policy_get",
+          "step_id": "s1",
+          "received_ms": 49.01
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "policy_get",
+          "step_id": "s1",
+          "latency_ms": 15,
+          "received_ms": 67.21
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "policy_search_clauses",
+          "step_id": "s2",
+          "received_ms": 67.33
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "policy_search_clauses",
+          "step_id": "s2",
+          "latency_ms": 31,
+          "received_ms": 118.3
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "policy_explain",
+          "step_id": "s3",
+          "received_ms": 118.42
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "policy_explain",
+          "step_id": "s3",
+          "latency_ms": 15,
+          "received_ms": 157.76
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 157.86
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 174.66
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "correct_back_original",
+      "message": "Correction, use my original travel policy. What exclusions matter?",
+      "requested_goal": "policy_question",
+      "actual_goal": "policy_question",
+      "goal_match": true,
+      "first_event_ms": 19.03,
+      "time_to_final_ms": 174.26,
+      "event_count": 12,
+      "plan": {
+        "valid": true,
+        "step_count": 3,
+        "tools": [
+          "policy_get",
+          "policy_search_clauses",
+          "policy_explain"
+        ],
+        "errors": []
+      },
+      "citation_checks": [
+        {
+          "match": true,
+          "page": 1,
+          "quote_length": 600,
+          "source_ref": "a67214a34b"
+        },
+        {
+          "match": true,
+          "page": 7,
+          "quote_length": 19,
+          "source_ref": "d604e5104e"
+        },
+        {
+          "match": true,
+          "page": 5,
+          "quote_length": 26,
+          "source_ref": "d604e5104e"
+        }
+      ],
+      "citation_count": 3,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 19.03
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 33.71
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 33.79
+        },
+        {
+          "stage": "replan",
+          "status": "ok",
+          "received_ms": 49.56
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "policy_get",
+          "step_id": "s1",
+          "received_ms": 49.66
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "policy_get",
+          "step_id": "s1",
+          "latency_ms": 16,
+          "received_ms": 77.33
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "policy_search_clauses",
+          "step_id": "s2",
+          "received_ms": 77.44
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "policy_search_clauses",
+          "step_id": "s2",
+          "latency_ms": 16,
+          "received_ms": 109.31
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "policy_explain",
+          "step_id": "s3",
+          "received_ms": 109.4
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "policy_explain",
+          "step_id": "s3",
+          "latency_ms": 31,
+          "received_ms": 157.39
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 157.48
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 174.16
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "source_coverage_observations",
+      "message": "Show my coverage gaps and overlaps.",
+      "requested_goal": "coverage_analysis",
+      "actual_goal": "coverage_analysis",
+      "goal_match": true,
+      "first_event_ms": 17.75,
+      "time_to_final_ms": 93.8,
+      "event_count": 7,
+      "plan": {
+        "valid": true,
+        "step_count": 1,
+        "tools": [
+          "coverage_analyze"
+        ],
+        "errors": []
+      },
+      "citation_checks": [
+        {
+          "match": true,
+          "page": 1,
+          "quote_length": 252,
+          "source_ref": "d604e5104e"
+        },
+        {
+          "match": true,
+          "page": 16,
+          "quote_length": 520,
+          "source_ref": "d604e5104e"
+        },
+        {
+          "match": true,
+          "page": 1,
+          "quote_length": 319,
+          "source_ref": "561c0d25a5"
+        },
+        {
+          "match": true,
+          "page": 1,
+          "quote_length": 43,
+          "source_ref": "d604e5104e"
+        },
+        {
+          "match": true,
+          "page": 1,
+          "quote_length": 319,
+          "source_ref": "561c0d25a5"
+        },
+        {
+          "match": true,
+          "page": 4,
+          "quote_length": 700,
+          "source_ref": "d604e5104e"
+        },
+        {
+          "match": true,
+          "page": 1,
+          "quote_length": 42,
+          "source_ref": "d604e5104e"
+        }
+      ],
+      "citation_count": 7,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 17.75
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 31.87
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 31.95
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "coverage_analyze",
+          "step_id": "s1",
+          "received_ms": 71.05
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "coverage_analyze",
+          "step_id": "s1",
+          "latency_ms": 15,
+          "received_ms": 71.15
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 85.59
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 85.66
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "capture_buying_needs",
+      "message": "Compare insurance for a trip to Japan; my budget is CNY 500 and I have one dependant.",
+      "requested_goal": "buying",
+      "actual_goal": "buying",
+      "goal_match": true,
+      "first_event_ms": 17.44,
+      "time_to_final_ms": 85.04,
+      "event_count": 9,
+      "plan": {
+        "valid": true,
+        "step_count": 2,
+        "tools": [
+          "needs_defaults",
+          "needs_capture"
+        ],
+        "errors": []
+      },
+      "citation_checks": [],
+      "citation_count": 0,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 17.44
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 30.56
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 30.65
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "needs_defaults",
+          "step_id": "s1",
+          "received_ms": 39.53
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "needs_defaults",
+          "step_id": "s1",
+          "latency_ms": 0,
+          "received_ms": 53.17
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "needs_capture",
+          "step_id": "s2",
+          "received_ms": 53.26
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "needs_capture",
+          "step_id": "s2",
+          "latency_ms": 0,
+          "received_ms": 69.21
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 69.34
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 84.95
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "prepare_reviewable_draft",
+      "message": "Prepare my claim package for review.",
+      "requested_goal": "claim_preview",
+      "actual_goal": "claim_preview",
+      "goal_match": true,
+      "first_event_ms": 18.72,
+      "time_to_final_ms": 131.71,
+      "event_count": 9,
+      "plan": {
+        "valid": true,
+        "step_count": 2,
+        "tools": [
+          "claim_status_get",
+          "claim_export_preview"
+        ],
+        "errors": []
+      },
+      "citation_checks": [],
+      "citation_count": 0,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 18.72
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 32.19
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 32.27
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "claim_status_get",
+          "step_id": "s1",
+          "received_ms": 40.79
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "claim_status_get",
+          "step_id": "s1",
+          "latency_ms": 32,
+          "received_ms": 72.27
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "claim_export_preview",
+          "step_id": "s2",
+          "received_ms": 72.35
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "claim_export_preview",
+          "step_id": "s2",
+          "latency_ms": 31,
+          "received_ms": 116.88
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 116.97
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 131.61
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "actual_claim_tracking",
+      "message": "What is my claim status?",
+      "requested_goal": "claim_status",
+      "actual_goal": "claim_status",
+      "goal_match": true,
+      "first_event_ms": 17.45,
+      "time_to_final_ms": 88.34,
+      "event_count": 7,
+      "plan": {
+        "valid": true,
+        "step_count": 1,
+        "tools": [
+          "claim_status_get"
+        ],
+        "errors": []
+      },
+      "citation_checks": [],
+      "citation_count": 0,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 17.45
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 31.63
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 31.78
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "claim_status_get",
+          "step_id": "s1",
+          "received_ms": 40.89
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "claim_status_get",
+          "step_id": "s1",
+          "latency_ms": 16,
+          "received_ms": 73.61
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 73.68
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 88.24
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "explain_actual_delay",
+      "message": "Explain the delay in this claim.",
+      "requested_goal": "claim_explanation",
+      "actual_goal": "claim_explanation",
+      "goal_match": true,
+      "first_event_ms": 17.26,
+      "time_to_final_ms": 80.48,
+      "event_count": 7,
+      "plan": {
+        "valid": true,
+        "step_count": 1,
+        "tools": [
+          "claim_explanation"
+        ],
+        "errors": []
+      },
+      "citation_checks": [],
+      "citation_count": 0,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 17.26
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 30.47
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 30.55
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "claim_explanation",
+          "step_id": "s1",
+          "received_ms": 59.62
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "claim_explanation",
+          "step_id": "s1",
+          "latency_ms": 16,
+          "received_ms": 59.7
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 73.12
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 73.22
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "incident_guidance",
+      "message": "Show the incident guide for a China travel policy.",
+      "requested_goal": "incidents",
+      "actual_goal": "incidents",
+      "goal_match": true,
+      "first_event_ms": 17.42,
+      "time_to_final_ms": 67.07,
+      "event_count": 7,
+      "plan": {
+        "valid": true,
+        "step_count": 1,
+        "tools": [
+          "incident_types_list"
+        ],
+        "errors": []
+      },
+      "citation_checks": [],
+      "citation_count": 0,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 17.42
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 31.08
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 31.16
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "incident_types_list",
+          "step_id": "s1",
+          "received_ms": 44.72
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "incident_types_list",
+          "step_id": "s1",
+          "latency_ms": 16,
+          "received_ms": 44.81
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 58.91
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 58.99
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "urgent_human_contacts",
+      "message": "I need urgent emergency contacts in Japan.",
+      "requested_goal": "emergency",
+      "actual_goal": "emergency",
+      "goal_match": true,
+      "first_event_ms": 16.77,
+      "time_to_final_ms": 64.66,
+      "event_count": 7,
+      "plan": {
+        "valid": true,
+        "step_count": 1,
+        "tools": [
+          "emergency_contacts"
+        ],
+        "errors": []
+      },
+      "citation_checks": [],
+      "citation_count": 0,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 16.77
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 30.35
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 30.44
+        },
+        {
+          "stage": "execute",
+          "status": "running",
+          "tool": "emergency_contacts",
+          "step_id": "s1",
+          "received_ms": 44.84
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "tool": "emergency_contacts",
+          "step_id": "s1",
+          "latency_ms": 0,
+          "received_ms": 44.92
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 57.76
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 57.83
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "out_of_scope_refusal",
+      "message": "Buy Bitcoin for me.",
+      "requested_goal": "outside_scope",
+      "actual_goal": "outside_scope",
+      "goal_match": true,
+      "first_event_ms": 17.86,
+      "time_to_final_ms": 61.24,
+      "event_count": 5,
+      "plan": {
+        "valid": true,
+        "step_count": 0,
+        "tools": [],
+        "errors": []
+      },
+      "citation_checks": [],
+      "citation_count": 0,
+      "special_acceptance_pass": true,
+      "tool_failure_count": 0,
+      "boundaries": [
+        {
+          "stage": "understand",
+          "status": "ok",
+          "received_ms": 17.86
+        },
+        {
+          "stage": "routing",
+          "status": "fallback",
+          "received_ms": 32.05
+        },
+        {
+          "stage": "plan",
+          "status": "ok",
+          "received_ms": 32.18
+        },
+        {
+          "stage": "verify",
+          "status": "ok",
+          "received_ms": 53.62
+        },
+        {
+          "stage": "respond",
+          "status": "ok",
+          "received_ms": 53.69
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "runtime": {
+    "version": "0.3.0",
+    "retrieval_engine": "Local multilingual E5 + SQLite BM25/RRF",
+    "external_generation_enforced_disabled": true,
+    "jev_enforced_disabled": true
+  },
+  "registered_tool_count": 34,
+  "summary": {
+    "turns": 12,
+    "acceptance_passed": 12,
+    "goals_matched": 12,
+    "plans_valid": 12,
+    "planned_tool_calls": 18,
+    "source_quotes_checked": 12,
+    "source_quotes_matched": 12,
+    "first_event_ms": {
+      "p50": 17.5,
+      "p95": 19.39
+    },
+    "time_to_final_ms": {
+      "p50": 86.69,
+      "p95": 5285.13
+    },
+    "external_generation_calls": 0,
+    "model_tokens": null,
+    "model_cost": null,
+    "generation_evidence": "Runtime forces external generation/JEV disabled; this script invokes only local app endpoints."
+  },
+  "cleanup": {
+    "conversations_deleted": 9,
+    "claims_deleted": 1,
+    "policies_deleted": 2,
+    "signed_out": true
+  },
+  "errors": [],
+  "pass": true
+}

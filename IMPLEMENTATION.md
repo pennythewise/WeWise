@@ -1,3 +1,9 @@
+# Expanded app update —17October2026
+
+The [complete requirement register](docs/REQUIREMENTS_STATUS.md) and [current feature boundaries](FEATURE_STATUS.md) supersede older missing-feature notes below. New routes: `/reports`, `/incidents`; the main assistant persists conversations and executes validated plans with34 adapters. Run `python eval/run.py` for the task/attack corpus, `python scripts/measure-agent.py --help` for measured streaming scenarios and `python scripts/verify-expanded-preview.py --help` for the full-stack smoke. Operator installation of local semantic assets and private Tencent MemoryCore is documented in [deploy/LOCAL_RETRIEVAL_SERVICES.md](deploy/LOCAL_RETRIEVAL_SERVICES.md). No external model or JEV credential is needed for retrieval mode.
+
+---
+
 # WeWise implementation and team runbook
 
 Mainland China insurance assistant, with Japan travel incidents as the complete

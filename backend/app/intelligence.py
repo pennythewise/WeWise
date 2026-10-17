@@ -1,8 +1,8 @@
 """Grounded policy assistance. Model text never executes application actions.
 
-Retrieval uses owner-filtered SQLite FTS5/BM25 and a multilingual lexical fallback.
-There is no semantic-vector retrieval claim. Model output is schema/citation/
-numeric checked; failures degrade to explicitly labelled extractive evidence.
+Retrieval uses owner-filtered SQLite FTS5/BM25, optional pinned local multilingual
+E5 vectors and lexical fallback. Model assertions require exact supported source
+extracts; failures degrade to explicitly labelled extractive evidence.
 """
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ from urllib.parse import urlparse
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from .core import audit, current_user, get_db
@@ -160,6 +161,12 @@ def retrieve(db, user_id: str, policy_id: str, query: str, limit: int = 5) -> tu
         if score > 0 and matched:
             scored.append((score, row))
     scored.sort(key=lambda item: (-item[0], item[1]["page"], item[1]["id"]))
+    retrieval_engine = "sqlite_fts5_bm25+multilingual_lexical" if fts_ranks else "multilingual_lexical_bm25"
+    from .semantic_retrieval import hybrid_order
+    hybrid = hybrid_order(db, user_id, policy_id, query, [dict(row) for _, row in scored], limit=30)
+    if hybrid is not None:
+        scored = [(row["_hybrid_score"], row) for row in hybrid]
+        retrieval_engine = "local_e5_onnx_cpu_bm25_rrf"
     if medical_query and document_query and not exclusion_query:
         relevant_lists = [item for item in scored if is_medical_document_section(item[1]["text"].lower())]
         if relevant_lists:
@@ -173,7 +180,7 @@ def retrieve(db, user_id: str, policy_id: str, query: str, limit: int = 5) -> tu
             break
         total += len(row["text"])
         result.append({"id": f"C{len(result) + 1}", "document_id": row["document_id"], "page": row["page"], "quote": row["text"], "chunk_id": row["id"]})
-    return result, "sqlite_fts5_bm25+multilingual_lexical" if fts_ranks else "multilingual_lexical_bm25"
+    return result, retrieval_engine
 
 
 def is_guarantee(answer: str) -> bool:
@@ -202,6 +209,31 @@ def verify_model_output(output: dict, citations: list[dict]) -> tuple[str | None
     for citation in used:
         if f"[{citation['id']}]" not in answer:
             return None, [], "missing_inline_citation"
+    # Citation existence is not entailment. In the absence of an independent
+    # semantic proof, accept only declared exact source assertions. This rejects
+    # reversed negation and a second uncited paragraph even with a valid C1.
+    claims = output.get("claims")
+    if not isinstance(claims, list) or not 1 <= len(claims) <= 12:
+        return None, [], "structured_source_assertions_required"
+    assertions = []
+    declared = set()
+    for claim in claims:
+        if not isinstance(claim, dict) or not isinstance(claim.get("text"), str) or not isinstance(claim.get("citation_ids"), list) or not claim["citation_ids"]:
+            return None, [], "invalid_assertion_schema"
+        text = claim["text"].strip()
+        refs = claim["citation_ids"]
+        if any(ref not in known or ref not in ids for ref in refs):
+            return None, [], "unknown_assertion_citation"
+        if not text or not any(text in known[ref]["quote"] for ref in refs):
+            return None, [], "assertion_not_source_extract"
+        if claim.get("quote") is not None and (not isinstance(claim["quote"], str) or text not in claim["quote"] or not any(claim["quote"] in known[ref]["quote"] for ref in refs)):
+            return None, [], "assertion_quote_mismatch"
+        assertions.append(text)
+        declared.update(refs)
+    remaining = re.sub(r"\[C\d+\]", "", answer)
+    normalize = lambda value: re.sub(r"\s+", "", value)
+    if normalize(remaining) != normalize("\n".join(assertions)) or declared != set(ids):
+        return None, [], "undeclared_factual_text"
     return answer, used, None
 
 
@@ -221,7 +253,8 @@ async def call_model(message: str, citations: list[dict], locale: str, user: dic
         "Every factual paragraph must include one or more [C1] style citations. Never state a number absent from its cited passage. "
         "Do not calculate insurance limits or payment. No payout estimates. If passages do not answer the question, say insufficient information. "
         f"Write in { {'zh': 'Simplified Chinese', 'en': 'English', 'ja': 'Japanese'}.get(locale, 'English') }. Use a {style} style. "
-        'Return ONLY a JSON object {"answer":"... [C1]", "citation_ids":["C1"]}. '
+        'Return ONLY a JSON object {"answer":"verbatim source text [C1]", "citation_ids":["C1"], "claims":[{"text":"verbatim source text","quote":"verbatim source text","citation_ids":["C1"]}]}. '
+        "Every claim must be an exact contiguous extract from its cited passage. The answer may only concatenate these extracts and inline citation IDs. Do not paraphrase, negate, translate or add uncited prose; unsupported reasoning must be omitted. "
         "A confirmed policy still requires the insurer's assessment."
     )
     body = json.dumps({"question": mask_pii(message, user, policy), "evidence": passages}, ensure_ascii=False)
@@ -357,21 +390,23 @@ class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=4000)
     policy_id: str | None = Field(default=None, max_length=80)
     locale: str = Field(default="zh", pattern="^(zh|en|ja)$")
+    conversation_id: str | None = Field(default=None, max_length=100)
+    claim_id: str | None = Field(default=None, max_length=100)
+    expected_revision: int | None = Field(default=None, ge=0)
 
 
 def local_route(message: str) -> str:
     lower = message.lower()
-    if any(x in lower for x in ["紧急", "救命", "emergency", "bleeding", "呼吸", "自杀"]):
+    if any(x in lower for x in ["紧急", "救命", "急救", "出血", "昏迷", "emergency", "bleeding", "呼吸", "自杀", "緊急", "救急", "助けて"]):
         return "emergency"
     if any(x in lower for x in ["比特币", "bitcoin", "股票", "buy crypto", "transfer money", "转账", "payout account", "收款账户", "银行账号", "wife's policy", "husband's policy", "other user's", "妻子的保单", "老婆的保单", "他人保单"]):
         return "outside_scope"
-    if any(x in lower for x in ["compare", "比较", "购买", "推荐保险", "buy insurance"]):
+    if any(x in lower for x in ["compare", "比较", "购买", "推荐保险", "buy insurance", "hospital cover", "想买", "买保险", "预算", "budget", "计划投保"]):
         return "buying"
     return "policy_question"
 
 
-@router.post("/chat")
-async def chat(payload: ChatRequest, user=Depends(current_user)):
+async def _chat_answer(payload: ChatRequest, user):
     locale, message = payload.locale, payload.message.strip()
     trace = [{"stage": "authenticate", "status": "ok", "detail": "Private account scope enforced by application code."}]
     route = local_route(message)
@@ -409,9 +444,13 @@ async def chat(payload: ChatRequest, user=Depends(current_user)):
                 return {**base, "answer": "请选择要讨论的保单，或先上传保单。" if locale == "zh" else "Select the policy you mean, or upload one first.", "clarification": {"type": "select_policy", "options": [{"id": p["id"], "title": p["title"]} for p in policies]}}
             policy = policies[0]
         policy = dict(policy)
-        citations, retrieval_engine = retrieve(db, user["id"], policy["id"], message)
-        quarantined = db.execute("SELECT COUNT(*) FROM document_chunks dc JOIN policy_documents pd ON pd.document_id=dc.document_id WHERE pd.policy_id=? AND dc.user_id=? AND dc.quarantined=1", (policy["id"], user["id"])).fetchone()[0]
-        audit(db, user["id"], "policy_evidence_retrieved", "policy", policy["id"], {"chunks": len(citations), "quarantined_chunks": quarantined, "engine": retrieval_engine})
+    def fetch_evidence():
+        with get_db() as db:
+            citations, engine = retrieve(db, user["id"], policy["id"], message)
+            quarantined = db.execute("SELECT COUNT(*) FROM document_chunks dc JOIN policy_documents pd ON pd.document_id=dc.document_id WHERE pd.policy_id=? AND dc.user_id=? AND dc.quarantined=1", (policy["id"], user["id"])).fetchone()[0]
+            audit(db, user["id"], "policy_evidence_retrieved", "policy", policy["id"], {"chunks": len(citations), "quarantined_chunks": quarantined, "engine": engine})
+        return citations, engine, quarantined
+    citations, retrieval_engine, quarantined = await asyncio.to_thread(fetch_evidence)
     trace.append({"stage": "retrieve", "status": "ok" if citations else "insufficient", "detail": f"{retrieval_engine}; {len(citations)} owner-scoped passages; {quarantined} quarantined chunks excluded."})
     if not policy["confirmed"]:
         trace.append({"stage": "critical_fact_gate", "status": "needs_confirmation", "detail": "Personalized conclusions blocked until critical policy facts are confirmed."})
@@ -451,3 +490,22 @@ async def chat(payload: ChatRequest, user=Depends(current_user)):
             "citations": [{k: v for k, v in c.items() if k != "chunk_id"} for c in used],
             "policy_id": policy["id"], "policy_revision": policy["revision"], "uncertainty": "conditional_insurer_review",
             "chips": ["需要哪些材料？", "哪些情况可能不赔？", "准备理赔包"] if locale == "zh" else ["What evidence is needed?", "What exclusions matter?", "Prepare claim package"]}
+
+
+@router.post("/chat")
+async def chat(payload: ChatRequest, user=Depends(current_user)):
+    from .agent_foundation import run_turn
+    return await run_turn(payload, user)
+
+
+@router.post("/chat/stream")
+async def chat_stream(payload: ChatRequest, user=Depends(current_user)):
+    from .agent_foundation import stream_turn
+    stream = stream_turn(payload, user)
+    # Preflight ownership and revisions before headers are committed.
+    first = await anext(stream)
+    async def body():
+        yield json.dumps(first, ensure_ascii=False) + "\n"
+        async for item in stream:
+            yield json.dumps(item, ensure_ascii=False) + "\n"
+    return StreamingResponse(body(), media_type="application/x-ndjson", headers={"Cache-Control": "no-store", "X-Accel-Buffering": "no"})
