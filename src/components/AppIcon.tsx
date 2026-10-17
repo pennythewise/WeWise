@@ -1,7 +1,11 @@
 import icons from '@/assets/icons.json';
 
 // `mic` is a local addition in the same geometry (24 grid, 1.65 stroke, round caps); the brand folder has no microphone.
-const EXTRA = { mic: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3' };
+const EXTRA = {
+  mic: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3',
+  phone: 'M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a15 15 0 0 1-7-7l2-2-2-5Z',
+  upload: 'M12 16V3m-5 5 5-5 5 5M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5',
+};
 const PATHS: Record<string, string> = { ...icons.paths, ...EXTRA };
 export type IconName = keyof typeof icons.paths | keyof typeof EXTRA;
 

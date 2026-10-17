@@ -19,7 +19,7 @@ function initialLang(): LangCode {
     const saved = localStorage.getItem('wewise.lang');
     if (isLang(saved)) return saved;
   } catch { /* storage unavailable */ }
-  return 'en';
+  return 'zh';
 }
 
 i18n.use(initReactI18next).init({
