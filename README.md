@@ -3,6 +3,10 @@
 China insurance assistant for the hackathon: understand a policy, prepare a claim,
 and keep the customer in control. React/Vite frontend with a FastAPI backend.
 
+**Team test link:** https://wewise-retrieval-preview.vercel.app/me . Start a
+private synthetic demo; no shared password or Vercel login is required.
+The public preview enforces retrieval-only mode. See [deployment notes](DEPLOYMENT.md).
+
 **Current implementation:** [team setup and API configuration](IMPLEMENTATION.md)
 and [feature boundaries](FEATURE_STATUS.md). Earlier PRD/spec files describe the
 original scripted prototype; the current China-only scope and these documents

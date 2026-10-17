@@ -1,5 +1,11 @@
 # Verification receipt - 17 October 2026
 
+Public deployment verification is recorded in [DEPLOYMENT.md](DEPLOYMENT.md).
+The earlier local receipt below remains the baseline. Latest deployment changes:
+162 backend tests passed, 3 optional local Tencent checks skipped, 12 Node gateway
+tests passed. Eleven public API groups and desktop/mobile browser flows passed;
+public raster OCR and a real stop/resume persistence check also passed.
+
 Environment: local Windows, Python 3.12 virtual environment, Node 24.19, React/Vite,
 FastAPI at `http://127.0.0.1:8017`, browser development app at
 `http://127.0.0.1:5177`. The built SPA is also served by the backend. These are
@@ -62,4 +68,5 @@ verification.
 Remaining limits: actual microphone/camera permission flows depend on the user's
 device, no live model/key/entitlement verification, no insurer/bank/phone-transfer
 connection, no certified translation, no upstream history/backup erasure proof,
-no public full-stack deployment. See `FEATURE_STATUS.md` for the delivery boundary.
+The public preview now has its own private approved-memory ledger (Tencent is not
+hosted there). See `DEPLOYMENT.md` and `FEATURE_STATUS.md` for its boundaries.

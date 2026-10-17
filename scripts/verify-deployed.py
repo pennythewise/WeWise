@@ -88,7 +88,7 @@ def main():
         gate = expect(a.post("/api/chat", json={"message": "What outpatient claim documents are needed?", "policy_id": pid, "locale": "en"})).json()
         assert gate["clarification"]["type"] == "confirm_policy"
         expect(a.patch(f"/api/policies/{pid}", json={"fields": {}, "confirmed": True}))
-        reply = expect(a.post("/api/chat", json={"message": "门诊医疗理赔需要哪些材料和证明？", "policy_id": pid, "locale": "zh-CN"})).json()
+        reply = expect(a.post("/api/chat", json={"message": "门诊医疗理赔需要哪些材料和证明？", "policy_id": pid, "locale": "zh"})).json()
         assert reply["engine"] == "retrieval_only" and reply["citations"]
         for citation in reply["citations"]:
             document = expect(a.get(f"/api/documents/{citation['document_id']}")).json()
@@ -124,7 +124,7 @@ def main():
             checks["insurer_simulation_separate_from_actual_status"] = "pass"
         finally:
             if case_id:
-                expect(a.delete(f"/api/claims/{case_id}"))
+                expect(a.delete(f"/api/claims/{case_id}?confirmed=true"))
             expect(a.post("/api/auth/logout", json={}))
             expect(b.post("/api/auth/logout", json={}))
             expect(a.get("/api/auth/me"), 401)

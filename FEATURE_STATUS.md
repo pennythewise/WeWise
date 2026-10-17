@@ -1,6 +1,7 @@
 # Implementation boundaries
 
-This register describes the code, not production acceptance. See the verification
+Public retrieval-only preview: https://wewise-retrieval-preview.vercel.app/me .
+Each tester starts a separate synthetic workspace. This register describes the code, not production acceptance. See the verification
 receipt for executed checks. Mainland China only; Japan is the primary overseas
 incident example. API credentials are supplied later by the team.
 
@@ -28,7 +29,7 @@ incident example. API credentials are supplied later by the team.
 | E7 / F4 | Audit metadata and opt-in approved-memory view/edit/delete; actual private Tencent sidecar projection | No automatic health/chat memory; upstream history purge not claimed |
 | F2 / F3 | Clarification, unsupported/out-of-scope replies and actual inspector events | No invented model call, elapsed time or JEV confidence |
 | Evidence | Functional and attack tests, actual local Tencent tests, UI flow checks | Provider protocol stubs are not live-model tests |
-| Delivery | Reproducible dependencies, local full stack, runbook and reviewable source branch | Public full-stack deployment, organiser email, new pitch deck and recorded demo video are not completed by this change |
+| Delivery | Public retrieval-only full-stack preview, reproducible dependencies, runbook and reviewable source branch | Organiser email, new pitch deck and recorded demo video are not completed by this change |
 
 The plan used E5 for both voice and sensitive confirmation; those are identified
 explicitly above to avoid conflating the two features.
