@@ -1,0 +1,673 @@
+{
+  "brand": {
+    "name": "WeWise 微晓",
+    "tagline": "保险问微晓，安心少烦恼",
+    "taglineZh": "保险问微晓，安心少烦恼"
+  },
+  "badge": {
+    "concept": "概念演示 · 全部数据与办理结果均为模拟"
+  },
+  "nav": {
+    "label": "网站导航",
+    "bankHome": "银行首页",
+    "insurance": "保险保障",
+    "buy": "投保体验",
+    "policiesClaims": "保单与理赔",
+    "team": "团队说明",
+    "notInDemo": "不在本演示范围内",
+    "open": "打开菜单",
+    "close": "关闭"
+  },
+  "tabs": {
+    "label": "应用导航",
+    "home": "首页",
+    "policies": "保单",
+    "claims": "理赔",
+    "ask": "问微晓",
+    "awaiting": "{{n}} 项理赔等您处理"
+  },
+  "header": {
+    "back": "返回",
+    "inspector": "我是怎么得出的",
+    "inspectorShort": "检视器",
+    "language": "语言"
+  },
+  "screens": {
+    "prdRef": "PRD {{ref}}",
+    "placeholder": "占位页面 · 第一阶段",
+    "home": {
+      "title": "首页",
+      "desc": "保障总览：保额环形图、可滑动的保单卡片、提醒、保障缺口与进行中的理赔。"
+    },
+    "policies": {
+      "title": "我的保单",
+      "desc": "按续保日期排序的保单列表，可按类型和保险公司筛选。"
+    },
+    "policyDetail": {
+      "title": "保单详情",
+      "desc": "保障摘要、可搜索的条款、保障缺口，以及“就此保单提问”入口。"
+    },
+    "claims": {
+      "title": "理赔",
+      "desc": "全部理赔及状态，以及等待你处理的事项。"
+    },
+    "claimDetail": {
+      "title": "理赔",
+      "desc": "准备理赔材料、核对并提交，然后跟踪进度时间线。"
+    },
+    "ask": {
+      "title": "问微晓",
+      "desc": "与助手对话：带引用的回答、卡片、快捷回复和输入框。"
+    },
+    "memory": {
+      "title": "记忆",
+      "desc": "微晓记住了什么、访问过什么，可删除，也可一键关闭。"
+    },
+    "about": {
+      "title": "团队说明",
+      "desc": "团队、概念介绍，以及非官方产品声明。"
+    },
+    "index": "全部页面",
+    "capture": {
+      "title": "拍摄证据",
+      "desc": "AR 引导拍摄理赔现场照片。"
+    }
+  },
+  "inspector": {
+    "title": "智能体检视器",
+    "turn": "轮次",
+    "elapsed": "用时",
+    "noTurn": "暂无轮次",
+    "status": {
+      "idle": "等待对话",
+      "ok": "全部检查通过",
+      "confirm": "需要你确认",
+      "blocked": "已拦截"
+    },
+    "tabs": {
+      "pipeline": "流程",
+      "tools": "工具",
+      "safety": "安全",
+      "evidence": "依据",
+      "overview": "概览"
+    },
+    "empty": {
+      "pipeline": "理解、规划、执行、核验、回复的过程会在这里实时呈现。",
+      "tools": "工具调用的风险等级、脱敏参数和耗时会显示在这里。",
+      "safety": "防护事件（脱敏、忽略指令、拒绝、确认）会显示在这里。",
+      "evidence": "带条款原文和页码的引用会显示在这里。",
+      "overview": "五步理赔体验会显示在这里。"
+    },
+    "emit": "发送示例事件",
+    "clear": "清除",
+    "dev": "仅开发",
+    "eventCount_one": "{{count}} 条事件",
+    "eventCount_other": "{{count}} 条事件",
+    "pipe": {
+      "understand": "理解",
+      "intent": "意图",
+      "lang": "语言",
+      "plan": "规划",
+      "parallel": "并行步骤",
+      "execute": "执行",
+      "verify": "核验",
+      "citations": "引用",
+      "numbers": "数字",
+      "respond": "回复"
+    },
+    "step": {
+      "pending": "等待",
+      "running": "进行中",
+      "done": "完成",
+      "failed": "失败",
+      "replanned": "已重新规划"
+    },
+    "tools": {
+      "args": "参数（已脱敏）",
+      "running": "运行中…",
+      "blocked": "被策略执行点拦截"
+    },
+    "safety": {
+      "pii": "已脱敏 {{n}} 项（{{fields}}）",
+      "piiWhy": "个人信息在模型看到之前已被脱敏。",
+      "injection": "已忽略文件中的指令（第 {{page}} 页）",
+      "injectionWhy": "文件里的文字是数据，不是指令。",
+      "pending": "等待您确认",
+      "confirmed": "已确认",
+      "rejected": "已取消",
+      "confirmWhy": "敏感操作需要您明确确认。",
+      "protects": "这如何保护您："
+    },
+    "evidence": {
+      "confidence": "提取置信度",
+      "userConfirmed": "您已确认",
+      "viewPage": "查看页面"
+    },
+    "overview": {
+      "s1": {
+        "t": "确认保单",
+        "d": "核对理赔对应的保单和事件。"
+      },
+      "s2": {
+        "t": "准备材料",
+        "d": "逐项添加材料，并确认我读到的内容。"
+      },
+      "s3": {
+        "t": "核对",
+        "d": "检查摘要，赔款账户为只读。"
+      },
+      "s4": {
+        "t": "确认后提交",
+        "d": "在您确认之前不会发送任何内容。"
+      },
+      "s5": {
+        "t": "跟踪与理解",
+        "d": "查看进度时间线，并可要求通俗解释。"
+      }
+    },
+    "pin": "固定本轮",
+    "unpin": "取消固定",
+    "copy": "复制轨迹",
+    "replay": "重放本轮",
+    "log": "事件日志",
+    "filter": "筛选事件",
+    "filters": {
+      "all": "全部",
+      "tools": "工具",
+      "safety": "安全"
+    },
+    "noMatch": "没有符合的事件。"
+  },
+  "stage": {
+    "label": "演示控制",
+    "scenario": "场景",
+    "play": "播放",
+    "pause": "暂停",
+    "reset": "重置",
+    "attack": "攻击",
+    "inert": "第二阶段接入",
+    "names": {
+      "s1": "上传并看懂保单",
+      "s2": "评审式比较",
+      "s3": "理赔全流程",
+      "s4": "攻击：隐藏指令",
+      "s5": "攻击：越权",
+      "s6": "兜底与转人工"
+    },
+    "descs": {
+      "s1": "上传保单 PDF，智能体提取并讲解。",
+      "s2": "比较产品，由独立评审核对答案。",
+      "s3": "申请理赔：预审、材料、确认、提交。",
+      "s4": "文档中藏有改赔款账户的指令，智能体忽略它。",
+      "s5": "改赔款账户、查看他人保单、冒充保险公司员工：全部拦截。",
+      "s6": "超范围或模糊提问，兜底并转人工。"
+    },
+    "attackHint": "把下一轮换成攻击变体",
+    "on": "开",
+    "off": "关",
+    "nextHint": "先暂停，再逐步",
+    "next": "下一步",
+    "speed": "速度",
+    "advance": "快进 3 天",
+    "exportJson": "导出 JSON",
+    "snapshot": "PNG 截图"
+  },
+  "types": {
+    "medical": "医疗",
+    "critical": "重大疾病",
+    "accident": "意外",
+    "life": "寿险",
+    "travel": "旅行",
+    "motor": "车险",
+    "home": "家财"
+  },
+  "chat": {
+    "citation": "引用",
+    "page": "页码",
+    "seeEvidence": "查看依据",
+    "thinking": "思考中…",
+    "verdict": {
+      "covered": "在保障范围内",
+      "not_covered": "不在保障范围内",
+      "depends": "视情况而定",
+      "unsure": "我不确定"
+    },
+    "askAgent": "咨询持牌顾问",
+    "howIKnow": "我是怎么知道的",
+    "original": "显示原文",
+    "translate": "翻译摘要为{{lang}}",
+    "attach": "添加文件",
+    "demoDocs": "使用演示文件",
+    "fromDevice": "从本机上传",
+    "placeholder": "问微晓…",
+    "mic": "语音输入",
+    "send": "发送",
+    "greeting": "你好，我是微晓 WeWise。我可以用通俗的话解释您的保单、核对保障范围、帮您准备理赔材料并比较方案。保险问微晓，安心少烦恼。",
+    "scope": "我提供决策参考，而不是购买建议。理赔结果只由保险公司决定。",
+    "push": "模拟通知",
+    "chips": {
+      "policy": "看懂一份保单",
+      "policySend": "使用示例保单",
+      "claim": "准备理赔",
+      "claimSend": "我 10 月 10 日住院了",
+      "compare": "比较保险",
+      "compareSend": "帮我比较住院保险",
+      "gapSend": "检查我的保障缺口",
+      "complainSend": "我想投诉我的理赔结果"
+    },
+    "micStop": "停止语音输入",
+    "listening": "正在聆听…",
+    "voiceDemo": "演示：播放示例语句"
+  },
+  "home": {
+    "hero": "您的保障一览",
+    "glance": "保障总览",
+    "donutAria": "按险种划分的总保额 {{total}}",
+    "totalCover": "总保额",
+    "monthly": "每月保费",
+    "nextRenewal": "下次续保",
+    "none": "无",
+    "premium": "保费",
+    "singleTrip": "单次旅程",
+    "startsIn": "{{n}} 天后生效",
+    "active": "有效",
+    "renewsIn": "{{n}} 天后续保",
+    "gapDetected": "发现保障缺口",
+    "keyClauses": "关键条款",
+    "openPolicy": "查看保单",
+    "flip": "翻转卡片",
+    "flipBack": "翻回正面",
+    "policies": "我的保单",
+    "alerts": "提醒",
+    "renewsOn": "将在 {{n}} 天后（{{date}}）续保。",
+    "sparkAria": "保费从 {{from}} 上涨到 {{to}}",
+    "hike": "五年内保费上涨 {{pct}}%",
+    "hikeDetail": "每月 {{from}} → {{to}}，续保时可能再次调整。",
+    "gapsTitle": "值得关注的缺口",
+    "gaps": {
+      "outpatient": "没有门诊保障",
+      "outpatientSend": "我的医疗险包含门诊吗？",
+      "ci": "没有重疾保障",
+      "child": "孩子没有保障"
+    },
+    "openClaims": "进行中的理赔",
+    "addPolicy": "添加保单",
+    "emptyTitle": "添加您的第一份保单",
+    "emptyText": "上传保单，我会用通俗的话解释。"
+  },
+  "policies": {
+    "filterType": "按险种筛选",
+    "all": "全部",
+    "insurer": "保险公司",
+    "sorted": "按续保日期排序",
+    "coverEnds": "保障截止",
+    "renews": "续保",
+    "coverPeriod": "保障期间",
+    "none": "没有符合条件的保单。",
+    "notFound": "未找到保单",
+    "notFoundText": "它可能已被移除。",
+    "ask": "就此保单提问",
+    "askMedical": "登革热住院在保障范围内吗？",
+    "askGeneric": "我的{{name}}保障什么？",
+    "tabs": {
+      "summary": "概要",
+      "clauses": "条款",
+      "gaps": "缺口"
+    },
+    "search": "搜索条款",
+    "filterClause": "按类型筛选条款",
+    "clauseType": {
+      "coverage": "保障",
+      "exclusion": "免责",
+      "waiting": "等待期",
+      "limit": "限额",
+      "condition": "条件"
+    },
+    "noClauses": "没有符合的条款。",
+    "noGap": "此保单未发现缺口。",
+    "gapCheck": "检查我所有保单的缺口"
+  },
+  "cards": {
+    "extract": {
+      "title": "核对我读到的内容",
+      "high": "置信度高",
+      "medium": "请核对",
+      "low": "请核对",
+      "confirmed": "已确认",
+      "group": {
+        "basics": "基本信息",
+        "limits": "限额",
+        "waiting": "等待期",
+        "exclusions": "免责"
+      },
+      "save": "保存",
+      "corrected": "已由您更正",
+      "correct": "更正",
+      "lowHint": "有 {{count}} 个字段需要您核对。",
+      "confirmAll": "全部确认",
+      "source": "出处",
+      "confirmWithFix": "我把年度限额更正为 {{value}}，并确认全部字段。",
+      "confirmPlain": "确认全部字段"
+    },
+    "summary": {
+      "limit": "年度限额",
+      "deductible": "自付额",
+      "copay": "共付比例",
+      "waiting": "等待期",
+      "days": "{{n}} 天",
+      "renewal": "续保日",
+      "open": "查看保单"
+    },
+    "gap": {
+      "title": "保障缺口检查",
+      "covered": "已保障",
+      "partial": "部分保障",
+      "gap": "缺口",
+      "noClause": "未找到条款",
+      "consider": "可以考虑",
+      "notice": "仅为决策参考，不构成购买建议。"
+    },
+    "compare": {
+      "title": "并排比较",
+      "premium": "保费",
+      "perMonth": " /月",
+      "deductible": "自付额",
+      "copay": "共付比例",
+      "limit": "年度限额",
+      "waiting": "等待期",
+      "trajectory": "保费走势",
+      "term": "条款",
+      "better": "此项更优"
+    },
+    "advocate": {
+      "label": "{{side}} 方观点"
+    },
+    "verdict": {
+      "bill": "如果住院账单为",
+      "product": "产品 {{side}}",
+      "youPay": "您承担",
+      "insurerPays": "保险公司赔付",
+      "computed": "由程序按保单条款计算，而不是由 AI 估算。",
+      "judge": "评审",
+      "aWins": "A 更合适，当",
+      "bWins": "B 更合适，当",
+      "talk": "联系持牌顾问",
+      "talkSend": "联系持牌顾问"
+    },
+    "prescreen": {
+      "title": "理赔预审",
+      "covered": "很可能赔付",
+      "excluded": "很可能不赔",
+      "uncertain": "不确定",
+      "waiting": "等待期",
+      "waitingAria": "自生效起 {{days}} 天，等待期 {{wait}} 天",
+      "inception": "保单生效",
+      "eligible": "可理赔起始",
+      "incident": "事故日期",
+      "waitOk": "事故发生在保单生效后第 {{days}} 天，等待期已届满。",
+      "waitBefore": "事故发生在本保障生效前 {{days}} 天。",
+      "exclusions": "命中的免责条款",
+      "noExclusions": "没有命中。",
+      "missing": "仍需提供",
+      "notice": "最终由保险公司决定，这不是获批承诺。"
+    },
+    "checklist": {
+      "title": "理赔材料清单",
+      "open": "打开理赔页面"
+    },
+    "status": {
+      "open": "查看理赔",
+      "whySend": "为什么这么久？"
+    },
+    "confirm": {
+      "title": "请确认",
+      "what": "内容",
+      "to": "提交给",
+      "shared": "分享的数据",
+      "payout": "赔款账户（只读）",
+      "expires": "{{time}} 后失效",
+      "expired": "已失效，请重新发起。",
+      "cancel": "取消",
+      "confirm": "确认",
+      "done": "已确认",
+      "cancelled": "已取消"
+    },
+    "handoff": {
+      "title": "转交持牌顾问",
+      "recommended": "推荐顾问",
+      "best": "最匹配",
+      "willShare": "将分享的内容",
+      "masked": "个人信息已脱敏。不想分享的项目可以取消勾选。",
+      "consent": "我同意向 {{name}} 分享所选项目。",
+      "share": "分享给顾问",
+      "shared": "已分享",
+      "confirmTitle": "确认分享",
+      "confirmWhat": "向 {{name}} 分享脱敏摘要"
+    },
+    "safety": {
+      "view": "查看被我忽略的内容",
+      "snippet": "第 {{page}} 页的隐藏文字（已脱敏）",
+      "why": "这如何保护您"
+    },
+    "escalation": {
+      "title": "需要由真人处理"
+    },
+    "incident": {
+      "title": "事故处理指南",
+      "country": "国家",
+      "steps": "按顺序该做什么",
+      "numbers": "紧急电话（点按复制）",
+      "copy": "复制",
+      "copied": "已复制",
+      "avoid": "避免这样做",
+      "report": "生成事故报告（中英 + 当地）",
+      "reportTitle": "事故报告预览",
+      "localNote": "可提供给对方当事人和保险公司。",
+      "capture": "用 AR 引导拍摄证据"
+    }
+  },
+  "claims": {
+    "timeline": "理赔进度",
+    "listIntro": "您的理赔。材料齐全不等于获批，最终由保险公司决定。",
+    "now": "当前",
+    "explain": "用通俗的话解释",
+    "stage": {
+      "SUBMITTED": "已提交",
+      "DOCUMENT_REVIEW": "材料审核",
+      "INFO_REQUESTED": "需补充资料",
+      "ASSESSMENT": "理算评估",
+      "DECISION": "审核结论",
+      "PAYOUT": "赔款支付"
+    },
+    "actor": {
+      "you": "您",
+      "insurer": "保险公司",
+      "ai": "AI 协助"
+    },
+    "plain": {
+      "SUBMITTED": "您的理赔已发送给保险公司，但这不代表已获批准。",
+      "DOCUMENT_REVIEW": "保险公司正在核对材料是否齐全、是否清晰可读。",
+      "INFO_REQUESTED": "保险公司需要您再补充一些内容，在您提供之前流程暂停。",
+      "ASSESSMENT": "保险公司正在把理赔与您的保单条款对照。",
+      "DECISION": "保险公司已作出决定。您可以让我解释原因，但我无法更改结果。",
+      "PAYOUT": "赔款会支付到保险公司档案中登记的账户。"
+    },
+    "required": "必需",
+    "optional": "可选",
+    "doc": {
+      "check": "请核对",
+      "recognised": "已识别 · 请确认",
+      "confirmed": "已确认",
+      "toAdd": "待补充",
+      "optional": "可选",
+      "toggle": "显示详情",
+      "useDemo": "使用演示文件",
+      "confirm": "确认",
+      "fixFirst": "请先更正日期再继续。"
+    },
+    "prepared": "已准备 {{n}} / {{total}} 项",
+    "preparedLabel": "已准备材料",
+    "status": {
+      "DRAFT": "草稿",
+      "SUBMITTED": "已提交",
+      "IN_REVIEW": "审核中",
+      "INFO_REQUESTED": "需补充资料",
+      "DECLINED": "已拒赔",
+      "PAID": "已赔付"
+    },
+    "waitingOn": {
+      "user": "等待您处理",
+      "insurer": "等待保险公司"
+    },
+    "payoutLocked": "来自保险公司档案，我无法更改。",
+    "riskNotice": "材料齐全后仍需保险公司审核，这不是获批或赔付的承诺。",
+    "steps": {
+      "label": "理赔步骤",
+      "policy": "确认保单",
+      "docs": "准备材料",
+      "review": "核对并提交",
+      "title1": "确认保单",
+      "title2": "准备理赔材料",
+      "title3": "核对并提交"
+    },
+    "incident": "事件",
+    "incidentValue": "登革热，10 月 10 日入院",
+    "changeInvalidates": "如果更改保单或事件，之前的确认会被清除，需要重新确认。",
+    "continue": "继续",
+    "back": "返回",
+    "confirmAllHint": "请确认每一份材料后再继续。",
+    "reviewContinue": "核对并继续",
+    "total": "费用合计",
+    "confirmSubmission": "确认提交",
+    "notFound": "未找到理赔",
+    "notFoundText": "它可能已被移除。",
+    "infoNeeded": "保险公司要求再补充一份材料。",
+    "decline": {
+      "title": "为什么被拒赔",
+      "next": "接下来您可以",
+      "add": "如有遗漏，补充说明材料",
+      "appeal": "向保险公司申请正式复核（申诉）",
+      "regulator": "拨打保险监管部门消费者热线 12378",
+      "cant": "我可以解释这个结果，但无法推翻它。",
+      "talk": "咨询持牌顾问如何申诉"
+    },
+    "captureLink": "拍摄现场证据（AR 引导）"
+  },
+  "memory": {
+    "toggle": "记住关于我的信息",
+    "on": "微晓会用这些信息让回答更贴合您。",
+    "off": "记忆已关闭，不会再记住新的内容。",
+    "remember": "我记住了什么",
+    "empty": "没有记住任何内容。",
+    "delete": "删除",
+    "accessed": "我访问了什么",
+    "noAccess": "目前还没有访问记录。向微晓提问后，每次查询都会显示在这里。",
+    "purposeSearch": "查找条款来回答您",
+    "purposeLookup": "查找您的保单",
+    "purposeWaiting": "核对等待期",
+    "purposeOcr": "读取您添加的文件",
+    "purposeHandoff": "向您同意的顾问分享",
+    "purposeClaim": "提交您确认的理赔",
+    "purposeOther": "为处理您的请求所需"
+  },
+  "about": {
+    "concept": "概念演示",
+    "conceptText": "微晓 WeWise 是银行 App 内的 AI 保险助手概念：帮助大家看懂保单、安全地准备理赔并比较方案，同时在检视器中展示它的工作过程。",
+    "how": "微晓如何工作",
+    "steps": [
+      "理解您的问题。",
+      "规划步骤并调用工具。",
+      "用条款和数字核验每个回答。",
+      "涉及敏感操作前先征得您的同意。"
+    ],
+    "notOfficial": "这不是银行的官方产品，也不代表任何合作关系。",
+    "synthetic": "所展示的人物、保单和结果均为模拟。"
+  },
+  "upload": {
+    "sampleSend": "使用示例保单",
+    "title": "添加保单",
+    "desc": "上传保单 PDF 或照片，我会读取、查找条款并请您确认。",
+    "sample": "使用示例保单",
+    "camera": "拍照（演示）",
+    "steps": {
+      "reading": "读取",
+      "finding": "查找条款",
+      "checking": "核对",
+      "ready": "就绪"
+    },
+    "synthetic": "仅为演示：示例为模拟文件。"
+  },
+  "emergency": {
+    "fab": "紧急求助",
+    "demo": "演示模拟",
+    "title": "您并不孤单",
+    "contacts": "紧急联系人",
+    "end": "结束通话",
+    "script": [
+      "慢慢深呼吸，您可以放心跟我说。",
+      "首先：有人受伤吗？如果有，请拨打下方当地急救电话。",
+      "请待在安全的地方。现在不需要对理赔作任何决定。",
+      "准备好后，我会一步一步帮您向保险公司报案并收集证据。"
+    ],
+    "connecting": "正在连接微晓…",
+    "live": "通话中",
+    "mute": "静音",
+    "unmute": "取消静音",
+    "speaker": "朗读",
+    "summary": "通话已结束",
+    "duration": "通话时长 {{time}}。没有录音，也没有发送任何内容。",
+    "next": [
+      "如有人受伤，请拨打当地急救电话",
+      "48 小时内向保险公司报案",
+      "在东西被移动前拍下现场照片"
+    ],
+    "incidentSend": "我在国外出了事故",
+    "guide": "打开事故处理指南",
+    "capture": "拍摄证据"
+  },
+  "capture": {
+    "demo": "演示：取景画面是合成场景，不会上传任何内容。",
+    "blurry": "拍得太早，照片模糊。请等画框变绿后再拍。",
+    "noCamera": "无法使用摄像头，已改用示例场景。",
+    "holdSteady": "请保持稳定…",
+    "allDone": "四张照片都合格。",
+    "shoot": "拍照",
+    "useCamera": "使用我的摄像头",
+    "shots": "证据照片",
+    "sharp": "清晰",
+    "blurryShort": "模糊",
+    "meta": "深圳（大致位置）",
+    "retake": "需要重拍",
+    "retakeBtn": "重拍",
+    "pending": "尚未拍摄",
+    "packTitle": "证据包已就绪",
+    "pack": {
+      "hash": "每张照片都有指纹，任何改动都能被发现",
+      "time": "时间戳：2026 年 10 月 14 日 14:32",
+      "place": "大致位置：深圳南山",
+      "plate": "分享副本中的车牌已被遮挡"
+    },
+    "attach": "添加到我的理赔",
+    "attached": "已添加到您的理赔",
+    "openClaim": "打开理赔"
+  },
+  "showcase": {
+    "open": "3D 资产",
+    "title": "已保资产",
+    "count": "第 {{n}} 项，共 {{total}} 项",
+    "insured": "已投保",
+    "notInsured": "未投保",
+    "cover": "保额",
+    "renews": "{{n}} 天后续保",
+    "openPolicy": "查看保单",
+    "addCover": "添加保障",
+    "swipe": "滑动浏览",
+    "prev": "上一项资产",
+    "next": "下一项资产",
+    "loading": "正在加载展厅…",
+    "noWebgl": "此设备不支持 3D，但您仍可浏览资产。",
+    "addSend": "我的电动滑板车需要投保吗？",
+    "close": "关闭",
+    "hint": "示意用通用模型，并非具体车辆或建筑。"
+  }
+}

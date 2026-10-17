@@ -1,0 +1,673 @@
+{
+  "brand": {
+    "name": "WeWise 微晓",
+    "tagline": "Ask WeWise about insurance, worry less",
+    "taglineZh": "保险问微晓，安心少烦恼"
+  },
+  "badge": {
+    "concept": "Concept demo · synthetic data"
+  },
+  "nav": {
+    "label": "Website navigation",
+    "bankHome": "Bank Home",
+    "insurance": "Insurance",
+    "buy": "Buy Experience",
+    "policiesClaims": "Policies & Claims",
+    "team": "About the Team",
+    "notInDemo": "Not part of this demo",
+    "open": "Open menu",
+    "close": "Close"
+  },
+  "tabs": {
+    "label": "App navigation",
+    "home": "Home",
+    "policies": "Policies",
+    "claims": "Claims",
+    "ask": "Ask WeWise",
+    "awaiting": "{{n}} claims waiting on you"
+  },
+  "header": {
+    "back": "Back",
+    "inspector": "How I got this",
+    "inspectorShort": "Inspector",
+    "language": "Language"
+  },
+  "screens": {
+    "prdRef": "PRD {{ref}}",
+    "placeholder": "Placeholder screen · Phase 1",
+    "home": {
+      "title": "Home",
+      "desc": "Portfolio at a glance: coverage donut, swipeable policy twin cards, alerts, gaps and open claims."
+    },
+    "policies": {
+      "title": "Policies",
+      "desc": "Policy list sorted by renewal date, with type and insurer filters."
+    },
+    "policyDetail": {
+      "title": "Policy detail",
+      "desc": "Summary, searchable clauses, gaps, and an \"Ask about this policy\" shortcut."
+    },
+    "claims": {
+      "title": "Claims",
+      "desc": "All claims with status chips and the ones waiting on you."
+    },
+    "claimDetail": {
+      "title": "Claim",
+      "desc": "Prepare documents, review and submit, then track the timeline."
+    },
+    "ask": {
+      "title": "Ask WeWise",
+      "desc": "Chat with the assistant: cited answers, cards, quick replies and a composer."
+    },
+    "memory": {
+      "title": "Memory",
+      "desc": "What WeWise remembers and what it accessed, with delete and an on/off switch."
+    },
+    "about": {
+      "title": "About the team",
+      "desc": "The team, the concept, and the non-official-product statement."
+    },
+    "index": "All screens",
+    "capture": {
+      "title": "Capture evidence",
+      "desc": "AR-guided photos of the scene for your claim."
+    }
+  },
+  "inspector": {
+    "title": "Agent Inspector",
+    "turn": "Turn",
+    "elapsed": "Elapsed",
+    "noTurn": "No turn yet",
+    "status": {
+      "idle": "Waiting for a turn",
+      "ok": "All checks passed",
+      "confirm": "Confirmation needed",
+      "blocked": "Blocked"
+    },
+    "tabs": {
+      "pipeline": "Pipeline",
+      "tools": "Tools",
+      "safety": "Safety",
+      "evidence": "Evidence",
+      "overview": "Overview"
+    },
+    "empty": {
+      "pipeline": "Understand, plan, execute, verify and respond will fill in here live.",
+      "tools": "Tool calls with risk tier, masked arguments and latency will appear here.",
+      "safety": "Guard events (masked PII, ignored instructions, denials, confirmations) will appear here.",
+      "evidence": "Citations with the verbatim clause quote and page will appear here.",
+      "overview": "Claims experience in five steps will appear here."
+    },
+    "emit": "Emit sample events",
+    "clear": "Clear",
+    "dev": "Dev only",
+    "eventCount_one": "{{count}} event",
+    "eventCount_other": "{{count}} events",
+    "pipe": {
+      "understand": "Understand",
+      "intent": "Intent",
+      "lang": "Language",
+      "plan": "Plan",
+      "parallel": "Parallel steps",
+      "execute": "Execute",
+      "verify": "Verify",
+      "citations": "Citations",
+      "numbers": "Numbers",
+      "respond": "Respond"
+    },
+    "step": {
+      "pending": "Waiting",
+      "running": "Running",
+      "done": "Done",
+      "failed": "Failed",
+      "replanned": "Re-planned"
+    },
+    "tools": {
+      "args": "Arguments (masked)",
+      "running": "Running…",
+      "blocked": "Blocked by policy enforcement"
+    },
+    "safety": {
+      "pii": "PII masked ×{{n}} ({{fields}})",
+      "piiWhy": "Personal details are masked before the model sees them.",
+      "injection": "Instruction in document ignored (p.{{page}})",
+      "injectionWhy": "Text inside a document is data, not an instruction.",
+      "pending": "waiting for you",
+      "confirmed": "confirmed",
+      "rejected": "cancelled",
+      "confirmWhy": "Sensitive actions need your explicit confirmation.",
+      "protects": "Why this protects you:"
+    },
+    "evidence": {
+      "confidence": "Extraction confidence",
+      "userConfirmed": "You confirmed",
+      "viewPage": "View page"
+    },
+    "overview": {
+      "s1": {
+        "t": "Confirm the policy",
+        "d": "Check which policy and incident the claim is for."
+      },
+      "s2": {
+        "t": "Prepare documents",
+        "d": "Add each document and confirm what I read."
+      },
+      "s3": {
+        "t": "Review",
+        "d": "Check the summary. The payout account is read-only."
+      },
+      "s4": {
+        "t": "Submit with confirmation",
+        "d": "Nothing is sent until you confirm."
+      },
+      "s5": {
+        "t": "Track and understand",
+        "d": "Follow the timeline and ask for plain-word explanations."
+      }
+    },
+    "pin": "Pin turn",
+    "unpin": "Unpin",
+    "copy": "Copy trace",
+    "replay": "Replay turn",
+    "log": "Event log",
+    "filter": "Filter events",
+    "filters": {
+      "all": "All",
+      "tools": "Tools",
+      "safety": "Safety"
+    },
+    "noMatch": "No matching events."
+  },
+  "stage": {
+    "label": "Stage controls",
+    "scenario": "Scenario",
+    "play": "Play",
+    "pause": "Pause",
+    "reset": "Reset",
+    "attack": "Attack",
+    "inert": "Wired in Phase 2",
+    "names": {
+      "s1": "Upload and understand a policy",
+      "s2": "Compare with a judge",
+      "s3": "Claim end to end",
+      "s4": "Attack: hidden instruction",
+      "s5": "Attack: over-reach",
+      "s6": "Fallback and handoff"
+    },
+    "descs": {
+      "s1": "Upload a policy PDF; the agent extracts and explains it.",
+      "s2": "Compare products; a separate judge checks the answer.",
+      "s3": "File a claim: pre-screen, documents, confirm, submit.",
+      "s4": "A document hides a payout-change instruction; the agent ignores it.",
+      "s5": "Payout change, someone else's policy, fake insurer staff: all blocked.",
+      "s6": "Off-topic or unclear asks; fall back and hand off to a human."
+    },
+    "attackHint": "Swap the next turn for an attack variant",
+    "on": "ON",
+    "off": "OFF",
+    "nextHint": "Pause first, then step",
+    "next": "Next step",
+    "speed": "Speed",
+    "advance": "Advance 3 days",
+    "exportJson": "Export JSON",
+    "snapshot": "PNG snapshot"
+  },
+  "types": {
+    "medical": "Medical",
+    "critical": "Critical illness",
+    "accident": "Accident",
+    "life": "Life",
+    "travel": "Travel",
+    "motor": "Motor",
+    "home": "Home"
+  },
+  "chat": {
+    "citation": "Citation",
+    "page": "page",
+    "seeEvidence": "See evidence",
+    "thinking": "Thinking…",
+    "verdict": {
+      "covered": "Covered",
+      "not_covered": "Not covered",
+      "depends": "Depends",
+      "unsure": "I'm not sure"
+    },
+    "askAgent": "Ask a licensed agent",
+    "howIKnow": "How I know this",
+    "original": "Show original",
+    "translate": "Translate summary to {{lang}}",
+    "attach": "Attach a document",
+    "demoDocs": "Use a demo document",
+    "fromDevice": "Upload from this device",
+    "placeholder": "Ask WeWise…",
+    "mic": "Voice input",
+    "send": "Send",
+    "greeting": "Hi, I'm WeWise 微晓. I can explain your policies in plain words, check what's covered, help you prepare a claim and compare plans. 保险问微晓，安心少烦恼.",
+    "scope": "I give decision support, not advice to buy. Only your insurer decides claims.",
+    "push": "Simulated notification",
+    "chips": {
+      "policy": "Understand a policy",
+      "policySend": "Use sample policy",
+      "claim": "Prepare a claim",
+      "claimSend": "I was admitted on 10 Oct",
+      "compare": "Compare plans",
+      "compareSend": "Compare hospital plans for me",
+      "gapSend": "Check my gaps",
+      "complainSend": "I want to complain about my claim decision"
+    },
+    "micStop": "Stop voice input",
+    "listening": "Listening…",
+    "voiceDemo": "demo: plays a sample phrase"
+  },
+  "home": {
+    "hero": "Your protection at a glance",
+    "glance": "Coverage overview",
+    "donutAria": "Total cover {{total}} by insurance type",
+    "totalCover": "Total cover",
+    "monthly": "Monthly premium",
+    "nextRenewal": "Next renewal",
+    "none": "None",
+    "premium": "Premium",
+    "singleTrip": "Single trip",
+    "startsIn": "Starts in {{n}} days",
+    "active": "Active",
+    "renewsIn": "Renews in {{n}} days",
+    "gapDetected": "Gap detected",
+    "keyClauses": "Key clauses",
+    "openPolicy": "Open policy",
+    "flip": "Flip card",
+    "flipBack": "Flip back",
+    "policies": "Your policies",
+    "alerts": "Alerts",
+    "renewsOn": "renews in {{n}} days, on {{date}}.",
+    "sparkAria": "Premium rose from {{from}} to {{to}}",
+    "hike": "Premium up {{pct}}% in 5 years",
+    "hikeDetail": "{{from}} → {{to}} per month. Expect another review at renewal.",
+    "gapsTitle": "Gaps worth a look",
+    "gaps": {
+      "outpatient": "No outpatient cover",
+      "outpatientSend": "Is outpatient care covered under my health plan?",
+      "ci": "No critical illness cover",
+      "child": "Child not covered"
+    },
+    "openClaims": "Open claims",
+    "addPolicy": "Add policy",
+    "emptyTitle": "Add your first policy",
+    "emptyText": "Upload a policy and I'll explain it in plain words."
+  },
+  "policies": {
+    "filterType": "Filter by type",
+    "all": "All",
+    "insurer": "Insurer",
+    "sorted": "Sorted by renewal date",
+    "coverEnds": "Cover ends",
+    "renews": "Renews",
+    "coverPeriod": "Cover period",
+    "none": "No policies match.",
+    "notFound": "Policy not found",
+    "notFoundText": "It may have been removed.",
+    "ask": "Ask about this policy",
+    "askMedical": "Am I covered for dengue hospitalisation?",
+    "askGeneric": "What does my {{name}} cover?",
+    "tabs": {
+      "summary": "Summary",
+      "clauses": "Clauses",
+      "gaps": "Gaps"
+    },
+    "search": "Search clauses",
+    "filterClause": "Filter clauses by type",
+    "clauseType": {
+      "coverage": "Coverage",
+      "exclusion": "Exclusion",
+      "waiting": "Waiting",
+      "limit": "Limit",
+      "condition": "Condition"
+    },
+    "noClauses": "No clauses match.",
+    "noGap": "No gaps found for this policy.",
+    "gapCheck": "Check my gaps across all policies"
+  },
+  "cards": {
+    "extract": {
+      "title": "Review what I read",
+      "high": "High confidence",
+      "medium": "Please check",
+      "low": "Please check",
+      "confirmed": "Confirmed",
+      "group": {
+        "basics": "Basics",
+        "limits": "Limits",
+        "waiting": "Waiting periods",
+        "exclusions": "Exclusions"
+      },
+      "save": "Save",
+      "corrected": "Corrected by you",
+      "correct": "Correct",
+      "lowHint": "{{count}} field needs your check.",
+      "confirmAll": "Confirm all",
+      "source": "Where I found it",
+      "confirmWithFix": "I corrected the annual limit to {{value}} and confirmed all fields.",
+      "confirmPlain": "Confirm all fields"
+    },
+    "summary": {
+      "limit": "Annual limit",
+      "deductible": "Deductible",
+      "copay": "Co-pay",
+      "waiting": "Waiting period",
+      "days": "{{n}} days",
+      "renewal": "Renewal",
+      "open": "Open policy"
+    },
+    "gap": {
+      "title": "Gap check",
+      "covered": "Covered",
+      "partial": "Partial",
+      "gap": "Gap",
+      "noClause": "no clause found",
+      "consider": "What to consider",
+      "notice": "Decision support, not a recommendation to buy."
+    },
+    "compare": {
+      "title": "Side by side",
+      "premium": "Premium",
+      "perMonth": " /mo",
+      "deductible": "Deductible",
+      "copay": "Co-pay",
+      "limit": "Annual limit",
+      "waiting": "Waiting period",
+      "trajectory": "Premium trajectory",
+      "term": "Term",
+      "better": "Better on this term"
+    },
+    "advocate": {
+      "label": "Argument for {{side}}"
+    },
+    "verdict": {
+      "bill": "If your hospital bill is",
+      "product": "Product {{side}}",
+      "youPay": "You pay",
+      "insurerPays": "Insurer pays",
+      "computed": "Calculated by code from the policy terms, not by the AI.",
+      "judge": "Judge",
+      "aWins": "A wins when",
+      "bWins": "B wins when",
+      "talk": "Talk to a licensed agent",
+      "talkSend": "Talk to a licensed agent"
+    },
+    "prescreen": {
+      "title": "Claim pre-screen",
+      "covered": "Likely covered",
+      "excluded": "Likely excluded",
+      "uncertain": "Uncertain",
+      "waiting": "Waiting period",
+      "waitingAria": "{{days}} days from start; waiting period {{wait}} days",
+      "inception": "Policy start",
+      "eligible": "Eligible from",
+      "incident": "Incident",
+      "waitOk": "The incident is {{days}} days after the policy started, so the waiting period is served.",
+      "waitBefore": "The incident is {{days}} days before this cover starts.",
+      "exclusions": "Exclusions hit",
+      "noExclusions": "None matched.",
+      "missing": "Still needed",
+      "notice": "Only the insurer decides. This is not a promise of approval."
+    },
+    "checklist": {
+      "title": "Claim checklist",
+      "open": "Open claim page"
+    },
+    "status": {
+      "open": "Open claim",
+      "whySend": "Why is it taking long?"
+    },
+    "confirm": {
+      "title": "Please confirm",
+      "what": "What",
+      "to": "Sent to",
+      "shared": "Data shared",
+      "payout": "Payout account (read-only)",
+      "expires": "Expires in {{time}}",
+      "expired": "Expired. Please ask again.",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "done": "Confirmed",
+      "cancelled": "Cancelled"
+    },
+    "handoff": {
+      "title": "Hand off to a licensed agent",
+      "recommended": "Recommended agents",
+      "best": "Best match",
+      "willShare": "What will be shared",
+      "masked": "Personal details are masked. Untick anything you'd rather not share.",
+      "consent": "I agree to share the selected items with {{name}}.",
+      "share": "Share with agent",
+      "shared": "Shared",
+      "confirmTitle": "Confirm sharing",
+      "confirmWhat": "Share a masked summary with {{name}}"
+    },
+    "safety": {
+      "view": "View what I ignored",
+      "snippet": "Hidden text on page {{page}} (masked)",
+      "why": "Why this protects you"
+    },
+    "escalation": {
+      "title": "A person should take this"
+    },
+    "incident": {
+      "title": "Incident guide",
+      "country": "Country",
+      "steps": "What to do, in order",
+      "numbers": "Emergency numbers (tap to copy)",
+      "copy": "Copy",
+      "copied": "Copied",
+      "avoid": "What to avoid",
+      "report": "Generate incident report (EN + local)",
+      "reportTitle": "Incident report preview",
+      "localNote": "Share with the other party and the insurer.",
+      "capture": "Capture evidence with AR guide"
+    }
+  },
+  "claims": {
+    "timeline": "Claim timeline",
+    "listIntro": "Your claims. Materials prepared is not approval: the insurer decides.",
+    "now": "Now",
+    "explain": "Explain in plain words",
+    "stage": {
+      "SUBMITTED": "Submitted",
+      "DOCUMENT_REVIEW": "Document review",
+      "INFO_REQUESTED": "Info requested",
+      "ASSESSMENT": "Assessment",
+      "DECISION": "Decision",
+      "PAYOUT": "Payout"
+    },
+    "actor": {
+      "you": "You",
+      "insurer": "Insurer",
+      "ai": "AI helped"
+    },
+    "plain": {
+      "SUBMITTED": "Your claim has been sent to the insurer. This does not mean it is approved.",
+      "DOCUMENT_REVIEW": "The insurer is checking that all documents arrived and are readable.",
+      "INFO_REQUESTED": "The insurer needs something more from you. The clock is paused until you send it.",
+      "ASSESSMENT": "The insurer is comparing the claim with your policy terms.",
+      "DECISION": "The insurer has decided. You can ask me to explain the reasons, but I can't change the decision.",
+      "PAYOUT": "Money is paid to the account on file with your insurer."
+    },
+    "required": "Required",
+    "optional": "Optional",
+    "doc": {
+      "check": "Please check",
+      "recognised": "Recognised · please confirm",
+      "confirmed": "Confirmed",
+      "toAdd": "To add",
+      "optional": "Optional",
+      "toggle": "show details",
+      "useDemo": "Use demo document",
+      "confirm": "Confirm",
+      "fixFirst": "Correct the date to continue."
+    },
+    "prepared": "{{n}} / {{total}} prepared",
+    "preparedLabel": "Prepared items",
+    "status": {
+      "DRAFT": "Draft",
+      "SUBMITTED": "Submitted",
+      "IN_REVIEW": "In review",
+      "INFO_REQUESTED": "Info requested",
+      "DECLINED": "Declined",
+      "PAID": "Paid"
+    },
+    "waitingOn": {
+      "user": "Waiting on you",
+      "insurer": "Waiting on insurer"
+    },
+    "payoutLocked": "From your insurer's file. I can't change this.",
+    "riskNotice": "Once documents are complete, the insurer still reviews them. This is not an approval or a payment promise.",
+    "steps": {
+      "label": "Claim steps",
+      "policy": "Confirm policy",
+      "docs": "Prepare documents",
+      "review": "Review & submit",
+      "title1": "Confirm the policy",
+      "title2": "Prepare claim documents",
+      "title3": "Review and submit"
+    },
+    "incident": "Incident",
+    "incidentValue": "Dengue, admitted 10 Oct",
+    "changeInvalidates": "If you change the policy or incident, earlier confirmations are cleared and you'll confirm again.",
+    "continue": "Continue",
+    "back": "Back",
+    "confirmAllHint": "Confirm every document to continue.",
+    "reviewContinue": "Review & continue",
+    "total": "Total charges",
+    "confirmSubmission": "Confirm submission",
+    "notFound": "Claim not found",
+    "notFoundText": "It may have been removed.",
+    "infoNeeded": "The insurer asked for one more document.",
+    "decline": {
+      "title": "Why it was declined",
+      "next": "What you can do next",
+      "add": "Add information if something was missed",
+      "appeal": "Ask the insurer for a formal review (appeal)",
+      "regulator": "Call the insurance regulator consumer hotline 12378",
+      "cant": "I can explain this, but I can't overturn it.",
+      "talk": "Talk to a licensed agent about an appeal"
+    },
+    "captureLink": "Capture scene evidence (AR guide)"
+  },
+  "memory": {
+    "toggle": "Remember things about me",
+    "on": "WeWise uses these to personalise answers.",
+    "off": "Memory is off. Nothing new is remembered.",
+    "remember": "What I remember",
+    "empty": "Nothing remembered.",
+    "delete": "Delete",
+    "accessed": "What I accessed",
+    "noAccess": "Nothing accessed yet. Ask WeWise something and each lookup will appear here.",
+    "purposeSearch": "Find clauses to answer you",
+    "purposeLookup": "Find your policy",
+    "purposeWaiting": "Check the waiting period",
+    "purposeOcr": "Read a document you added",
+    "purposeHandoff": "Share with an agent you approved",
+    "purposeClaim": "Submit the claim you confirmed",
+    "purposeOther": "Needed for your request"
+  },
+  "about": {
+    "concept": "Concept demo",
+    "conceptText": "WeWise 微晓 is a concept for an AI insurance assistant inside a bank app. It helps people understand their policies, prepare claims safely and compare plans, and it shows its working in the Inspector.",
+    "how": "How WeWise works",
+    "steps": [
+      "Understands what you ask.",
+      "Plans the steps and calls tools.",
+      "Checks every answer against clauses and numbers.",
+      "Asks before anything sensitive happens."
+    ],
+    "notOfficial": "This is not an official bank product and does not imply any partnership.",
+    "synthetic": "All people, policies and outcomes shown are synthetic."
+  },
+  "upload": {
+    "sampleSend": "Use sample policy",
+    "title": "Add a policy",
+    "desc": "Upload a policy PDF or photo. I'll read it, find the clauses and ask you to confirm.",
+    "sample": "Use sample policy",
+    "camera": "Take a photo (demo)",
+    "steps": {
+      "reading": "Reading",
+      "finding": "Finding clauses",
+      "checking": "Checking",
+      "ready": "Ready"
+    },
+    "synthetic": "Demo only: the sample is a synthetic document."
+  },
+  "emergency": {
+    "fab": "Emergency",
+    "demo": "Demo simulation",
+    "title": "You're not alone",
+    "contacts": "Emergency contacts",
+    "end": "End call",
+    "script": [
+      "Take a slow breath. You are safe to talk to me.",
+      "First: is anyone hurt? If yes, call the local emergency number below.",
+      "Stay where it is safe. You don't need to decide anything about the claim right now.",
+      "When you're ready, I'll help you report this to your insurer and collect evidence, one step at a time."
+    ],
+    "connecting": "Connecting to WeWise…",
+    "live": "On call",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "speaker": "Read aloud",
+    "summary": "Call ended",
+    "duration": "Call length {{time}}. Nothing was recorded or sent.",
+    "next": [
+      "Call local emergency services if anyone is hurt",
+      "Report to your insurer within 48 hours",
+      "Take photos of the scene before anything moves"
+    ],
+    "incidentSend": "I had an accident abroad",
+    "guide": "Open the incident guide",
+    "capture": "Capture evidence"
+  },
+  "capture": {
+    "demo": "Demo: the camera view is a synthetic scene. Nothing is uploaded.",
+    "blurry": "Too early: the shot is blurry. Wait for the green frame, then try again.",
+    "noCamera": "Camera isn't available. Using the sample scene.",
+    "holdSteady": "Hold steady…",
+    "allDone": "All four shots look good.",
+    "shoot": "Take photo",
+    "useCamera": "Use my camera",
+    "shots": "Evidence shots",
+    "sharp": "Sharp",
+    "blurryShort": "Blurry",
+    "meta": "Shenzhen (approx.)",
+    "retake": "Retake needed",
+    "retakeBtn": "Retake",
+    "pending": "Not taken yet",
+    "packTitle": "Evidence pack ready",
+    "pack": {
+      "hash": "Each photo is fingerprinted so changes can be detected",
+      "time": "Time stamped 14:32, 14 Oct 2026",
+      "place": "Approximate location: Nanshan, Shenzhen",
+      "plate": "Number plate masked in the shared copy"
+    },
+    "attach": "Attach to my claim",
+    "attached": "Attached to your claim",
+    "openClaim": "Open claim"
+  },
+  "showcase": {
+    "open": "3D assets",
+    "title": "Insured assets",
+    "count": "{{n}} of {{total}}",
+    "insured": "Insured",
+    "notInsured": "Not insured",
+    "cover": "Cover",
+    "renews": "Renews in {{n}} days",
+    "openPolicy": "Open policy",
+    "addCover": "Add cover",
+    "swipe": "Swipe to browse",
+    "prev": "Previous asset",
+    "next": "Next asset",
+    "loading": "Loading studio…",
+    "noWebgl": "3D isn't available on this device. You can still browse your assets.",
+    "addSend": "Should I insure my electric scooter?",
+    "close": "Close",
+    "hint": "Generic models for illustration. Not a specific vehicle or building."
+  }
+}
