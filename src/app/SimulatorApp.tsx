@@ -25,7 +25,12 @@ function SimulatorModeGuard({children}:{children:ReactNode}) {
 // AppShell is the layout route; pages render inside PhoneFrame via <Outlet/>.
 export default function App() {
   return (
-    <><div className="fixed inset-x-0 top-0 z-[100] bg-warning px-4 py-2 text-center text-xs text-white">引导模拟器 · 此模式全部办理结果与对话均为预设演示 <a href="/" className="ml-3 underline">返回真实功能</a></div>
+    <div style={{display:'flex',flexDirection:'column',height:'100dvh',minWidth:0}}>
+    <aside aria-label="Simulation mode notice" style={{display:'flex',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between',gap:'8px 16px',padding:'10px 16px',flexShrink:0,background:'var(--wb-ink, #1D2943)',color:'white',position:'relative',zIndex:30}}>
+      <p style={{margin:0,fontSize:13,lineHeight:1.7,flex:'1 1 220px'}}>引导模拟器 · 此模式全部办理结果与对话均为预设演示<br/><span lang="en">Guided simulator · preset conversations and transactions</span></p>
+      <a href="/" style={{display:'inline-flex',alignItems:'center',justifyContent:'center',minHeight:44,padding:'8px 16px',borderRadius:8,background:'white',color:'var(--wb-ink, #1D2943)',fontSize:13,fontWeight:600,whiteSpace:'nowrap',textDecoration:'none',flexShrink:0}}>返回真实功能 / Real features</a>
+    </aside>
+    <div className="simulator-viewport" style={{flex:1,minHeight:0,minWidth:0}}>
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <SimulatorModeGuard>
       <Routes>
@@ -43,6 +48,6 @@ export default function App() {
         </Route>
       </Routes>
       </SimulatorModeGuard>
-    </BrowserRouter></>
+    </BrowserRouter></div></div>
   );
 }

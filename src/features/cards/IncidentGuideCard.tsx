@@ -49,6 +49,7 @@ export function IncidentGuideCard({ country: initial, messageId }: { country: st
 
       <h4 className="mb-1 mt-4 text-xs font-semibold uppercase tracking-wide text-muted">{t('cards.incident.numbers')}</h4>
       <div className="space-y-1.5">{inc.numbers.map((n, i) => <CopyNumber key={i} number={n.number} label={p(n.label)} />)}</div>
+      {!inc.numbers.length && <Notice tone="warn" icon="info">{p({en:'No reviewed phone numbers are available for this destination. Confirm your location and use official local emergency information; do not wait for insurance intake.',zh:'此目的地没有已核验的电话号码。请确认所在国家并查找官方当地紧急服务，不要等待保险问答。'})}</Notice>}
 
       <h4 className="mb-1 mt-4 text-xs font-semibold uppercase tracking-wide text-muted">{t('cards.incident.avoid')}</h4>
       <ul className="space-y-1 text-[13px] text-body">{inc.avoid.map((s, i) => <li key={i} className="flex gap-1.5"><AppIcon name="close" size={14} className="mt-1 shrink-0 text-danger" />{p(s)}</li>)}</ul>
@@ -62,7 +63,7 @@ export function IncidentGuideCard({ country: initial, messageId }: { country: st
           {(['en', 'zh'] as const).map((l) => (
             <section key={l} className="rounded-input border border-cardline p-3">
               <h4 className="mb-1 font-semibold text-ink">{l === 'en' ? 'English' : '中文'}</h4>
-              <p>{l === 'en' ? `Incident report. Country: ${pick(inc.name, 'en')}. Reporter: M** L** T**. Policy: SG-2026-77****05. Date: ${'2026-10-14'}. Please contact the 24-hour assistance line within 48 hours.` : `事故报告。国家：${pick(inc.name, 'zh')}。报案人：M** L** T**。保单：SG-2026-77****05。日期：2026-10-14。请在 48 小时内联系 24 小时救援热线。`}</p>
+              <p>{l === 'en' ? `Incident report. Country: ${pick(inc.name, 'en')}. Reporter: M** L** T**. Policy: SG-2026-77****05. Date: ${'2026-10-14'}. Contact the assistance provider printed on the issued policy promptly and check its actual notification requirements.` : `事故报告。国家：${pick(inc.name, 'zh')}。报案人：M** L** T**。保单：SG-2026-77****05。日期：2026-10-14。请及时联系已签发保单列明的协助机构，并核对实际通知要求。`}</p>
               <p className="mt-1 text-xs text-muted">{t('cards.incident.localNote')}</p>
             </section>
           ))}
