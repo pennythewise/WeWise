@@ -16,7 +16,7 @@ Mainland China policies only; Japan accidental outpatient treatment is the deepl
 | Reviewed PDF/ZIP claim and cross-border packages, exact consent previews | Downloads to the user only. Actual status stays PREPARED_NOT_SUBMITTED. |
 | Approved-memory CRUD and private Tencent mirror | SQLite approval ledger remains authoritative. Hosting health/readback must verify Tencent activation; no automatic sensitive memory or historical erasure claim. |
 | Calm interactive guidance, speech/text, guided multi-photo evidence capture | Rule-based in-app conversation and device-supported speech/camera. No live phone transfer, dispatch, medical diagnosis or AR measurement. |
-| WorkBuddy/Claude/Qwen and advisory JEV adapters | User deferred both credentials. Retrieval-only hosting disables external calls even if keys exist. Semantic translation and generative dialogue remain key-deferred. |
+| WorkBuddy/Claude/Qwen and advisory JEV adapters | Claude native API configured with strict source checks and retrieval fallback. Supplied JEV credential failed authentication; JEV stays disabled. WorkBuddy/Qwen migration remains deferred. See [activation details](docs/LIVE_PROVIDER_SETUP.md). |
 
 Insurer receipts, decisions, timelines, payouts and agent callbacks are explicitly simulated. Bank SSO, real insurer submission/status, regulated commission collection, real phone transfer, family delegation and animated avatar remain later integrations.
 

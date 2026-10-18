@@ -1,3 +1,11 @@
+# Provider update — 18 October 2026
+
+The updated preview enables server-side Claude and checked original-source
+extracts. JEV remains disabled because the supplied key failed authentication.
+Older key-deferred/retrieval-only notes below are historical for the earlier
+release; see [current boundaries](LIVE_PROVIDER_SETUP.md). All insurer and human
+callback simulation boundaries remain in force.
+
 # WeWise requirement traceability and acceptance boundaries
 
 This register replaces an overly broad interpretation of the earlier test receipt.

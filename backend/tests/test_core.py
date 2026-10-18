@@ -193,7 +193,7 @@ def test_portfolio_does_not_sum_insurance_as_wealth(client):
     ("qwen", "https://dashscope.aliyuncs.com/compatible-mode/v1", "", "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"),
     ("anthropic", "https://api.anthropic.com", "", "https://api.anthropic.com/v1/messages"),
 ])
-def test_model_protocol_fixtures_never_contact_provider(monkeypatch, provider, base, endpoint, expected):
+def test_model_protocol_fixtures_never_contact_provider(client, monkeypatch, provider, base, endpoint, expected):
     captured = []
     monkeypatch.setenv("AI_PROVIDER", provider)
     monkeypatch.setenv("AI_MODEL", "fixture-model-id-not-live")
@@ -202,7 +202,7 @@ def test_model_protocol_fixtures_never_contact_provider(monkeypatch, provider, b
     monkeypatch.setenv("AI_ENDPOINT", endpoint)
     monkeypatch.setenv("AI_API_KEY", "fake-test-key-not-a-real-credential")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "fake-test-key-not-a-real-credential")
-    generated = json.dumps({"answer": "The source records outpatient treatment [C1].", "citation_ids": ["C1"]})
+    generated = json.dumps({"selected_excerpt_ids": ["E1"]})
     class FixtureResponse:
         def raise_for_status(self):
             return None
