@@ -5,7 +5,9 @@ and keep the customer in control. React/Vite frontend with a FastAPI backend.
 
 **Team test link:** https://wewise-retrieval-preview.vercel.app/me . Start a
 private synthetic demo; no shared password or Vercel login is required.
-The public preview enforces retrieval-only mode. See [deployment notes](DEPLOYMENT.md).
+The updated preview supports server-side Claude with checked source extracts and
+retrieval fallback. JEV remains disabled after its supplied key failed authentication.
+See [live provider boundaries](docs/LIVE_PROVIDER_SETUP.md) and [deployment notes](DEPLOYMENT.md).
 
 **Current implementation:** [team setup and API configuration](IMPLEMENTATION.md)
 and [the complete requirement register](docs/REQUIREMENTS_STATUS.md).

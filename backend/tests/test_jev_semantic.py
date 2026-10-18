@@ -45,7 +45,7 @@ def test_jev_official_choice_protocol_and_minimized_input(monkeypatch):
         assert body["questions"]["intent"]["criteria"] == jev.INTENTS
         assert "person@example.com" not in body["state"]["untrusted_user_text"]
         assert "12345678901" not in body["state"]["untrusted_user_text"]
-        return httpx.Response(200, json={"model": "jev-fixture", "answers": {"intent": answer()}})
+        return httpx.Response(200, json={"model": "jev-fixture", "answers": {"intent": answer()}, "usage": {"input_tokens": 80, "output_tokens": 12}})
     result = asyncio.run(jev.suggest("compare for person@example.com 12345678901", transport=httpx.MockTransport(respond)))
     assert result["used"] and result["suggestion"] == "buying"
     assert result["authority"] == "advisory_only"

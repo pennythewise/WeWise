@@ -1,3 +1,10 @@
+# Provider update — 18 October 2026
+
+The updated preview enables native Claude using private server settings, source
+verification and a persistent daily request cap. JEV stays disabled after an
+authentication failure. [Current provider setup](docs/LIVE_PROVIDER_SETUP.md)
+supersedes retrieval-only claims in the historical deployment record below.
+
 # WeWise teammate preview
 
 Test: **https://wewise-retrieval-preview.vercel.app/me**
@@ -7,10 +14,11 @@ synthetic policy schedule plus the published wording. No shared password or
 Vercel account is needed. Confirm the policy's extracted facts before asking for
 personalized guidance. Use only synthetic personal, medical and financial data.
 
-The hosted build enforces `WEWISE_RETRIEVAL_ONLY=1`: chat uses real source
-retrieval; it cannot call a model even if an ambient API key exists. Translation
-retains original text with a visible label. WorkBuddy credentials can be added in
-a later, explicitly configured deployment. JEV remains disconnected. The current runtime uses pinned local multilingual E5
+The updated hosted build loads private operator settings for Claude and keeps
+source retrieval as fallback. `WEWISE_RETRIEVAL_ONLY=1` can disable all paid calls.
+Translations require explicit external-processing consent and user review.
+WorkBuddy can be configured later. JEV remains disconnected after authentication
+failed. The current runtime uses pinned local multilingual E5
 embeddings fused with BM25 and a private Tencent MemoryCore mirror of approved
 preferences; no remote embedding/model service receives queries in this mode.
 

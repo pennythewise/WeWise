@@ -280,6 +280,21 @@ async def stream_turn(payload, user):
     now = core.now_iso()
     turn_id = core.uid("tr_")
     events, results = [], {}
+    # Reject foreign/stale resource references before a paid routing request.
+    # The transaction below repeats these checks after the network await.
+    with core.get_db() as db:
+        previous = owned_conversation(db, payload.conversation_id, user["id"]) if payload.conversation_id else None
+        state_before = json.loads(previous["state_json"]) if previous else {}
+        if previous and payload.expected_revision is not None and payload.expected_revision != previous["revision"]:
+            raise HTTPException(409, "Conversation changed in another tab. Reload before sending.")
+        if state_before.get("in_flight_until", 0) > time.time():
+            raise HTTPException(409, "A turn is already running in this conversation. Wait for it to finish.")
+        prior_claim = payload.claim_id or state_before.get("claim_id")
+        if payload.policy_id and payload.policy_id != state_before.get("policy_id") and not payload.claim_id:
+            prior_claim = None
+        for table, identifier in (("policies", payload.policy_id or state_before.get("policy_id")), ("claims", prior_claim)):
+            if identifier and not db.execute(f"SELECT 1 FROM {table} WHERE id=? AND user_id=?", (identifier, user["id"])).fetchone():
+                raise HTTPException(404, "Resource not found.")
     protected = intelligence.local_route(payload.message) in {"outside_scope", "emergency"} or bool(documents.INJECTION.search(payload.message))
     advice = ({"used": False, "reason": "deterministic_safety_priority", "engine": "deterministic_allowed_intents"} if protected else await suggest(intelligence.mask_pii(payload.message, user), question="intent"))
     with core.get_db() as db:

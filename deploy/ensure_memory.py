@@ -67,7 +67,7 @@ def ensure_memory() -> dict[str, str]:
             memory_dir = DATA / 'tencent'
             memory_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
             environment = dict(os.environ)
-            for name in ('OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'DASHSCOPE_API_KEY', 'TDAI_LLM_API_KEY', 'LLM_API_KEY'):
+            for name in ('OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'AI_API_KEY', 'TYPESAFE_API_KEY', 'DASHSCOPE_API_KEY', 'TDAI_LLM_API_KEY', 'LLM_API_KEY'):
                 environment.pop(name, None)
             environment.update({'TDAI_GATEWAY_CONFIG': str(PROJECT / 'backend/tencent-memory.yaml'), 'TDAI_DATA_DIR': str(memory_dir), 'TDAI_GATEWAY_HOST': '127.0.0.1', 'TDAI_GATEWAY_PORT': '8420', 'TDAI_GATEWAY_API_KEY': key, 'V3_STRICT_ISOLATION': 'true', 'TDAI_LLM_BASE_URL': 'http://127.0.0.1:9/v1', 'TDAI_LLM_API_KEY': ''})
             # Do not persist upstream stdout/stderr: it may contain user data.

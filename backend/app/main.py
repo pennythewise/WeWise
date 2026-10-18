@@ -16,6 +16,7 @@ from fastapi.staticfiles import StaticFiles
 from . import core, documents, intelligence
 from .semantic_retrieval import embedding_health
 from .jev_adapter import jev_health
+from .provider_limits import limits_health
 
 
 def optional_module(name):
@@ -40,7 +41,7 @@ def create_app():
         documents.seed_demo_documents()
         yield
 
-    app = FastAPI(title="WeWise · 微晓", version="0.3.0", lifespan=lifespan,
+    app = FastAPI(title="WeWise · 微晓", version="0.3.1", lifespan=lifespan,
                   description="Private local hackathon assistant. Synthetic customer data only. No insurer transactions.")
 
     @app.middleware("http")
@@ -83,10 +84,11 @@ def create_app():
     def health():
         config = intelligence.ai_config()
         semantic = embedding_health()
-        return {"status": "ok", "version": "0.3.0", "ai": config,
+        return {"status": "ok", "version": "0.3.1", "ai": config,
                 "ocr": {"engine": "PyMuPDF text + RapidOCR CPU", "scan_page_quota": 12, "manual_fallback": True},
                 "retrieval": {"engine": "Local multilingual E5 + SQLite BM25/RRF" if semantic["configured"] else "SQLite FTS5/BM25 + multilingual lexical", "vector_embeddings": semantic["configured"], "semantic": semantic},
                 "jev": jev_health(),
+                "paid_request_limits": limits_health(),
                 "memory": memory.memory_health() if memory and hasattr(memory, "memory_health") else {"engine": "not_initialized"},
                 "synthetic_data_only": True,
                 "simulation_boundary": ["insurer receipts", "insurer processing timelines", "agent callback requests"],
@@ -96,9 +98,9 @@ def create_app():
     def capabilities():
         config = intelligence.ai_config()
         return {"real": ["private authenticated accounts", "document upload and per-page extraction", "CPU OCR with explicit fallback", "critical-fact and source-term review", "owner-scoped cited retrieval", "profile and clause coverage observations", "private portfolio and document vault", "24-hour temporary upload lifecycle", "claim-package export", "approved memory reuse and deletion", "user-sourced claim progress and notifications", "isolated insurer state-machine simulator", "deterministic advocate comparison and cost arithmetic", "renewal and premium history", "persisted conversations and validated tool plans", "streamed execution inspector", "guided multi-photo evidence capture", "in-app rule-based calming conversation", "medical and financial factual report review"],
-                "conditional": {"live_model": config["configured"], "model_verified": False, "local_embeddings": embedding_health()["configured"], "jev": jev_health()["configured"], "voice": "Browser/device support and user permission required."},
+                "conditional": {"live_model": config["configured"], "model_verified": config.get("live_verified", False), "local_embeddings": embedding_health()["configured"], "jev": jev_health()["configured"], "jev_verified": jev_health()["verified_live"], "voice": "Browser/device support and user permission required."},
                 "simulated": ["insurer receipt", "insurer processing timeline", "licensed-agent callback request"],
-                "not_connected": ["insurer submission API", "insurer status feed", "WeBank SSO", "live telephone transfer", "JEV cloud"],
+                "not_connected": ["insurer submission API", "insurer status feed", "WeBank SSO", "live telephone transfer"] + ([] if jev_health()["configured"] else ["JEV cloud"]),
                 "notice": "This capability report describes implementation, not independently verified deployment or production suitability."}
 
     dist = core.ROOT / "dist"

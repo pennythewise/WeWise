@@ -1,3 +1,10 @@
+# Provider update — 18 October 2026
+
+Claude now uses the native Anthropic API with explicit model selection and strict
+source checks. JEV's supplied key failed authentication; its deterministic
+fallback remains active. See [current provider setup](docs/LIVE_PROVIDER_SETUP.md)
+for configuration, spend limits and the exact scope of live verification.
+
 # Expanded app update — 17 October 2026
 
 The [complete requirement register](docs/REQUIREMENTS_STATUS.md) and [current feature boundaries](FEATURE_STATUS.md) supersede older missing-feature notes below. New routes: `/reports`, `/incidents`; the main assistant persists conversations and executes validated plans with 34 adapters. Run `python eval/run.py` for the task/attack corpus, `python scripts/measure-agent.py --help` for measured streaming scenarios and `python scripts/verify-expanded-preview.py --help` for the full-stack smoke. Operator installation of local semantic assets and private Tencent MemoryCore is documented in [deploy/LOCAL_RETRIEVAL_SERVICES.md](deploy/LOCAL_RETRIEVAL_SERVICES.md). No external model or JEV credential is needed for retrieval mode.
