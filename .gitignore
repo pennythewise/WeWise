@@ -19,3 +19,4 @@ test-results/
 
 # Retired code kept locally only
 tobe_deleted/
+.vite/
