@@ -12,6 +12,7 @@ import { HandoffPreviewCard } from './HandoffPreviewCard';
 import { IncidentGuideCard } from './IncidentGuideCard';
 import { PolicySummaryCard } from './PolicySummaryCard';
 import { ShopCompareCard } from './ShopCompareCard';
+import { GenerativeReveal } from './GenerativeReveal';
 import { SafetyNoticeCard } from './SafetyNoticeCard';
 import { VerdictCard } from './VerdictCard';
 import { ReportInsightsCard } from './ReportInsightsCard';
@@ -21,6 +22,10 @@ import { LocationPermissionCard, LocationSuggestCard } from '../location/Locatio
 
 /** Exhaustive switch over the card union: adding a card kind without a renderer fails to compile. */
 export function CardView({ card, messageId }: { card: Card; messageId?: string }) {
+  return <GenerativeReveal id={card.id}>{renderCard(card, messageId)}</GenerativeReveal>;
+}
+
+function renderCard(card: Card, messageId?: string) {
   switch (card.kind) {
     case 'PolicySummaryCard': return <PolicySummaryCard {...card.data} />;
     case 'ExtractionReviewCard': return <ExtractionReviewCard {...card.data} />;
