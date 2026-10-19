@@ -12,6 +12,7 @@ import { useMemoryStore } from '@/features/settings/memoryStore';
 import { useLocationStore } from '@/features/location/locationStore';
 import { syncCrossBorder, useCrossBorderStore } from '@/features/claims/crossBorderStore';
 import type { Locale } from '@/engine/l';
+import { useTypingStore } from '@/features/chat/typingStore';
 
 export interface ChatMessage {
   id: string;
@@ -157,6 +158,7 @@ export const useAgentStore = create<AgentState>((set, get) => {
       useMemoryStore.getState().reset();
       useLocationStore.getState().reset();
       useCrossBorderStore.getState().reset();
+      useTypingStore.getState().reset();
       set({ ...initial });
     },
   };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppIcon } from '@/components/AppIcon';
 import { Badge } from '@/components/ui';
@@ -12,6 +12,7 @@ import { useAgentStore } from '@/agentStore';
 import { useTx } from '@/i18n/useTx';
 import { useUiStore } from '@/store';
 import { useBreakpoint } from '@/layout/useBreakpoint';
+import { useTypedReveal } from './useTypedReveal';
 
 const VERDICT: Record<Verdict, { tone: 'ok' | 'danger' | 'warn' | 'neutral'; icon: 'check' | 'close' | 'info' }> = {
   covered: { tone: 'ok', icon: 'check' }, not_covered: { tone: 'danger', icon: 'close' }, depends: { tone: 'warn', icon: 'info' }, unsure: { tone: 'neutral', icon: 'info' },
@@ -45,6 +46,9 @@ export function AssistantBubble({ m }: { m: ChatMessage }) {
     if (mode !== 'showcase') ui.setInspectorOpen(true);
   };
   const v = m.verdict ? VERDICT[m.verdict] : null;
+  const segs = useMemo(() => [m.text ? pick(m.text, lang) : '', ...(m.bullets ?? []).map((b) => pick(b, lang))], [m.text, m.bullets, lang]);
+  const reveal = useTypedReveal(m.id, segs, !!m.text);
+  const caret = (i: number) => (reveal.current === i ? <span aria-hidden="true" className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] animate-pulse bg-primary" /> : null);
 
   return (
     <div className="flex gap-2.5" data-msg={m.id}>
@@ -55,19 +59,19 @@ export function AssistantBubble({ m }: { m: ChatMessage }) {
         {m.text && (
           <div className={`rounded-[16px] rounded-tl-[4px] border bg-white px-3.5 py-3 text-[14px] leading-[1.7] text-body ${selected ? 'border-primary' : 'border-cardline'}`}>
             {v && <p className="mb-2"><Badge tone={v.tone} icon={v.icon}>{t(`chat.verdict.${m.verdict}`)}</Badge></p>}
-            <p><RichText text={pick(m.text, lang)} messageId={m.id} /></p>
+            <p><RichText text={reveal.visible[0]} messageId={m.id} />{caret(0)}</p>
             {m.bullets && (
               <ul className="mt-2 list-disc space-y-1.5 pl-5">
-                {m.bullets.map((b, i) => <li key={i}><RichText text={pick(b, lang)} messageId={m.id} /></li>)}
+                {m.bullets.map((_, i) => (reveal.visible[i + 1] || reveal.done) && <li key={i}><RichText text={reveal.visible[i + 1]} messageId={m.id} />{caret(i + 1)}</li>)}
               </ul>
             )}
-            {m.verdict === 'depends' || m.verdict === 'unsure' ? (
+            {reveal.done && (m.verdict === 'depends' || m.verdict === 'unsure') ? (
               <button type="button" className="mt-2 min-h-touch text-[13px] font-semibold text-primary" onClick={() => void useAgentStore.getState().send(t('cards.verdict.talkSend'))}>{t('chat.askAgent')}</button>
             ) : null}
           </div>
         )}
         {m.cards.map((c) => <CardView key={c.id} card={c} messageId={m.id} />)}
-        {m.status === 'done' && m.text && (
+        {m.status === 'done' && m.text && reveal.done && (
           <div className="flex flex-wrap items-center gap-x-4">
             <button type="button" className="min-h-touch text-[13px] font-semibold text-primary" onClick={howIKnow}>{t('chat.howIKnow')}</button>
             <button type="button" className="min-h-touch text-[13px] font-medium text-muted" onClick={() => setOverride(override ? null : other)} aria-pressed={!!override}>

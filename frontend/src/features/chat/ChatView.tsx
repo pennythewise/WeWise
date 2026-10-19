@@ -8,6 +8,7 @@ import { Chips } from './Chips';
 import { Composer } from './Composer';
 import { Notice } from '@/components/ui';
 import { L } from '@/engine/l';
+import { useTypingStore } from './typingStore';
 
 const useDefaultChips = (): Chip[] => {
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ export function ChatView() {
   const messages = useAgentStore((s) => s.messages);
   const running = useAgentStore((s) => s.running);
   const defaults = useDefaultChips();
+  const typing = useTypingStore((s) => s.typingId !== null);
   const endRef = useRef<HTMLDivElement>(null);
   const reduce = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
@@ -48,7 +50,7 @@ export function ChatView() {
           </div>
         )}
         {messages.map((m) => (m.role === 'user' ? <UserBubble key={m.id} m={m} /> : <AssistantBubble key={m.id} m={m} />))}
-        {chips.length > 0 && !running && <Chips chips={chips} />}
+        {chips.length > 0 && !running && !typing && <Chips chips={chips} />}
         <div ref={endRef} />
       </div>
       <Composer />
