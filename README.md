@@ -17,6 +17,7 @@ python3.11 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
 WEWISE_RETRIEVAL_ONLY=1 WEWISE_SEED_DEMO=1 .venv/bin/python -m uvicorn backend.app.main:app --port 8017
 
 # frontend
+cd frontend
 pnpm install
 pnpm dev        # http://localhost:5173, proxies /api to the backend on :8017
 pnpm build      # type-check + production build
@@ -28,10 +29,9 @@ Evidence: `.venv/bin/python backend/eval/run.py` runs the golden-task and attack
 
 | Path | Contents |
 |------|----------|
-| `src/` | React app: `app` shell and router, `layout` phone frame, `features` screens, `engine` agent clients and scenarios (S1–S7), `mock` synthetic data, `i18n` |
-| `public/models/` | 3D models (credits in the About screen) |
+| `frontend/` | React + Vite app. `src/`: `app` shell and router, `layout` phone frame, `features` screens, `engine` agent clients and scenarios (S1–S7), `mock` synthetic data, `i18n`. `public/models/`: 3D models (credits in the About screen) |
 | `backend/` | FastAPI service (`app/`), its tests (`tests/`) and the evidence suite (`eval/`) |
-| `api/` | Vercel serverless entry (must stay at the root) |
+| `api/` | Vercel serverless entry (must stay at the root, with the root `package.json`) |
 | `infra/` | `server/` sandbox gateway, `deploy/` runtime helpers, `scripts/` tooling, `tests/` gateway tests |
 | `docs/` | PRD, tech spec and frontend PRD |
 | `tobe_deleted/` | Retired live-app UI, pending removal |
