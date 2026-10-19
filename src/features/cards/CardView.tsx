@@ -13,6 +13,10 @@ import { IncidentGuideCard } from './IncidentGuideCard';
 import { PolicySummaryCard } from './PolicySummaryCard';
 import { SafetyNoticeCard } from './SafetyNoticeCard';
 import { VerdictCard } from './VerdictCard';
+import { ReportInsightsCard } from './ReportInsightsCard';
+import { OverlapReportCard } from './OverlapReportCard';
+import { SwitchCheckCard } from '../switch/SwitchCheck';
+import { LocationPermissionCard, LocationSuggestCard } from '../location/LocationCards';
 
 /** Exhaustive switch over the card union: adding a card kind without a renderer fails to compile. */
 export function CardView({ card, messageId }: { card: Card; messageId?: string }) {
@@ -31,5 +35,10 @@ export function CardView({ card, messageId }: { card: Card; messageId?: string }
     case 'IncidentGuideCard': return <IncidentGuideCard {...card.data} messageId={messageId} />;
     case 'SafetyNoticeCard': return <SafetyNoticeCard {...card.data} />;
     case 'EscalationCard': return <EscalationCard {...card.data} />;
+    case 'ReportInsightsCard': return <ReportInsightsCard {...card.data} messageId={messageId} />;
+    case 'OverlapReportCard': return <OverlapReportCard gig={card.data.gig} messageId={messageId} />;
+    case 'SwitchCheckCard': return <SwitchCheckCard />;
+    case 'LocationPermissionCard': return <LocationPermissionCard />;
+    case 'LocationSuggestCard': return <LocationSuggestCard cityId={card.data.cityId} messageId={messageId} />;
   }
 }

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ExtractedField } from '@/engine/types';
 import { Badge, CardShell } from '@/components/ui';
-import { Sheet } from '@/components/Sheet';
 import { ClauseViewer } from '../policies/ClauseViewer';
 import { useTx } from '@/i18n/useTx';
 import { useAgentStore } from '@/agentStore';
@@ -60,10 +59,16 @@ export function ExtractionReviewCard({ fields }: { fields: ExtractedField[] }) {
                         )}
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-1">
-                        <button type="button" onClick={() => setViewer(f.clauseId ?? null)} disabled={!f.clauseId} className="rounded-full bg-wash px-2 py-0.5 text-xs text-muted disabled:cursor-default" aria-label={`${t('chat.page')} ${f.page}`}>p.{f.page}</button>
+                        <button type="button" onClick={() => setViewer(viewer === f.key ? null : f.key)} disabled={!f.clauseId} aria-expanded={f.clauseId ? viewer === f.key : undefined} className={`rounded-full px-2 py-0.5 text-xs disabled:cursor-default ${viewer === f.key ? 'bg-primary text-white' : 'bg-wash text-muted'}`} aria-label={`${t('chat.page')} ${f.page}`}>p.{f.page}</button>
                         {!fixed && <Confidence c={f.confidence} />}
                       </div>
                     </div>
+                    {viewer === f.key && f.clauseId && (
+                      <div className="mt-2 animate-fade-in">
+                        <p className="mb-1 text-xs font-semibold text-muted">{t('cards.extract.source')}</p>
+                        <ClauseViewer clauseId={f.clauseId} compact />
+                      </div>
+                    )}
                     {editing !== f.key && !confirmed && (
                       <button type="button" className="mt-1 min-h-[36px] text-[13px] font-semibold text-primary" onClick={() => { setDraft(fixed ?? ''); setEditing(f.key); }}>
                         {t('cards.extract.correct')}
@@ -82,9 +87,6 @@ export function ExtractionReviewCard({ fields }: { fields: ExtractedField[] }) {
           <button type="button" className="btn-primary w-full" onClick={confirmAll} disabled={running}>{t('cards.extract.confirmAll')}</button>
         </div>
       )}
-      <Sheet open={!!viewer} onOpenChange={(o) => !o && setViewer(null)} side="bottom" height="70dvh" title={t('cards.extract.source')}>
-        <div className="p-4">{viewer && <ClauseViewer clauseId={viewer} />}</div>
-      </Sheet>
     </CardShell>
   );
 }

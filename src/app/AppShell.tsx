@@ -2,9 +2,6 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { setNavigate } from '@/navRef';
-import { UploadSheet } from '@/features/settings/UploadSheet';
-import { AssetShowcase } from '@/features/showcase/AssetShowcase';
-import { EmergencyCall } from '@/features/settings/EmergencyCall';
 import { useStageShortcuts } from '@/features/stage/useStageShortcuts';
 import { playScenario } from '@/features/stage/autoplay';
 import { queryFlags } from '@/lib';
@@ -26,7 +23,6 @@ export function AppShell() {
   useEffect(() => { setNavigate(navigate); }, [navigate]);
   useStageShortcuts(mode === 'showcase');
   useEffect(() => { if (new URLSearchParams(location.search).get('autoplay') === '1') void playScenario(queryFlags.scenario() ?? 1); }, []);
-  const overlays = (<><UploadSheet /><EmergencyCall /><AssetShowcase /></>);
 
   if (mode === 'phone') {
     return (
@@ -44,7 +40,6 @@ export function AppShell() {
           </div>
         </Sheet>
         <InspectorSheet />
-        {overlays}
       </div>
     );
   }
@@ -62,7 +57,6 @@ export function AppShell() {
         </div>
       </div>
       {showcase ? <InspectorPane /> : <InspectorDrawer />}
-      {overlays}
     </div>
   );
 }

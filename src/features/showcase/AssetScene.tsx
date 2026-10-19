@@ -43,7 +43,7 @@ function Rig({ index, drag }: { index: number; drag: MutableRefObject<number> })
       const want = still ? -0.65 : -0.65 + Math.sin(st.clock.elapsedTime * 0.22) * 0.55 + (active ? 0 : 0.4);
       g.rotation.y = THREE.MathUtils.damp(g.rotation.y, want, 2.2, dt);
     });
-    st.camera.lookAt(0, -0.55, 0); // aim below the models so they sit in the upper half, clear of the info card
+    st.camera.lookAt(0, 0.35, 0); // centre the model in the inline card; the controls sit along the bottom edge
   });
   return (
     <group ref={world}>
@@ -52,8 +52,8 @@ function Rig({ index, drag }: { index: number; drag: MutableRefObject<number> })
         return (
           <group key={a.id} position={[i * SPACING, 0, 0]} scale={SCALE[a.kind]}>
             <group ref={(el) => { turn.current[i] = el; }}><M /></group>
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}><ringGeometry args={[3.55, 3.575, 128]} /><meshBasicMaterial color="#8CA3EF" transparent opacity={0.55} toneMapped={false} /></mesh>
-            <ContactShadows position={[0, 0.005, 0]} opacity={0.75} scale={9} blur={2.4} far={3} resolution={512} color="#000000" />
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}><ringGeometry args={[3.55, 3.575, 128]} /><meshBasicMaterial color="#3A5ECF" transparent opacity={0.35} toneMapped={false} /></mesh>
+            <ContactShadows position={[0, 0.005, 0]} opacity={0.4} scale={9} blur={2.6} far={3} resolution={512} color="#1D2943" />
           </group>
         );
       })}
@@ -65,23 +65,23 @@ function Floor() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.002, 0]}>
       <planeGeometry args={[120, 40]} />
-      <MeshReflectorMaterial blur={[260, 80]} resolution={512} mixBlur={1} mixStrength={28} mirror={0.55} roughness={0.95} depthScale={0.6} minDepthThreshold={0.4} maxDepthThreshold={1.3} color="#0A0E17" metalness={0.5} />
+      <MeshReflectorMaterial blur={[260, 80]} resolution={512} mixBlur={1} mixStrength={6} mirror={0.25} roughness={1} depthScale={0.4} minDepthThreshold={0.4} maxDepthThreshold={1.3} color="#E9EEF8" metalness={0.1} />
     </mesh>
   );
 }
 
-/** HMI-style showcase stage: dark studio, glossy floor, rim lights, horizontally paged assets. */
+/** Showcase stage in the app's light theme: pale studio, soft floor reflection, horizontally paged assets. */
 export default function AssetScene({ index, drag }: { index: number; drag: MutableRefObject<number> }) {
   return (
-    <Canvas dpr={[1, 1.75]} camera={{ position: [0, 3.8, 16.5], fov: 40 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}>
-      <color attach="background" args={['#070A12']} />
-      <fog attach="fog" args={['#070A12', 18, 40]} />
+    <Canvas dpr={[1, 1.75]} camera={{ position: [0, 2.4, 9.6], fov: 40 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}>
+      <color attach="background" args={['#F3F6FC']} />
+      <fog attach="fog" args={['#F3F6FC', 20, 42]} />
       <Suspense fallback={null}>
         <Studio />
-        <ambientLight intensity={0.15} />
-        <spotLight position={[0, 9, 6]} angle={0.55} penumbra={0.9} intensity={90} color="#DCE6FF" />
-        <spotLight position={[-8, 3, -4]} angle={0.6} penumbra={1} intensity={60} color="#3A5ECF" />
-        <spotLight position={[8, 3, -4]} angle={0.6} penumbra={1} intensity={45} color="#8CA3EF" />
+        <hemisphereLight args={['#FFFFFF', '#DCE4F5', 1.1]} />
+        <directionalLight position={[5, 10, 7]} intensity={1.6} />
+        <spotLight position={[0, 9, 6]} angle={0.55} penumbra={0.9} intensity={40} color="#FFFFFF" />
+        <spotLight position={[-8, 3, -4]} angle={0.6} penumbra={1} intensity={25} color="#8CA3EF" />
         <Floor />
         <Rig index={index} drag={drag} />
       </Suspense>

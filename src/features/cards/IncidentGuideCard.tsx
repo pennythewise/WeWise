@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CardShell, Notice } from '@/components/ui';
-import { Sheet } from '@/components/Sheet';
 import { AppIcon } from '@/components/AppIcon';
 import { CitationChip } from '../chat/CitationChip';
+import { LocalPolicyCard, LocalReport } from '../crossborder/LocalPolicyCard';
+import { ConnectParty } from '../crossborder/ConnectParty';
 import { INCIDENTS, incidentFor } from '@/mock/incidents';
 import { pick, type Locale } from '@/engine/l';
 import { useTx } from '@/i18n/useTx';
@@ -54,21 +55,21 @@ export function IncidentGuideCard({ country: initial, messageId }: { country: st
       <h4 className="mb-1 mt-4 text-xs font-semibold uppercase tracking-wide text-muted">{t('cards.incident.avoid')}</h4>
       <ul className="space-y-1 text-[13px] text-body">{inc.avoid.map((s, i) => <li key={i} className="flex gap-1.5"><AppIcon name="close" size={14} className="mt-1 shrink-0 text-danger" />{p(s)}</li>)}</ul>
 
+      <div className="mt-4"><LocalPolicyCard country={country} /></div>
+
       {inc.policyDeadline && <div className="mt-4"><Notice tone="warn" icon="clock">{p(inc.policyDeadline.note)} <CitationChip id={inc.policyDeadline.clauseId} messageId={messageId} /></Notice></div>}
       <Link to="/capture" className="btn-primary mt-4 w-full"><AppIcon name="scan" size={18} />{t('cards.incident.capture')}</Link>
-      <button type="button" className="btn-secondary mt-2 w-full" onClick={() => setReport(true)}>{t('cards.incident.report')}</button>
+      <button type="button" className="btn-secondary mt-2 w-full" aria-expanded={report} onClick={() => setReport(!report)}>{t('cards.incident.report')}<AppIcon name="chevron" size={16} className={`transition-transform ${report ? '-rotate-90' : 'rotate-90'}`} /></button>
 
-      <Sheet open={report} onOpenChange={setReport} side="bottom" height="75dvh" title={t('cards.incident.reportTitle')}>
-        <div className="space-y-3 p-4 text-[13px] leading-relaxed text-body">
-          {(['en', 'zh'] as const).map((l) => (
-            <section key={l} className="rounded-input border border-cardline p-3">
-              <h4 className="mb-1 font-semibold text-ink">{l === 'en' ? 'English' : '中文'}</h4>
-              <p>{l === 'en' ? `Incident report. Country: ${pick(inc.name, 'en')}. Reporter: M** L** T**. Policy: SG-2026-77****05. Date: ${'2026-10-14'}. Contact the assistance provider printed on the issued policy promptly and check its actual notification requirements.` : `事故报告。国家：${pick(inc.name, 'zh')}。报案人：M** L** T**。保单：SG-2026-77****05。日期：2026-10-14。请及时联系已签发保单列明的协助机构，并核对实际通知要求。`}</p>
-              <p className="mt-1 text-xs text-muted">{t('cards.incident.localNote')}</p>
-            </section>
-          ))}
+      {report && (
+        <div className="mt-3 animate-fade-in space-y-3 text-[13px] leading-relaxed text-body">
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted">{t('cards.incident.reportTitle')}</h4>
+          <LocalReport country={country} nameEn={pick(inc.name, 'en')} nameZh={pick(inc.name, 'zh')} />
+          <p className="text-xs text-muted">{t('cards.incident.localNote')}</p>
         </div>
-      </Sheet>
+      )}
+
+      <div className="mt-4"><ConnectParty key={country} country={country} /></div>
     </CardShell>
   );
 }

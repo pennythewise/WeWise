@@ -9,14 +9,8 @@ export type InspectorFilter = 'all' | 'tools' | 'safety';
 interface UiState {
   navSheetOpen: boolean;
   inspectorOpen: boolean; // drawer (tablet) / sheet (phone); the showcase pane is always open
-  uploadOpen: boolean;
-  emergencyOpen: boolean;
-  showcaseOpen: boolean;
-  setShowcaseOpen: (v: boolean) => void;
   setNavSheetOpen: (v: boolean) => void;
   setInspectorOpen: (v: boolean) => void;
-  setUploadOpen: (v: boolean) => void;
-  setEmergencyOpen: (v: boolean) => void;
 
   inspectorTab: InspectorTabId;
   inspectorFilter: InspectorFilter;
@@ -37,14 +31,8 @@ interface UiState {
 export const useUiStore = create<UiState>((set) => ({
   navSheetOpen: false,
   inspectorOpen: false,
-  uploadOpen: false,
-  emergencyOpen: false,
-  showcaseOpen: false,
-  setShowcaseOpen: (showcaseOpen) => set({ showcaseOpen }),
   setNavSheetOpen: (navSheetOpen) => set({ navSheetOpen }),
   setInspectorOpen: (inspectorOpen) => set({ inspectorOpen }),
-  setUploadOpen: (uploadOpen) => set({ uploadOpen }),
-  setEmergencyOpen: (emergencyOpen) => set({ emergencyOpen }),
 
   inspectorTab: 'pipeline',
   inspectorFilter: 'all',

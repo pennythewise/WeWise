@@ -1,6 +1,6 @@
 import type { IconName } from '@/components/AppIcon';
 
-export type ScreenKey = 'home' | 'policies' | 'policyDetail' | 'claims' | 'claimDetail' | 'ask' | 'memory' | 'about' | 'capture';
+export type ScreenKey = 'home' | 'policies' | 'policyDetail' | 'claims' | 'claimDetail' | 'ask' | 'memory' | 'about' | 'capture' | 'upload' | 'emergency' | 'coverageCheck' | 'switchCheck';
 
 export interface RouteMeta {
   key: ScreenKey;
@@ -10,6 +10,8 @@ export interface RouteMeta {
   prd: string; // Frontend PRD section
   tab?: 'home' | 'policies' | 'claims' | 'ask';
   parent?: string; // shows a back chevron
+  /** Full-bleed screen inside the phone: no app header or tab bar (call screen, 3D showcase). */
+  immersive?: boolean;
 }
 
 export const ROUTES: RouteMeta[] = [
@@ -21,6 +23,10 @@ export const ROUTES: RouteMeta[] = [
   { key: 'ask', path: '/ask', href: '/ask', prd: '§6.3', tab: 'ask' },
   { key: 'memory', path: '/memory', href: '/memory', prd: '§6.11', parent: '/' },
   { key: 'capture', path: '/capture', href: '/capture', prd: '§6.9 (C8)', parent: '/claims' },
+  { key: 'upload', path: '/upload', href: '/upload', prd: '§6.4 (A1)', parent: '/policies' },
+  { key: 'emergency', path: '/emergency', href: '/emergency', prd: '§6.9 (C7)', parent: '/' },
+  { key: 'coverageCheck', path: '/coverage-check', href: '/coverage-check', prd: '§4.1 D2', parent: '/' },
+  { key: 'switchCheck', path: '/switch-check', href: '/switch-check', prd: '§4.1 B5', parent: '/' },
   { key: 'about', path: '/about', href: '/about', prd: '§2.4 (nav) / §15', parent: '/' },
 ];
 

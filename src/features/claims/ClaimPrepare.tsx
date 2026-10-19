@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { AppIcon } from '@/components/AppIcon';
 import { CardShell, Notice, ProgressBar, Skeleton, StepIndicator } from '@/components/ui';
-import { Sheet } from '@/components/Sheet';
 import { ConfirmActionCard } from '../cards/ConfirmActionCard';
 import { policyById } from '@/mock/policies';
 import { useTx } from '@/i18n/useTx';
 import { useAgentStore } from '@/agentStore';
 import { claimActions, findConfirmCard } from './claimActions';
 import { DocRow } from './DocRow';
+import { ClaimAgents } from './ClaimAgents';
 import { preparedCount, requiredCount, useClaimStore } from './claimStore';
 
 /** 准备理赔材料 / Prepare claim documents: ① Confirm policy ② Prepare documents ③ Review & submit (PRD §6.8). */
@@ -53,6 +53,7 @@ export function ClaimPrepare() {
 
       {step === 2 && (
         <div className="mt-3 space-y-3">
+          <ClaimAgents />
           <div className="flex items-center justify-between text-[14px]"><span className="font-semibold text-ink">{t('claims.preparedLabel')}</span><span className="font-semibold text-brand" aria-live="polite">{t('claims.prepared', { n, total })}</span></div>
           <ProgressBar value={n} max={total} tone={n === total ? 'ok' : 'info'} label={t('claims.prepared', { n, total })} />
           <ul className="rounded-card border border-[#E2E9F4] bg-white">{docs.map((d) => <DocRow key={d.id} doc={d} />)}</ul>
@@ -76,16 +77,19 @@ export function ClaimPrepare() {
             <div><p className="text-xs text-muted">{t('cards.confirm.payout')}</p><p className="text-[15px] font-semibold tabular-nums text-ink">•••• •••• 4821</p><p className="text-xs text-muted">{t('claims.payoutLocked')}</p></div>
           </div>
           <Notice tone="warn">{t('claims.riskNotice')}</Notice>
-          <Cta>
-            <button type="button" className="btn-secondary" onClick={() => setStep(2)}>{t('claims.back')}</button>
-            <button type="button" className="btn-primary flex-1" disabled={running} onClick={submit}>{t('claims.confirmSubmission')}</button>
-          </Cta>
+          {sheet ? (
+            <div className="animate-fade-in space-y-2" data-testid="submit-confirm">
+              {card ? <ConfirmActionCard {...card.data} /> : <CardShell title={t('cards.confirm.title')} icon="lock"><div className="space-y-2"><Skeleton className="h-5 w-2/3" /><Skeleton className="h-16" /><Skeleton className="h-10" /></div></CardShell>}
+              <button type="button" className="btn-secondary w-full" onClick={() => setSheet(false)}>{t('claims.back')}</button>
+            </div>
+          ) : (
+            <Cta>
+              <button type="button" className="btn-secondary" onClick={() => setStep(2)}>{t('claims.back')}</button>
+              <button type="button" className="btn-primary flex-1" disabled={running} onClick={submit}>{t('claims.confirmSubmission')}</button>
+            </Cta>
+          )}
         </div>
       )}
-
-      <Sheet open={sheet} onOpenChange={setSheet} side="bottom" height="auto" title={t('cards.confirm.title')}>
-        <div className="p-4">{card ? <ConfirmActionCard {...card.data} /> : <div className="space-y-2"><Skeleton className="h-5 w-2/3" /><Skeleton className="h-16" /><Skeleton className="h-10" /></div>}</div>
-      </Sheet>
     </div>
   );
 }

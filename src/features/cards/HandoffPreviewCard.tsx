@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ShareItem, Txt } from '@/engine/types';
 import { Badge, CardShell } from '@/components/ui';
-import { Sheet } from '@/components/Sheet';
 import { agentById } from '@/mock/agents';
 import { useTx } from '@/i18n/useTx';
 import { useAgentStore } from '@/agentStore';
@@ -62,12 +61,13 @@ export function HandoffPreviewCard({ agentIds, why, shares, actionId }: Props) {
             <input type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--wb-primary)]" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
             {t('cards.handoff.consent', { name: agent.name })}
           </label>
-          <button type="button" className="btn-primary mt-3 w-full" disabled={!consent || picked.length === 0 || running} onClick={() => setConfirmOpen(true)}>{t('cards.handoff.share')}</button>
+          {!confirmOpen && <button type="button" className="btn-primary mt-3 w-full" disabled={!consent || picked.length === 0 || running} onClick={() => setConfirmOpen(true)}>{t('cards.handoff.share')}</button>}
         </>
       )}
 
-      <Sheet open={confirmOpen} onOpenChange={setConfirmOpen} side="bottom" height="auto" title={t('cards.handoff.confirmTitle')}>
-        <div className="p-4">
+      {confirmOpen && (
+        <div className="mt-3 animate-fade-in rounded-card border border-[#8298DA] bg-[#F4F7FF] p-4">
+          <h4 className="mb-2 text-[15px] font-semibold text-ink">{t('cards.handoff.confirmTitle')}</h4>
           <ConfirmPanel
             title={t('cards.handoff.confirmTitle')} what={t('cards.handoff.confirmWhat', { name: agent.name })} to={`${agent.name} · ${agent.license}`} shared={picked.map((s) => tx(s.label))}
             expiresInSec={300} state="pending"
@@ -75,7 +75,7 @@ export function HandoffPreviewCard({ agentIds, why, shares, actionId }: Props) {
             onConfirm={() => { setConfirmOpen(false); void useAgentStore.getState().resolve(actionId, 'confirm'); }}
           />
         </div>
-      </Sheet>
+      )}
     </CardShell>
   );
 }

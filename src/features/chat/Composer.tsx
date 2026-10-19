@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import * as Popover from '@radix-ui/react-popover';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppIcon } from '@/components/AppIcon';
 import { FIXTURES } from '@/mock/fixtures';
@@ -14,11 +13,12 @@ export function Composer() {
   const { tx } = useTx();
   const { draft, setDraft, pendingFiles, addPendingFile, running, send } = useAgentStore();
   const fileRef = useRef<HTMLInputElement>(null);
+  const [tray, setTray] = useState(false);
   const voice = useVoiceInput();
   const can = (draft.trim().length > 0 || pendingFiles.length > 0) && !running;
 
   const submit = () => { if (can) void send(draft.trim()); };
-  const attach = async (f: File | { name: string; fixtureId: string }) => addPendingFile(await agentClient.uploadFile(f));
+  const attach = async (f: File | { name: string; fixtureId: string }) => { setTray(false); addPendingFile(await agentClient.uploadFile(f)); };
 
   return (
     <div className="shrink-0 border-t border-cardline bg-white px-3 pb-[max(env(safe-area-inset-bottom),8px)] pt-2">
@@ -33,23 +33,21 @@ export function Composer() {
           {t('chat.listening')}{!voice.real && <span className="text-xs text-muted"> · {t('chat.voiceDemo')}</span>}
         </div>
       )}
+      {tray && (
+        <div className="mb-2 animate-fade-in rounded-card border border-cardline bg-wash p-1.5" data-testid="attach-tray">
+          <p className="px-2 py-1 text-xs font-semibold text-muted">{t('chat.demoDocs')}</p>
+          {FIXTURES.map((f) => (
+            <button type="button" key={f.id} className="flex min-h-touch w-full items-center gap-2 rounded-control px-2 text-left text-[13px] text-ink hover:bg-white" onClick={() => void attach({ name: f.name, fixtureId: f.id })}>
+              <AppIcon name="scan" size={18} />{tx(f.label)}
+            </button>
+          ))}
+          <button type="button" className="flex min-h-touch w-full items-center gap-2 rounded-control px-2 text-left text-[13px] text-ink hover:bg-white" onClick={() => { setTray(false); fileRef.current?.click(); }}>
+            <AppIcon name="arrowUp" size={18} />{t('chat.fromDevice')}
+          </button>
+        </div>
+      )}
       <div className="flex items-end gap-1.5">
-        <Popover.Root>
-          <Popover.Trigger className="icon-btn shrink-0 text-brand" aria-label={t('chat.attach')} data-testid="attach"><AppIcon name="file" /></Popover.Trigger>
-          <Popover.Portal>
-            <Popover.Content side="top" align="start" sideOffset={8} className="z-[60] w-[min(86vw,300px)] rounded-card border border-cardline bg-white p-2 shadow-card">
-              <p className="px-2 py-1 text-xs font-semibold text-muted">{t('chat.demoDocs')}</p>
-              {FIXTURES.map((f) => (
-                <Popover.Close key={f.id} className="flex min-h-touch w-full items-center gap-2 rounded-control px-2 text-left text-[13px] text-ink hover:bg-wash" onClick={() => void attach({ name: f.name, fixtureId: f.id })}>
-                  <AppIcon name="scan" size={18} />{tx(f.label)}
-                </Popover.Close>
-              ))}
-              <Popover.Close className="flex min-h-touch w-full items-center gap-2 rounded-control px-2 text-left text-[13px] text-ink hover:bg-wash" onClick={() => fileRef.current?.click()}>
-                <AppIcon name="arrowUp" size={18} />{t('chat.fromDevice')}
-              </Popover.Close>
-            </Popover.Content>
-          </Popover.Portal>
-        </Popover.Root>
+        <button type="button" className={`icon-btn shrink-0 ${tray ? 'bg-bluewash text-primary' : 'text-brand'}`} aria-label={t('chat.attach')} aria-expanded={tray} onClick={() => setTray(!tray)} data-testid="attach"><AppIcon name="file" /></button>
         <input ref={fileRef} type="file" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void attach(f); e.target.value = ''; }} />
         <textarea
           rows={1} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder={t('chat.placeholder')} aria-label={t('chat.placeholder')}

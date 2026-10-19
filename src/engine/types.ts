@@ -49,6 +49,7 @@ export interface ExtractedField {
 export interface GapRow { area: Txt; status: 'covered' | 'partial' | 'gap'; why: Txt; cite?: string }
 export interface VerdictCriterion { name: Txt; a: number; b: number }
 export interface ShareItem { id: string; label: Txt; value: Txt }
+export interface ReportFinding { label: Txt; value: Txt; status: 'ok' | 'watch' | 'disclose'; note?: Txt; page: number }
 
 export type Card =
   | { kind: 'PolicySummaryCard'; id: string; data: { policyId: string } }
@@ -64,7 +65,12 @@ export type Card =
   | { kind: 'HandoffPreviewCard'; id: string; data: { agentIds: string[]; why: Record<string, Txt[]>; shares: ShareItem[]; actionId: string } }
   | { kind: 'IncidentGuideCard'; id: string; data: { country: string; policyId?: string } }
   | { kind: 'SafetyNoticeCard'; id: string; data: { tone: 'info' | 'blocked'; title: Txt; body: Txt; reasonCode: string; snippet?: string; page?: number; next?: Txt } }
-  | { kind: 'EscalationCard'; id: string; data: { reason: Txt } };
+  | { kind: 'EscalationCard'; id: string; data: { reason: Txt } }
+  | { kind: 'ReportInsightsCard'; id: string; data: { report: 'medical' | 'financial'; file: string; findings: ReportFinding[]; implications: Txt[]; memory: Txt[] } }
+  | { kind: 'OverlapReportCard'; id: string; data: { gig: boolean } }
+  | { kind: 'SwitchCheckCard'; id: string; data: Record<string, never> }
+  | { kind: 'LocationPermissionCard'; id: string; data: Record<string, never> }
+  | { kind: 'LocationSuggestCard'; id: string; data: { cityId: string } };
 
 export type CardKind = Card['kind'];
 

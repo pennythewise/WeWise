@@ -6,6 +6,8 @@ import { SAMPLE_EVENTS } from '@/engine/inspect';
 import { useExtractionStore } from '@/features/cards/extractionStore';
 import { useUiStore } from '@/store';
 import { useCaptureStore } from '@/features/capture/captureStore';
+import { useMemoryStore } from '@/features/settings/memoryStore';
+import { useLocationStore } from '@/features/location/locationStore';
 import type { Locale } from '@/engine/l';
 
 export interface ChatMessage {
@@ -125,6 +127,7 @@ export const useAgentStore = create<AgentState>((set, get) => {
     resolve: async (actionId, decision) => {
       set((s) => ({ actionStates: { ...s.actionStates, [actionId]: decision === 'confirm' ? 'confirmed' : 'rejected' } }));
       if (actionId === 'act_claim_submit' && decision === 'confirm') useClaimStore.getState().markSubmitted();
+      if (actionId === 'act_followup_send' && decision === 'confirm') useClaimStore.getState().replySent();
       await consume(mockClient.resolveAction({ actionId, decision }));
     },
     advance: async () => {
@@ -143,6 +146,8 @@ export const useAgentStore = create<AgentState>((set, get) => {
       useClaimStore.getState().reset();
       useExtractionStore.getState().reset();
       useCaptureStore.getState().reset();
+      useMemoryStore.getState().reset();
+      useLocationStore.getState().reset();
       set({ ...initial });
     },
   };

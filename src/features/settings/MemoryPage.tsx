@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppIcon } from '@/components/AppIcon';
 import { Badge, CardShell, EmptyState, Notice } from '@/components/ui';
-import { INITIAL_MEMORY } from '@/mock/users';
+import { useMemoryStore } from './memoryStore';
 import { buildTurns } from '@/engine/inspect';
 import { useAgentStore } from '@/agentStore';
 import { useTx } from '@/i18n/useTx';
@@ -13,7 +13,7 @@ const PURPOSE: Record<string, string> = { clause_search: 'purposeSearch', policy
 export function MemoryPage() {
   const { t } = useTranslation();
   const { tx } = useTx();
-  const [facts, setFacts] = useState(INITIAL_MEMORY);
+  const { facts, remove } = useMemoryStore();
   const [on, setOn] = useState(true);
   const events = useAgentStore((s) => s.events);
   const log = useMemo(() => buildTurns(events).flatMap((turn) => turn.tools.map((tool) => ({ ...tool, turnId: turn.turnId }))), [events]);
@@ -35,7 +35,7 @@ export function MemoryPage() {
             {facts.map((f) => (
               <li key={f.id} className="flex items-center gap-2 py-1.5">
                 <span className="min-w-0 flex-1 text-[14px] text-ink">{tx(f.text)}</span>
-                <button type="button" className="icon-btn text-muted" aria-label={`${t('memory.delete')}: ${tx(f.text)}`} onClick={() => setFacts(facts.filter((x) => x.id !== f.id))}><AppIcon name="close" size={18} /></button>
+                <button type="button" className="icon-btn text-muted" aria-label={`${t('memory.delete')}: ${tx(f.text)}`} onClick={() => remove(f.id)}><AppIcon name="close" size={18} /></button>
               </li>
             ))}
           </ul>

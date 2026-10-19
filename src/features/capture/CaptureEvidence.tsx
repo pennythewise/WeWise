@@ -51,7 +51,7 @@ export function CaptureEvidence() {
 
       <div className="flex items-center justify-between gap-2">
         <Badge tone={ready ? 'ok' : 'warn'} icon={ready ? 'check' : 'clock'}>{ready ? tx(step.ready) : t('capture.holdSteady')}</Badge>
-        <span className="rounded-full bg-ink px-2.5 py-1 text-xs font-semibold text-white">{Math.min(okIds.length + 1, STEPS.length)} / {STEPS.length}</span>
+        <span className="rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-white">{Math.min(okIds.length + 1, STEPS.length)} / {STEPS.length}</span>
       </div>
 
       <div className="relative aspect-[4/5] overflow-hidden rounded-card border border-cardline bg-ink" data-testid="ar-viewport">
@@ -67,7 +67,7 @@ export function CaptureEvidence() {
         {flash && <div className="absolute inset-0 bg-white" />}
       </div>
 
-      <p className="rounded-input bg-ink px-3 py-2 text-[13px] leading-snug text-white" aria-live="polite"><strong>{done ? '' : `${tx(step.title)} · `}</strong>{done ? t('capture.allDone') : tx(step.guide)}</p>
+      <p className="rounded-input border border-secline bg-bluewash px-3 py-2 text-[13px] leading-snug text-ink" aria-live="polite"><strong>{done ? '' : `${tx(step.title)} · `}</strong>{done ? t('capture.allDone') : tx(step.guide)}</p>
 
       {msg && <Notice tone="warn">{msg}</Notice>}
 

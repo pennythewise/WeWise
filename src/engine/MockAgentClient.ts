@@ -44,6 +44,8 @@ export class MockAgentClient implements AgentClient {
     }
     if (attachments.includes('inj_doc_01')) return turnById('s4.inject');
     if (attachments.includes('policy_sample')) return turnById('s1.upload');
+    if (attachments.includes('med_report')) return turnById('s7.medical');
+    if (attachments.includes('fin_report')) return turnById('s7.finance');
     const n = norm(text);
     const exact = TURNS.find((t) => t.utterances.some((u) => bothLangs(u).some((v) => norm(v) === n)));
     if (exact) return exact;
