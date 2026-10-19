@@ -6,6 +6,7 @@ import { s4Inject } from './attacks/s4_injection';
 import { s5Owner, s5Payout, s5Privilege } from './attacks/s5_overreach';
 import { claimAgents, claimFollowup, locationAsk, locationSuggest, partyConnect, s7Finance, s7Medical, s7Overlap, s7Switch } from './s7_more';
 import { s7Cover, s7Docs, s7Fix, s7Guarantee, s7Guide, s7Kit, s7Status } from './s7_crossborder';
+import { shopCompareAsk, shopCompareResult } from './shop_compare';
 import { escalate, fallbackOos, incidentGuide, s6Colloquial, s6Correct } from './s6_handoff';
 
 export const TURNS: TurnScript[] = [
@@ -15,6 +16,7 @@ export const TURNS: TurnScript[] = [
   s4Inject, s5Payout, s5Owner, s5Privilege,
   s7Medical, s7Finance, s7Overlap, s7Switch, partyConnect, claimAgents, claimFollowup, locationAsk, locationSuggest,
   s7Cover, s7Guide, s7Guarantee, s7Docs, s7Fix, s7Kit, s7Status,
+  shopCompareAsk, shopCompareResult,
   s6Colloquial, s6Correct, incidentGuide, escalate, fallbackOos,
 ];
 export const turnById = (id: string) => TURNS.find((t) => t.id === id)!;

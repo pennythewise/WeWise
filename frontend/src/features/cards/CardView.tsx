@@ -11,6 +11,7 @@ import { GapReportCard } from './GapReportCard';
 import { HandoffPreviewCard } from './HandoffPreviewCard';
 import { IncidentGuideCard } from './IncidentGuideCard';
 import { PolicySummaryCard } from './PolicySummaryCard';
+import { ShopCompareCard } from './ShopCompareCard';
 import { SafetyNoticeCard } from './SafetyNoticeCard';
 import { VerdictCard } from './VerdictCard';
 import { ReportInsightsCard } from './ReportInsightsCard';
@@ -25,6 +26,7 @@ export function CardView({ card, messageId }: { card: Card; messageId?: string }
     case 'ExtractionReviewCard': return <ExtractionReviewCard {...card.data} />;
     case 'GapReportCard': return <GapReportCard {...card.data} messageId={messageId} />;
     case 'CompareTableCard': return <CompareTableCard {...card.data} />;
+    case 'ShopCompareCard': return <ShopCompareCard {...card.data} />;
     case 'AdvocateCard': return <AdvocateCard {...card.data} />;
     case 'VerdictCard': return <VerdictCard {...card.data} />;
     case 'ClaimPrescreenCard': return <ClaimPrescreenCard {...card.data} messageId={messageId} />;

@@ -56,6 +56,7 @@ export type Card =
   | { kind: 'ExtractionReviewCard'; id: string; data: { policyId: string; fields: ExtractedField[] } }
   | { kind: 'GapReportCard'; id: string; data: { rows: GapRow[]; considerations: Txt[] } }
   | { kind: 'CompareTableCard'; id: string; data: { productIds: string[]; winners: Record<string, string> } }
+  | { kind: 'ShopCompareCard'; id: string; data: { productIds: string[]; dimension: 'overall' | 'coverage' | 'price' | 'claims' | 'fit' } }
   | { kind: 'AdvocateCard'; id: string; data: { side: 'A' | 'B'; productId: string; argument: Txt } }
   | { kind: 'VerdictCard'; id: string; data: { a: string; b: string; criteria: VerdictCriterion[]; winsA: Txt; winsB: Txt; cautions: Txt[]; headline: Txt } }
   | { kind: 'ClaimPrescreenCard'; id: string; data: { policyId: string; verdict: 'likely_covered' | 'likely_excluded' | 'uncertain'; inception: string; eligible: string; incident: string; waitingDays: number; exclusions: { clauseId: string }[]; missing: Txt[] } }
