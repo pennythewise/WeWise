@@ -1,12 +1,13 @@
 import { Suspense, useEffect, useRef, type MutableRefObject } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { ContactShadows, MeshReflectorMaterial } from '@react-three/drei';
+import { ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { ASSETS, type AssetKind } from '@/mock/assets';
 import { Car } from './models/Car';
 import { House } from './models/House';
 import { Scooter } from './models/Scooter';
+import { Drone } from './models/Drone';
 
 const SPACING = 11;
 const reduced = () => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -23,8 +24,8 @@ function Studio() {
   return null;
 }
 
-const MODEL: Record<AssetKind, () => JSX.Element> = { car: Car, house: House, scooter: Scooter };
-const SCALE: Record<AssetKind, number> = { car: 1, house: 1, scooter: 1 };
+const MODEL: Record<AssetKind, () => JSX.Element> = { car: Car, house: House, scooter: Scooter, drone: Drone };
+const SCALE: Record<AssetKind, number> = { car: 1, house: 1, scooter: 1, drone: 1 };
 
 function Rig({ index, drag }: { index: number; drag: MutableRefObject<number> }) {
   const world = useRef<THREE.Group>(null);
@@ -65,7 +66,7 @@ function Floor() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.002, 0]}>
       <planeGeometry args={[120, 40]} />
-      <MeshReflectorMaterial blur={[260, 80]} resolution={512} mixBlur={1} mixStrength={28} mirror={0.55} roughness={0.95} depthScale={0.6} minDepthThreshold={0.4} maxDepthThreshold={1.3} color="#0A0E17" metalness={0.5} />
+      <meshBasicMaterial color="#FFFFFF" toneMapped={false} />
     </mesh>
   );
 }
@@ -74,8 +75,8 @@ function Floor() {
 export default function AssetScene({ index, drag }: { index: number; drag: MutableRefObject<number> }) {
   return (
     <Canvas dpr={[1, 1.75]} camera={{ position: [0, 3.8, 16.5], fov: 40 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}>
-      <color attach="background" args={['#070A12']} />
-      <fog attach="fog" args={['#070A12', 18, 40]} />
+      <color attach="background" args={['#FFFFFF']} />
+      <fog attach="fog" args={['#FFFFFF', 18, 40]} />
       <Suspense fallback={null}>
         <Studio />
         <ambientLight intensity={0.15} />

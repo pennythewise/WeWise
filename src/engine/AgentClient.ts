@@ -1,6 +1,6 @@
 import type { Claim, ClaimSummary, FileRef, Locale, MockFile, Portfolio, TraceEvent } from './types';
 
-/** Same surface the real backend client will implement (PRD §4). Switch via VITE_AGENT_BACKEND=mock|http. */
+/** Agent surface the UI talks to (PRD §4). Implemented by the scripted MockAgentClient. */
 export interface AgentClient {
   startSession(opts: { userId: string; locale: Locale; country: string }): Promise<{ sessionId: string }>;
   sendMessage(input: { sessionId: string; text: string; attachments?: FileRef[] }): AsyncIterable<TraceEvent>;

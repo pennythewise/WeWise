@@ -1,6 +1,6 @@
 import { L } from '@/engine/l';
 
-export type AssetKind = 'car' | 'house' | 'scooter';
+export type AssetKind = 'car' | 'house' | 'scooter' | 'drone';
 export interface Asset { id: string; kind: AssetKind; name: L; subtitle: L; policyId?: string; facts: { label: L; value: L }[] }
 
 /** Physical assets for the 3D showcase. Generic models: no real vehicle brand or logo is depicted. */
@@ -11,4 +11,6 @@ export const ASSETS: Asset[] = [
     facts: [{ label: L('Floor area', '建筑面积'), value: L('186 m²', '186 平方米') }, { label: L('Built', '建成'), value: L('2021', '2021 年') }] },
   { id: 'asset_scooter', kind: 'scooter', name: L('Electric scooter', '电动滑板车'), subtitle: L('Daily commute', '日常通勤'),
     facts: [{ label: L('Range', '续航'), value: L('45 km', '45 公里') }, { label: L('Value', '价值'), value: L('¥4,200', '¥4,200') }] },
+  { id: 'asset_drone', kind: 'drone', name: L('DJI Air 3 drone', '大疆 Air 3 无人机'), subtitle: L('Aerial photography · Hobby use', '航拍摄影 · 个人使用'), policyId: 'pol_mei_drone_01',
+    facts: [{ label: L('Flight time', '续航'), value: L('46 min', '46 分钟') }, { label: L('Value', '价值'), value: L('¥6,988', '¥6,988') }] },
 ];

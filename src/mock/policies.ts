@@ -77,5 +77,16 @@ export const POLICIES: Policy[] = [
     ],
     gap: L('Flood from outside the building is excluded', '不含楼外洪水'),
   },
+  {
+    id: 'pol_mei_drone_01', insurerId: 'pinnacle', product: L('Drone Damage & Liability Plan', '无人机机身与第三者责任险'), type: 'accident', policyNo: 'PL-2026-66****19',
+    inception: '2026-06-12', renewal: '2027-06-12', status: 'active', coverAmount: 500000, deductible: 200, coPayPct: 0, roomCap: 0, waitingDays: 0, monthlyPremium: 38,
+    premiumHistory: [38, 38, 38],
+    keyTerms: [
+      { label: L('Aircraft damage', '机身损失'), value: L('¥6,988', '¥6,988') },
+      { label: L('Third-party liability', '第三者责任'), value: L('¥500,000', '¥500,000') },
+      { label: L('Lost-link / fly-away', '失联 / 炸机'), value: L('Included, 1 claim a year', '含，每年 1 次') },
+    ],
+    gap: L('No cover in no-fly zones or without local flight approval', '禁飞区或未获当地飞行许可时不赔'),
+  },
 ];
 export const policyById = (id: string) => POLICIES.find((p) => p.id === id);

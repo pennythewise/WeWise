@@ -16,11 +16,12 @@ export function PhoneFrame({ mode }: { mode: LayoutMode }) {
   const { t } = useTranslation();
   const key = matchRoute(useLocation().pathname).key;
   const card = mode !== 'phone';
-  return (
+  const screen = (
     <div
       data-testid="app-column"
-      className={`app-col relative flex h-full w-[min(100%,var(--app-max-width))] flex-col overflow-hidden bg-white ${card ? 'rounded-shell border border-cardline shadow-card' : 'border-x border-cardline'}`}
+      className={`app-col relative flex h-full w-[min(100%,var(--app-max-width))] flex-col overflow-hidden bg-white ${card ? 'w-full rounded-[38px]' : 'border-x border-cardline'}`}
     >
+      {card && <StatusBar />}
       <AppHeader mode={mode} />
       <main className={`min-h-0 flex-1 bg-wash ${key === 'ask' ? 'overflow-hidden' : 'overflow-y-auto px-4 py-4'}`}>
         <Outlet />
@@ -32,6 +33,33 @@ export function PhoneFrame({ mode }: { mode: LayoutMode }) {
           <AppIcon name="bell" size={18} />{t('emergency.fab')}
         </button>
       )}
+      {card && <div aria-hidden="true" className="pointer-events-none absolute bottom-1.5 left-1/2 z-30 h-1 w-32 -translate-x-1/2 rounded-full bg-ink/80" />}
+    </div>
+  );
+  if (!card) return screen;
+  // Device body: dark bezel, side buttons, dynamic island (drawn in StatusBar).
+  return (
+    <div className="relative mx-auto aspect-[9/19.5] h-full max-w-full" data-testid="phone-device">
+      <span aria-hidden="true" className="absolute -left-[3px] top-[110px] h-8 w-[3px] rounded-l bg-[#2B2F3A]" />
+      <span aria-hidden="true" className="absolute -left-[3px] top-[160px] h-14 w-[3px] rounded-l bg-[#2B2F3A]" />
+      <span aria-hidden="true" className="absolute -left-[3px] top-[228px] h-14 w-[3px] rounded-l bg-[#2B2F3A]" />
+      <span aria-hidden="true" className="absolute -right-[3px] top-[170px] h-20 w-[3px] rounded-r bg-[#2B2F3A]" />
+      <div className="h-full rounded-[50px] bg-[#0B0D12] p-[10px] shadow-[0_0_0_2px_#3A3F4B,0_30px_60px_-15px_rgba(15,23,42,0.45)]">{screen}</div>
+    </div>
+  );
+}
+
+/** iOS-style status bar with the dynamic island. Decorative. */
+function StatusBar() {
+  const time = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: false });
+  return (
+    <div aria-hidden="true" className="relative flex h-[46px] shrink-0 items-end justify-between bg-white px-7 pb-1.5 text-[14px] font-semibold text-ink">
+      <span className="tabular-nums">{time}</span>
+      <span className="absolute left-1/2 top-2 h-[26px] w-[96px] -translate-x-1/2 rounded-full bg-[#0B0D12]" />
+      <span className="flex items-center gap-1.5">
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1" /><rect x="4.5" y="5" width="3" height="6" rx="1" /><rect x="9" y="2.5" width="3" height="8.5" rx="1" /><rect x="13.5" y="0" width="3" height="11" rx="1" /></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="currentColor" opacity="0.4" /><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor" /><rect x="23" y="4" width="1.5" height="4" rx="0.75" fill="currentColor" opacity="0.4" /></svg>
+      </span>
     </div>
   );
 }

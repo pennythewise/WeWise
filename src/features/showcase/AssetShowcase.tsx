@@ -55,38 +55,38 @@ export function AssetShowcase() {
 
   return (
     <Dialog.Root open={showcaseOpen} onOpenChange={setShowcaseOpen}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/70 data-[state=open]:animate-fade-in" />
-        <Dialog.Content aria-describedby={undefined} className="fixed inset-y-0 left-1/2 z-50 flex w-[min(100vw,var(--app-max-width))] -translate-x-1/2 flex-col overflow-hidden bg-[#070A12] text-white outline-none data-[state=open]:animate-fade-in">
+      <Dialog.Portal container={document.querySelector<HTMLElement>('.app-col')}>
+        <Dialog.Overlay className="absolute inset-0 z-40 bg-black/70 data-[state=open]:animate-fade-in" />
+        <Dialog.Content aria-describedby={undefined} className="absolute inset-0 z-50 flex flex-col overflow-hidden bg-white text-white outline-none data-[state=open]:animate-fade-in">
           <Dialog.Title className="sr-only">{t('showcase.title')}</Dialog.Title>
 
           <div className="absolute inset-0 touch-pan-y" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} data-testid="showcase-stage">
             {webgl ? (
-              <Suspense fallback={<div className="flex h-full items-center justify-center text-[13px] text-white/60">{t('showcase.loading')}</div>}>
+              <Suspense fallback={<div className="flex h-full items-center justify-center text-[13px] text-slate-500">{t('showcase.loading')}</div>}>
                 <AssetScene index={index} drag={drag} />
               </Suspense>
-            ) : <div className="flex h-full items-center justify-center bg-gradient-to-b from-[#0B1020] to-[#070A12] px-8 text-center text-[13px] text-white/60">{t('showcase.noWebgl')}</div>}
+            ) : <div className="flex h-full items-center justify-center bg-gradient-to-b from-white to-slate-100 px-8 text-center text-[13px] text-slate-500">{t('showcase.noWebgl')}</div>}
           </div>
 
           {/* HUD */}
           <div className="pointer-events-none relative z-10 flex items-center justify-between px-4 pt-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">{t('showcase.title')}</p>
-              <p className="text-[13px] tabular-nums text-white/80" aria-live="polite">{t('showcase.count', { n: index + 1, total })}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{t('showcase.title')}</p>
+              <p className="text-[13px] tabular-nums text-slate-700" aria-live="polite">{t('showcase.count', { n: index + 1, total })}</p>
             </div>
-            <Dialog.Close className="pointer-events-auto icon-btn bg-white/10 text-white hover:bg-white/20" aria-label={t('showcase.close')}><AppIcon name="close" /></Dialog.Close>
+            <Dialog.Close className="pointer-events-auto icon-btn bg-slate-900/5 text-slate-800 hover:bg-slate-900/10" aria-label={t('showcase.close')}><AppIcon name="close" /></Dialog.Close>
           </div>
 
           <div className="pointer-events-none relative z-10 mt-auto space-y-3 px-4 pb-5">
             <div className="pointer-events-auto flex items-center justify-between">
-              <button type="button" onClick={() => go(-1)} disabled={index === 0} aria-label={t('showcase.prev')} className="icon-btn bg-white/10 text-white hover:bg-white/20 disabled:opacity-30"><AppIcon name="back" /></button>
+              <button type="button" onClick={() => go(-1)} disabled={index === 0} aria-label={t('showcase.prev')} className="icon-btn bg-slate-900/5 text-slate-800 hover:bg-slate-900/10 disabled:opacity-30"><AppIcon name="back" /></button>
               <div className="flex items-center gap-2" role="tablist" aria-label={t('showcase.title')}>
-                {ASSETS.map((a, i) => <button key={a.id} type="button" role="tab" aria-selected={i === index} aria-label={tx(a.name)} onClick={() => setIndex(i)} className={`h-2 rounded-full transition-all ${i === index ? 'w-7 bg-[#8CA3EF]' : 'w-2 bg-white/35'}`} />)}
+                {ASSETS.map((a, i) => <button key={a.id} type="button" role="tab" aria-selected={i === index} aria-label={tx(a.name)} onClick={() => setIndex(i)} className={`h-2 rounded-full transition-all ${i === index ? 'w-7 bg-[#8CA3EF]' : 'w-2 bg-slate-900/20'}`} />)}
               </div>
-              <button type="button" onClick={() => go(1)} disabled={index === total - 1} aria-label={t('showcase.next')} className="icon-btn bg-white/10 text-white hover:bg-white/20 disabled:opacity-30"><AppIcon name="chevron" /></button>
+              <button type="button" onClick={() => go(1)} disabled={index === total - 1} aria-label={t('showcase.next')} className="icon-btn bg-slate-900/5 text-slate-800 hover:bg-slate-900/10 disabled:opacity-30"><AppIcon name="chevron" /></button>
             </div>
 
-            <section key={asset.id} className="pointer-events-auto animate-fade-in rounded-[20px] border border-white/10 bg-white/[0.07] p-4 backdrop-blur-xl" aria-label={tx(asset.name)}>
+            <section key={asset.id} className="pointer-events-auto animate-fade-in rounded-[20px] border border-white/10 bg-[#0B1020]/90 p-4 backdrop-blur-xl" aria-label={tx(asset.name)}>
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <h2 className="text-[22px] font-semibold leading-tight">{tx(asset.name)}</h2>

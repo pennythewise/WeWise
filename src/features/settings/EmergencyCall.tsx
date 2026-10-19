@@ -68,9 +68,9 @@ export function EmergencyCall() {
 
   return (
     <Dialog.Root open={emergencyOpen} onOpenChange={setEmergencyOpen}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/60 data-[state=open]:animate-fade-in" />
-        <Dialog.Content aria-describedby={undefined} className="fixed inset-y-0 left-1/2 z-50 flex w-[min(100vw,var(--app-max-width))] -translate-x-1/2 flex-col bg-ink text-white outline-none data-[state=open]:animate-fade-in">
+      <Dialog.Portal container={document.querySelector<HTMLElement>('.app-col')}>
+        <Dialog.Overlay className="absolute inset-0 z-40 bg-ink/60 data-[state=open]:animate-fade-in" />
+        <Dialog.Content aria-describedby={undefined} className="absolute inset-0 z-50 flex flex-col overflow-y-auto bg-ink text-white outline-none data-[state=open]:animate-fade-in">
           <div className="flex items-center justify-between px-4 pt-4">
             <Badge tone="warn" icon="info">{t('emergency.demo')}</Badge>
             <Dialog.Close className="icon-btn text-white hover:bg-white/10" aria-label={t('nav.close')}><AppIcon name="close" /></Dialog.Close>

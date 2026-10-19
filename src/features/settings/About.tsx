@@ -14,6 +14,7 @@ export function About() {
       </CardShell>
       <Notice tone="warn">{t('about.notOfficial')}</Notice>
       <Notice tone="info">{tx(INSURER_DISCLAIMER)} {t('about.synthetic')}</Notice>
+      <p className="text-[11px] leading-relaxed text-muted">3D car: "2024 Xiaomi SU7 Max" by Ddiaz Design (sketchfab.com/ddiaz-design), CC-BY-NC-SA-4.0. 3D drone: "DJI Air 3" by polyman (sketchfab.com/Polyman_3D), CC-BY-4.0.</p>
     </div>
   );
 }

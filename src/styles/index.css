@@ -38,4 +38,8 @@
 .app-col { container-type: inline-size; }
 
 /* The simulator notice occupies its own row, clear of menus and page controls. */
+.simulator-root { display:flex; flex-direction:column; height:100dvh; min-width:0; }
+.simulator-notice { position:relative; z-index:30; flex-shrink:0; padding:10px 16px; background:var(--wb-ink, #1D2943); color:#fff; }
+.simulator-notice p { margin:0; font-size:13px; line-height:1.7; }
+.simulator-viewport { flex:1; min-height:0; min-width:0; }
 .simulator-viewport > [data-layout] { height:100%; }

@@ -1,0 +1,11 @@
+Model Information:
+* title:	DJI Air 3
+* source:	https://sketchfab.com/3d-models/dji-air-3-3c7c69f9c77741aa9b7bbfcc6be29202
+* author:	polyman (https://sketchfab.com/Polyman_3D)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "DJI Air 3" (https://sketchfab.com/3d-models/dji-air-3-3c7c69f9c77741aa9b7bbfcc6be29202) by polyman (https://sketchfab.com/Polyman_3D) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
