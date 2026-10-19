@@ -34,6 +34,5 @@ Evidence: `.venv/bin/python backend/eval/run.py` runs the golden-task and attack
 | `api/` | Vercel serverless entry (must stay at the root, with the root `package.json`) |
 | `infra/` | `server/` sandbox gateway, `deploy/` runtime helpers, `scripts/` tooling, `tests/` gateway tests |
 | `docs/` | PRD, tech spec and frontend PRD |
-| `tobe_deleted/` | Retired live-app UI, pending removal |
 
 Tests: `.venv/bin/python -m pytest -q -c backend/pytest.ini` · `node --test infra/tests/gateway.test.mjs`
