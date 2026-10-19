@@ -1,6 +1,7 @@
 import { create } from 'zustand';
+import i18n from 'i18next';
 import type { Card, Chip, FileRef, PlanStep, TraceEvent, Txt, Verdict } from '@/engine/types';
-import { mockClient } from '@/engine';
+import { httpClient, mockClient } from '@/engine';
 import { useClaimStore } from '@/features/claims/claimStore';
 import { SAMPLE_EVENTS } from '@/engine/inspect';
 import { useExtractionStore } from '@/features/cards/extractionStore';
@@ -118,7 +119,8 @@ export const useAgentStore = create<AgentState>((set, get) => {
       const ui = useUiStore.getState();
       if (ui.attack) { useUiStore.setState({ attack: false }); ui.setInspectorTab('safety'); } // Attack toggle: swap this turn for the adversarial variant, show Safety
       set((s) => ({ seq: s.seq + 1, draft: '', pendingFiles: [], messages: [...s.messages, userMsg(text, f)] }));
-      await consume(mockClient.sendMessage({ sessionId: 'sess_mock_001', text, attachments: f }));
+      const live = ui.source === 'live' && ui.backend === 'online' && !ui.attack && f.every((x) => !x.fixtureId);
+      await consume(live ? httpClient.sendMessage({ sessionId: 'sess_backend', text, attachments: f }) : mockClient.sendMessage({ sessionId: 'sess_mock_001', text, attachments: f }));
     },
     runTurn: async (turnId, hint, userText) => {
       if (userText) set((s) => ({ seq: s.seq + 1, messages: [...s.messages, userMsg(userText)] }));
@@ -128,7 +130,7 @@ export const useAgentStore = create<AgentState>((set, get) => {
       set((s) => ({ actionStates: { ...s.actionStates, [actionId]: decision === 'confirm' ? 'confirmed' : 'rejected' } }));
       if (actionId === 'act_claim_submit' && decision === 'confirm') useClaimStore.getState().markSubmitted();
       if (actionId === 'act_followup_send' && decision === 'confirm') useClaimStore.getState().replySent();
-      await consume(mockClient.resolveAction({ actionId, decision }));
+      await consume(httpClient.owns(actionId) ? httpClient.resolveAction({ actionId, decision }) : mockClient.resolveAction({ actionId, decision }));
     },
     advance: async () => {
       useClaimStore.getState().advanceDays(3);
@@ -143,6 +145,7 @@ export const useAgentStore = create<AgentState>((set, get) => {
     clearEvents: () => set({ events: [] }),
     reset: () => {
       mockClient.reset();
+      void httpClient.startSession().catch(() => undefined); // fresh private workspace for a clean replay
       useClaimStore.getState().reset();
       useExtractionStore.getState().reset();
       useCaptureStore.getState().reset();
@@ -153,4 +156,6 @@ export const useAgentStore = create<AgentState>((set, get) => {
   };
 });
 
-export const setClientLocale = (l: Locale) => mockClient.setLocale(l);
+export const setClientLocale = (l: Locale) => { mockClient.setLocale(l); httpClient.setLocale(l); };
+setClientLocale(i18n.language === 'zh' ? 'zh' : 'en');
+i18n.on('languageChanged', (lng) => setClientLocale(lng === 'zh' ? 'zh' : 'en'));

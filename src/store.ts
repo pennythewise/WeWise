@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockClient } from '@/engine';
+import { httpClient, mockClient } from '@/engine';
 import { queryFlags } from '@/lib';
 import { useAgentStore } from './agentStore';
 
@@ -26,6 +26,11 @@ interface UiState {
   setPlaying: (v: boolean) => void;
   setAttack: (v: boolean) => void;
   setSpeed: (n: number) => void;
+
+  /** 'live' sends typed chat to the FastAPI backend; 'scripted' keeps everything on the preset mock. */
+  source: 'live' | 'scripted';
+  backend: 'checking' | 'online' | 'offline';
+  setSource: (s: 'live' | 'scripted') => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -48,7 +53,18 @@ export const useUiStore = create<UiState>((set) => ({
   setPlaying: (playing) => set({ playing }),
   setAttack: (attack) => { mockClient.setAttack(attack); set({ attack }); },
   setSpeed: (speed) => { mockClient.setSpeed(speed); set({ speed }); },
+
+  source: 'live',
+  backend: 'checking',
+  setSource: (source) => set({ source }),
 }));
+
+/** Checks the API once at start-up and again on demand; scripted mode is used automatically while it is offline. */
+export async function probeBackend() {
+  useUiStore.setState({ backend: 'checking' });
+  const online = await httpClient.available();
+  useUiStore.setState({ backend: online ? 'online' : 'offline' });
+}
 
 /** Reset the whole stage: conversation, claim, inspector, flags. */
 export function resetStage() {

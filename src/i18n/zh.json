@@ -230,7 +230,12 @@
     "speed": "速度",
     "advance": "快进 3 天",
     "exportJson": "导出 JSON",
-    "snapshot": "PNG 截图"
+    "snapshot": "PNG 截图",
+    "live": "实时后端",
+    "scripted": "预设脚本",
+    "backendOnline": "后端在线",
+    "backendOffline": "后端离线，已使用预设回复",
+    "backendChecking": "正在检测后端…"
   },
   "types": {
     "medical": "医疗",

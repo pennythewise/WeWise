@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { probeBackend } from '@/store';
 import { AppShell } from './AppShell';
 import { PortfolioHome } from '@/features/home/PortfolioHome';
 import { PolicyList } from '@/features/policies/PolicyList';
@@ -16,6 +18,7 @@ import { CoverageCheck } from '@/features/home/CoverageCheck';
 
 // AppShell is the layout route; pages render inside PhoneFrame via <Outlet/>.
 export default function App() {
+  useEffect(() => { void probeBackend(); }, []);
   return (
     <div className="simulator-root">
       <aside aria-label="Simulation mode notice" className="simulator-notice">

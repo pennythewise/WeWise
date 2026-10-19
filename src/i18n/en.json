@@ -230,7 +230,12 @@
     "speed": "Speed",
     "advance": "Advance 3 days",
     "exportJson": "Export JSON",
-    "snapshot": "PNG snapshot"
+    "snapshot": "PNG snapshot",
+    "live": "Live backend",
+    "scripted": "Scripted",
+    "backendOnline": "Backend online",
+    "backendOffline": "Backend offline, using scripted replies",
+    "backendChecking": "Checking backend…"
   },
   "types": {
     "medical": "Medical",

@@ -253,8 +253,9 @@ def create_policy(db, document, fields=None):
 
 
 @router.post("/documents")
-def upload_document(file: UploadFile = File(...), kind: str = Form("policy"), claim_id: str | None = Form(None), policy_id: str | None = Form(None), save: bool = Form(True), user=Depends(current_user)):
-    if not save:
+def upload_document(file: UploadFile = File(...), kind: str = Form("policy"), claim_id: str | None = Form(None), policy_id: str | None = Form(None), save: str | None = Form(None), user=Depends(current_user)):
+    # Absent means save; only an explicit false-like value requests a temporary upload (robust across FastAPI form-default behaviour).
+    if save is not None and save.strip().lower() in {"false", "0", "no", "off"}:
         from .lifecycle import upload_temporary
         return upload_temporary(file=file, kind=kind, user=user)
     if kind not in {"policy", "evidence", "medical_report", "financial_report"}:

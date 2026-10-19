@@ -395,11 +395,28 @@ class ChatRequest(BaseModel):
     expected_revision: int | None = Field(default=None, ge=0)
 
 
+# Intent patterns for requests this assistant must never act on: moving money, redirecting a payout, reading
+# another person's records, impersonating staff or seeking investment tips. Phrase variants matter, so these are
+# regexes rather than exact keywords.
+OUT_OF_SCOPE = re.compile(
+    r"(转账|转到|转入|转给|汇款|打款|付款给|转钱|汇到|wire\s+(\w+\s+){0,2}(money|funds|payout)|(transfer|send|pay|move)\s+(\w+\s+){0,2}(money|funds|payout|reimbursement))"
+    r"|((change|update|switch|replace|redirect|修改|更改|变更|改成|改到|换成|替换).{0,30}(payout|bank|iban|account|账户|账号|银行卡|收款))"
+    r"|((收款|银行卡|账户|账号|payout|bank\\s+account).{0,12}(改成|改为|换成|改到|修改|更改|变更))"
+    r"|((other|another|someone|somebody|their)\s*(person|user|people|customer)?'?s?\s+(policy|claim|record|data|medical)|(wife|husband|spouse|mother|father|boss|colleague|neighbou?r|friend|ex)'?s?\s+(policy|claim|record|data|medical))"
+    r"|((妻子|老婆|丈夫|老公|父母|同事|朋友|邻居|他人|别人|其他用户|别的用户|所有用户|全部客户).{0,8}(保单|理赔|资料|信息|病历|记录))"
+    r"|(admin(istrator)?\s+(mode|access|override)|\bsudo\b|管理员(权限|模式)|root\s+access|i\s+am\s+(an?\s+)?(insurer|insurance\s+company)\s+(employee|staff)|保险公司员工|all\s+(users|customers)'?\s*(policies|data|records))"
+    r"|(crypto(currency)?|ethereum|加密货币|炒股|股票推荐|stock\s+tips?|买基金)",
+    re.IGNORECASE,
+)
+
+
 def local_route(message: str) -> str:
     lower = message.lower()
     if any(x in lower for x in ["紧急", "救命", "急救", "出血", "昏迷", "emergency", "bleeding", "呼吸", "自杀", "緊急", "救急", "助けて"]):
         return "emergency"
     if any(x in lower for x in ["比特币", "bitcoin", "股票", "buy crypto", "transfer money", "转账", "payout account", "收款账户", "银行账号", "wife's policy", "husband's policy", "other user's", "妻子的保单", "老婆的保单", "他人保单"]):
+        return "outside_scope"
+    if OUT_OF_SCOPE.search(message):
         return "outside_scope"
     if any(x in lower for x in ["compare", "比较", "购买", "推荐保险", "buy insurance", "hospital cover", "想买", "买保险", "预算", "budget", "计划投保"]):
         return "buying"
