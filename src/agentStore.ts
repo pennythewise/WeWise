@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import i18n from 'i18next';
 import type { Card, Chip, FileRef, PlanStep, TraceEvent, Txt, Verdict } from '@/engine/types';
 import { httpClient, mockClient } from '@/engine';
+import { fallbackOos } from '@/engine/scenarios';
 import { useClaimStore } from '@/features/claims/claimStore';
 import { SAMPLE_EVENTS } from '@/engine/inspect';
 import { useExtractionStore } from '@/features/cards/extractionStore';
@@ -119,7 +120,9 @@ export const useAgentStore = create<AgentState>((set, get) => {
       const ui = useUiStore.getState();
       if (ui.attack) { useUiStore.setState({ attack: false }); ui.setInspectorTab('safety'); } // Attack toggle: swap this turn for the adversarial variant, show Safety
       set((s) => ({ seq: s.seq + 1, draft: '', pendingFiles: [], messages: [...s.messages, userMsg(text, f)] }));
-      const live = ui.source === 'live' && ui.backend === 'online' && !ui.attack && f.every((x) => !x.fixtureId);
+      // Preset scenarios (S1–S6 prompts and their keywords) always get their scripted reply; anything else goes to the backend.
+      const scripted = ui.attack || mockClient.route(text, f.flatMap((x) => (x.fixtureId ? [x.fixtureId] : []))) !== fallbackOos; // route() consumes the Attack flag, so skip it while armed
+      const live = ui.source === 'live' && ui.backend === 'online' && !ui.attack && f.every((x) => !x.fixtureId) && !scripted;
       await consume(live ? httpClient.sendMessage({ sessionId: 'sess_backend', text, attachments: f }) : mockClient.sendMessage({ sessionId: 'sess_mock_001', text, attachments: f }));
     },
     runTurn: async (turnId, hint, userText) => {
