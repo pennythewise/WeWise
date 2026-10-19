@@ -1,6 +1,6 @@
 import { L } from '@/engine/l';
 
-// Real Chinese insurers used as illustrative labels (PRD §8). No logos: a coloured monogram stands in.
+// Real Chinese insurers used as illustrative labels (PRD §8). Logos are in src/assets/insurers and rendered by InsurerMark; the coloured monogram is the fallback.
 // Product names are real product lines where marked; prices and policy wording in this demo are simplified examples.
 export interface Insurer { id: string; name: string; zh: string; color: string; mark: string; hotline: string }
 export const INSURERS: Insurer[] = [
