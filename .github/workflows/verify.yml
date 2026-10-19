@@ -36,10 +36,11 @@ jobs:
         run: |
           npm install --global pnpm@11.25.0
           pnpm install --frozen-lockfile
+          pnpm --dir frontend install --frozen-lockfile
           python -m pip install -r backend/requirements.lock.txt
       - name: Backend functional and attack tests
         run: python -m pytest -q -c backend/pytest.ini
       - name: Gateway boundary tests
         run: node --test infra/tests/gateway.test.mjs
       - name: TypeScript and production build
-        run: pnpm build
+        run: pnpm --dir frontend build
