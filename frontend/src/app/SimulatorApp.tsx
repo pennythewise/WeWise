@@ -14,6 +14,10 @@ import { About } from '@/features/settings/About';
 import { UploadPage } from '@/features/settings/UploadSheet';
 import { EmergencyCall } from '@/features/settings/EmergencyCall';
 import { SwitchCheck } from '@/features/switch/SwitchCheck';
+import { ShopHome } from '@/features/shop/ShopHome';
+import { ShopCategory } from '@/features/shop/ShopCategory';
+import { ShopProduct } from '@/features/shop/ShopProduct';
+import { ShopCheckout } from '@/features/shop/ShopCheckout';
 import { CoverageCheck } from '@/features/home/CoverageCheck';
 
 // AppShell is the layout route; pages render inside PhoneFrame via <Outlet/>.
@@ -29,6 +33,10 @@ export default function App() {
           <Routes>
             <Route element={<AppShell />}>
               <Route path="/" element={<PortfolioHome />} />
+              <Route path="/shop" element={<ShopHome />} />
+              <Route path="/shop/c/:type" element={<ShopCategory />} />
+              <Route path="/shop/p/:id" element={<ShopProduct />} />
+              <Route path="/shop/checkout/:id" element={<ShopCheckout />} />
               <Route path="/policies" element={<PolicyList />} />
               <Route path="/policies/:id" element={<PolicyDetail />} />
               <Route path="/claims" element={<ClaimsList />} />

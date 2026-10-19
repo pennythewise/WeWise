@@ -4,7 +4,7 @@ import { AppIcon } from '@/components/AppIcon';
 import { matchRoute, TABS } from '@/app/routes';
 import { useClaimStore } from '@/features/claims/claimStore';
 
-/** In-app navigation: Home · Policies · Claims · Ask WeWise. */
+/** In-app navigation: Home · Shop · Policies · Claims · Ask WeWise. */
 export function TabBar() {
   const { t } = useTranslation();
   const active = matchRoute(useLocation().pathname).tab;
@@ -16,7 +16,7 @@ export function TabBar() {
       aria-label={t('tabs.label')}
       className="shrink-0 border-t border-cardline bg-white pb-[env(safe-area-inset-bottom)]"
     >
-      <ul className="grid h-[var(--tabbar-height)] grid-cols-4">
+      <ul className="grid h-[var(--tabbar-height)] grid-cols-5">
         {TABS.map((tab) => {
           const on = active === tab.id;
           return (

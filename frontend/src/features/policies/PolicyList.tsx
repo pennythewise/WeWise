@@ -10,12 +10,15 @@ import { POLICIES } from '@/mock/policies';
 import type { InsuranceType } from '@/mock/products';
 import { daysUntil } from '@/mock';
 import { useTx } from '@/i18n/useTx';
+import { useShopStore } from '@/features/shop/shopStore';
+import { shopProductById } from '@/mock/shop';
 
 const TYPES: InsuranceType[] = ['medical', 'accident', 'travel', 'motor', 'home'];
 
 export function PolicyList() {
   const { t } = useTranslation();
-  const { tx, date, lang } = useTx();
+  const { tx, date, lang, money } = useTx();
+  const orders = useShopStore((s) => s.orders);
   const [type, setType] = useState<InsuranceType | 'all'>('all');
   const [insurer, setInsurer] = useState('all');
   const rows = POLICIES.filter((p) => (type === 'all' || p.type === type) && (insurer === 'all' || p.insurerId === insurer)).sort((a, b) => a.renewal.localeCompare(b.renewal));
@@ -32,6 +35,23 @@ export function PolicyList() {
           {INSURERS.filter((i) => POLICIES.some((p) => p.insurerId === i.id)).map((i) => <option key={i.id} value={i.id}>{lang === 'zh' ? i.zh : i.name}</option>)}
         </select>
       </label>
+      {orders.length > 0 && (
+        <ul className="space-y-3" aria-label={t('policies.purchased')}>
+          {orders.map((o) => {
+            const p = shopProductById(o.productId)!;
+            return (
+              <li key={o.id} className="card flex items-center gap-3 !p-3.5">
+                <InsurerMark id={p.insurerId} />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[15px] font-semibold text-ink">{tx(p.name)}</span>
+                  <span className="block text-xs text-muted">{o.policyNo} · {money(o.premium)} {t(`shop.unit.${o.unit}`)}</span>
+                  <span className="mt-1.5 flex flex-wrap gap-1.5"><Badge tone="ok" icon="check">{t('policies.purchased')}</Badge><Badge tone="info" icon="clock">{t('shop.checkout.start')} {date(o.startDate)}</Badge></span>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
       <p className="text-xs text-muted">{t('policies.sorted')}</p>
       <ul className="space-y-3">
         {rows.map((p) => {

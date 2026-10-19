@@ -21,7 +21,8 @@
     "policies": "Policies",
     "claims": "Claims",
     "ask": "Ask WeWise",
-    "awaiting": "{{n}} claims waiting on you"
+    "awaiting": "{{n}} claims waiting on you",
+    "shop": "Shop"
   },
   "header": {
     "back": "Back",
@@ -88,6 +89,22 @@
     "capture": {
       "title": "Capture evidence",
       "desc": "AR-guided photos of the scene for your claim."
+    },
+    "shop": {
+      "title": "Insurance marketplace",
+      "desc": "Insurance marketplace"
+    },
+    "shopCategory": {
+      "title": "Compare plans",
+      "desc": "Compare plans"
+    },
+    "shopProduct": {
+      "title": "Plan details",
+      "desc": "Plan details"
+    },
+    "shopCheckout": {
+      "title": "Buy",
+      "desc": "Buy"
     }
   },
   "inspector": {
@@ -349,7 +366,8 @@
     },
     "noClauses": "No clauses match.",
     "noGap": "No gaps found for this policy.",
-    "gapCheck": "Check my gaps across all policies"
+    "gapCheck": "Check my gaps across all policies",
+    "purchased": "Just bought"
   },
   "cards": {
     "extract": {
@@ -694,5 +712,89 @@
     "addSend": "Should I insure my electric scooter?",
     "close": "Close",
     "hint": "Generic models for illustration. Not a specific vehicle or building."
+  },
+  "shop": {
+    "search": "Search products or insurers",
+    "categories": "Categories",
+    "results": "{{n}} results",
+    "noResults": "Nothing matches. Try another word or filter.",
+    "forYouTitle": "Picked for you",
+    "topRated": "Top rated",
+    "ordersNote": "You bought {{n}} plan(s) this session.",
+    "viewPolicies": "View in My Policies",
+    "from": "from",
+    "forYou": "quoted for you",
+    "claimDays": "Claims paid in ~{{n}} days",
+    "compare": "Compare",
+    "compareBar": "{{n}} of {{max}} selected",
+    "view": "View",
+    "priceRow": "Price ({{unit}})",
+    "ratingRow": "Rating",
+    "claimRow": "Claim speed",
+    "keyCover": "Key cover",
+    "declarationNote": "Health questions apply. You will answer a short health declaration before buying.",
+    "readTerms": "Read the full policy terms and exclusions before buying.",
+    "askWewise": "Ask WeWise about this plan",
+    "buy": "Buy now",
+    "unit": {
+      "month": "/ month",
+      "year": "/ year",
+      "trip": "/ trip"
+    },
+    "sort": {
+      "label": "Sort by",
+      "rating": "Top rated",
+      "price": "Lowest price",
+      "claim": "Fastest claims"
+    },
+    "quote": {
+      "title": "Get a quote: {{type}}",
+      "intro": "A few details so we can price each plan for you.",
+      "range": "Enter a value from {{min}} to {{max}}.",
+      "note": "Prices are illustrative estimates; the insurer confirms the final premium.",
+      "submit": "See my prices",
+      "cta": "Get your personal price",
+      "ctaHint": "{{n}} quick questions to see your exact price",
+      "done": "Prices are quoted for you",
+      "edit": "Edit my details",
+      "getAndBuy": "Get my price and buy"
+    },
+    "checkout": {
+      "steps": "Checkout steps",
+      "s1": "Details",
+      "s2": "Pay",
+      "s3": "Done",
+      "applicant": "Applicant",
+      "name": "Name",
+      "phone": "Phone",
+      "start": "Cover starts",
+      "startRange": "Choose a date from tomorrow up to 90 days ahead.",
+      "declaration": "I confirm my answers to the health declaration are true and complete.",
+      "agree": "I have read the product terms, exclusions and privacy notice.",
+      "next": "Continue to payment",
+      "method": "Payment method",
+      "methods": {
+        "wechat": "WeChat Pay",
+        "alipay": "Alipay",
+        "card": "Bank card"
+      },
+      "mockNote": "Demo only: no money moves and no insurer is contacted.",
+      "pay": "Pay {{amount}}",
+      "paying": "Processing…",
+      "back": "Back",
+      "doneTitle": "Your policy is issued",
+      "doneText": "Cover starts on {{date}}.",
+      "policyNo": "Policy no.",
+      "paid": "Paid",
+      "keepShopping": "Keep browsing"
+    },
+    "estimate": "estimate",
+    "allProducts": "All products",
+    "pick": {
+      "hint": "Select 2 to {{max}} plans of the same type",
+      "cancel": "Cancel",
+      "go": "Continue"
+    },
+    "count": "{{n}} plans"
   }
 }

@@ -21,7 +21,8 @@
     "policies": "保单",
     "claims": "理赔",
     "ask": "问微晓",
-    "awaiting": "{{n}} 项理赔等您处理"
+    "awaiting": "{{n}} 项理赔等您处理",
+    "shop": "选保险"
   },
   "header": {
     "back": "返回",
@@ -88,6 +89,22 @@
     "capture": {
       "title": "拍摄证据",
       "desc": "AR 引导拍摄理赔现场照片。"
+    },
+    "shop": {
+      "title": "保险市场",
+      "desc": "保险市场"
+    },
+    "shopCategory": {
+      "title": "比较产品",
+      "desc": "比较产品"
+    },
+    "shopProduct": {
+      "title": "产品详情",
+      "desc": "产品详情"
+    },
+    "shopCheckout": {
+      "title": "投保",
+      "desc": "投保"
     }
   },
   "inspector": {
@@ -349,7 +366,8 @@
     },
     "noClauses": "没有符合的条款。",
     "noGap": "此保单未发现缺口。",
-    "gapCheck": "检查我所有保单的缺口"
+    "gapCheck": "检查我所有保单的缺口",
+    "purchased": "新购买"
   },
   "cards": {
     "extract": {
@@ -694,5 +712,89 @@
     "addSend": "我的电动滑板车需要投保吗？",
     "close": "关闭",
     "hint": "示意用通用模型，并非具体车辆或建筑。"
+  },
+  "shop": {
+    "search": "搜索产品或保险公司",
+    "categories": "保险分类",
+    "results": "共 {{n}} 个结果",
+    "noResults": "没有匹配的产品，换个关键词或筛选试试。",
+    "forYouTitle": "为你推荐",
+    "topRated": "好评榜",
+    "ordersNote": "本次已购买 {{n}} 份保险。",
+    "viewPolicies": "去保单查看",
+    "from": "起",
+    "forYou": "为你报价",
+    "claimDays": "平均 {{n}} 天赔付",
+    "compare": "对比",
+    "compareBar": "已选 {{n}}/{{max}} 款",
+    "view": "查看",
+    "priceRow": "价格（{{unit}}）",
+    "ratingRow": "评分",
+    "claimRow": "理赔速度",
+    "keyCover": "核心保障",
+    "declarationNote": "需健康告知，购买前请如实填写。",
+    "readTerms": "购买前请阅读完整条款及免责说明。",
+    "askWewise": "问微晓：这款适合我吗",
+    "buy": "立即投保",
+    "unit": {
+      "month": "/月",
+      "year": "/年",
+      "trip": "/次"
+    },
+    "sort": {
+      "label": "排序",
+      "rating": "评分最高",
+      "price": "价格最低",
+      "claim": "理赔最快"
+    },
+    "quote": {
+      "title": "获取报价：{{type}}",
+      "intro": "填写几项信息，为你计算每款产品的价格。",
+      "range": "请输入 {{min}} 到 {{max}} 之间的数值。",
+      "note": "价格为示意估算，最终保费以保险公司核保为准。",
+      "submit": "查看我的报价",
+      "cta": "获取专属报价",
+      "ctaHint": "回答 {{n}} 个问题，查看准确价格",
+      "done": "已按你的信息报价",
+      "edit": "修改我的信息",
+      "getAndBuy": "获取报价并投保"
+    },
+    "checkout": {
+      "steps": "投保步骤",
+      "s1": "确认信息",
+      "s2": "支付",
+      "s3": "完成",
+      "applicant": "投保人",
+      "name": "姓名",
+      "phone": "手机号",
+      "start": "生效日期",
+      "startRange": "请选择明天起 90 天内的日期。",
+      "declaration": "我确认已如实、完整地完成健康告知。",
+      "agree": "我已阅读产品条款、免责说明及隐私政策。",
+      "next": "继续支付",
+      "method": "支付方式",
+      "methods": {
+        "wechat": "微信支付",
+        "alipay": "支付宝",
+        "card": "银行卡"
+      },
+      "mockNote": "仅为演示：不会产生真实扣款，也不会联系保险公司。",
+      "pay": "支付 {{amount}}",
+      "paying": "支付处理中…",
+      "back": "返回上一步",
+      "doneTitle": "保单已生成",
+      "doneText": "保障自 {{date}} 起生效。",
+      "policyNo": "保单号",
+      "paid": "已支付",
+      "keepShopping": "继续逛逛"
+    },
+    "estimate": "估算价",
+    "allProducts": "全部产品",
+    "pick": {
+      "hint": "选择 2 到 {{max}} 款同类产品",
+      "cancel": "取消",
+      "go": "继续"
+    },
+    "count": "共 {{n}} 款产品"
   }
 }
