@@ -35,6 +35,26 @@
   "screens": {
     "prdRef": "PRD {{ref}}",
     "placeholder": "Placeholder screen · Phase 1",
+    "upload": {
+      "title": "Add a policy",
+      "desc": "Upload a policy PDF or photo; WeWise reads it and you confirm the fields."
+    },
+    "emergency": {
+      "title": "Emergency call",
+      "desc": "AI calm-down call with local emergency numbers."
+    },
+    "assets": {
+      "title": "My insured assets",
+      "desc": "3D showcase of everything you have insured."
+    },
+    "coverageCheck": {
+      "title": "Overlaps & gaps",
+      "desc": "Cross-insurer overlap and gap check, including gig work."
+    },
+    "switchCheck": {
+      "title": "Switching check",
+      "desc": "Surrender-and-rebuy loss calculator and mis-selling red flags."
+    },
     "home": {
       "title": "Home",
       "desc": "Portfolio at a glance: coverage donut, swipeable policy twin cards, alerts, gaps and open claims."

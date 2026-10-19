@@ -23,7 +23,7 @@ export interface Policy {
 
 export const POLICIES: Policy[] = [
   {
-    id: 'pol_mei_health_01', insurerId: 'harbour', product: L('Hospital & Surgical Plan', '住院手术计划'), type: 'medical', policyNo: 'HM-2025-48****91',
+    id: 'pol_mei_health_01', insurerId: 'harbour', product: L('Ping An e-Sheng Bao Medical', '平安e生保·百万医疗'), type: 'medical', policyNo: 'HM-2025-48****91',
     inception: '2025-11-25', renewal: '2026-11-25', status: 'active', coverAmount: 2000000, deductible: 10000, coPayPct: 20, roomCap: 500, waitingDays: 90, monthlyPremium: 268,
     premiumHistory: [214, 226, 240, 252, 268],
     keyTerms: [
@@ -36,7 +36,7 @@ export const POLICIES: Policy[] = [
     gap: L('No outpatient cover', '不含门诊保障'),
   },
   {
-    id: 'pol_mei_pa_01', insurerId: 'pinnacle', product: L('Personal Accident Plan', '个人意外保障计划'), type: 'accident', policyNo: 'PL-2026-10****37',
+    id: 'pol_mei_pa_01', insurerId: 'pinnacle', product: L('China Life Personal Accident', '国寿意外伤害保险'), type: 'accident', policyNo: 'PL-2026-10****37',
     inception: '2026-01-18', renewal: '2027-01-18', status: 'active', coverAmount: 300000, deductible: 0, coPayPct: 0, roomCap: 0, waitingDays: 0, monthlyPremium: 45,
     premiumHistory: [45, 45, 45, 45, 45],
     keyTerms: [
@@ -46,7 +46,7 @@ export const POLICIES: Policy[] = [
     ],
   },
   {
-    id: 'pol_mei_travel_01', insurerId: 'sunrise', product: L('Travel Flex – Thailand', '灵活旅行险 – 泰国'), type: 'travel', policyNo: 'SG-2026-77****05',
+    id: 'pol_mei_travel_01', insurerId: 'sunrise', product: L('CPIC Overseas Travel – Thailand', '太保境外旅行险 – 泰国'), type: 'travel', policyNo: 'SG-2026-77****05',
     inception: '2026-12-20', renewal: '2027-01-03', status: 'upcoming', coverAmount: 500000, deductible: 0, coPayPct: 0, roomCap: 0, waitingDays: 0, monthlyPremium: 0,
     premiumHistory: [186],
     keyTerms: [
@@ -57,7 +57,7 @@ export const POLICIES: Policy[] = [
     gap: L('Adventure sports excluded', '不含冒险运动'),
   },
   {
-    id: 'pol_mei_motor_01', insurerId: 'sunrise', product: L('Comprehensive Motor Plan', '机动车综合险'), type: 'motor', policyNo: 'SG-2026-31****62',
+    id: 'pol_mei_motor_01', insurerId: 'sunrise', product: L('CPIC Motor Commercial Insurance', '太保机动车商业保险'), type: 'motor', policyNo: 'SG-2026-31****62',
     inception: '2026-03-08', renewal: '2027-03-08', status: 'active', coverAmount: 1000000, deductible: 0, coPayPct: 0, roomCap: 0, waitingDays: 0, monthlyPremium: 425,
     premiumHistory: [398, 410, 425],
     keyTerms: [
@@ -67,7 +67,7 @@ export const POLICIES: Policy[] = [
     ],
   },
   {
-    id: 'pol_mei_home_01', insurerId: 'banyan', product: L('Home Contents & Fire Plan', '家庭财产综合险'), type: 'home', policyNo: 'BC-2026-52****18',
+    id: 'pol_mei_home_01', insurerId: 'banyan', product: L('PICC Home Property Insurance', '人保家庭财产保险'), type: 'home', policyNo: 'BC-2026-52****18',
     inception: '2026-05-20', renewal: '2027-05-20', status: 'active', coverAmount: 1500000, deductible: 0, coPayPct: 0, roomCap: 0, waitingDays: 0, monthlyPremium: 62,
     premiumHistory: [58, 60, 62],
     keyTerms: [

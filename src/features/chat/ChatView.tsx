@@ -7,6 +7,7 @@ import { AssistantBubble, UserBubble } from './MessageBubble';
 import { Chips } from './Chips';
 import { Composer } from './Composer';
 import { Notice } from '@/components/ui';
+import { L } from '@/engine/l';
 
 const useDefaultChips = (): Chip[] => {
   const { t } = useTranslation();
@@ -14,6 +15,10 @@ const useDefaultChips = (): Chip[] => {
     { label: t('chat.chips.policy'), send: t('chat.chips.policySend') },
     { label: t('chat.chips.claim'), send: t('chat.chips.claimSend') },
     { label: t('chat.chips.compare'), send: t('chat.chips.compareSend') },
+    { label: L('Cover for where I live', '适合我所在地的保障'), send: L('Suggest insurance based on my location', '根据我的位置推荐保险') },
+    { label: L('Accident abroad', '国外出事故'), send: L('I had an accident abroad', '我在国外出了事故') },
+    { label: L('Am I paying twice?', '有没有重复投保？'), send: L('Am I paying twice for anything?', '我有没有重复投保？') },
+    { label: L('Told to switch policy', '被劝退保换新'), send: L('An agent told my dad to cancel his policy and buy a new one', '有人让我爸退掉旧保单换新的') },
   ];
 };
 

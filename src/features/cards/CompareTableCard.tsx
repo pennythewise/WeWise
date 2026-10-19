@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { CardShell } from '@/components/ui';
-import { insurerById } from '@/mock/insurers';
+import { INSURER_DISCLAIMER, insurerById } from '@/mock/insurers';
 import { productById } from '@/mock/products';
 import { useTx } from '@/i18n/useTx';
 
@@ -49,6 +49,7 @@ export function CompareTableCard({ productIds, winners }: { productIds: string[]
         </table>
       </div>
       <p className="mt-2 flex items-center gap-1.5 text-xs text-muted"><span className="inline-block h-2 w-2 rounded-full bg-ok" aria-hidden="true" />{t('cards.compare.better')}</p>
+      <p className="mt-1 text-[11px] leading-snug text-muted">{tx(INSURER_DISCLAIMER)}</p>
     </CardShell>
   );
 }

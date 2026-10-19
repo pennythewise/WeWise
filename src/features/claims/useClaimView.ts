@@ -16,10 +16,11 @@ export function useClaimView(id: string): { claim: Claim; timeline: TimelineStep
   const t: TimelineStep[] = [...base.timeline.map((s) => ({ stage: s.stage }))];
   const set = (stage: TimelineStep['stage'], patch: Partial<TimelineStep>) => { const i = t.findIndex((x) => x.stage === stage); t[i] = { ...t[i], ...patch }; };
   if (live.status !== 'DRAFT') set('SUBMITTED', { at: d(0), actor: 'you', note: { en: 'Claim HM-CL-70418 sent with 4 documents', zh: '理赔 HM-CL-70418 已提交，附 4 份材料' } });
-  if (live.status === 'INFO_REQUESTED') {
+  if (live.status === 'INFO_REQUESTED' || live.status === 'IN_REVIEW') {
     set('DOCUMENT_REVIEW', { at: d(1), actor: 'insurer', note: { en: 'Documents received', zh: '材料已收到' } });
     set('INFO_REQUESTED', { at: d(3), actor: 'insurer', note: { en: 'The insurer needs an itemised pharmacy bill', zh: '保险公司需要药房费用明细账单' } });
   }
+  if (live.status === 'IN_REVIEW') set('ASSESSMENT', { at: d(3), actor: 'ai', note: { en: 'You sent the pharmacy bill (found and drafted by the follow-up agent)', zh: '您已发送药房账单（由跟进助手查找并起草）' } });
   const reached = t.filter((s) => s.at);
   return { claim: { ...base, status: live.status, waitingOn: live.waitingOn }, timeline: t, current: reached[reached.length - 1]?.stage };
 }

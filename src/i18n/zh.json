@@ -35,6 +35,26 @@
   "screens": {
     "prdRef": "PRD {{ref}}",
     "placeholder": "占位页面 · 第一阶段",
+    "upload": {
+      "title": "添加保单",
+      "desc": "上传保单 PDF 或照片，微晓读取后由你确认字段。"
+    },
+    "emergency": {
+      "title": "紧急通话",
+      "desc": "AI 安抚通话，并提供当地紧急电话。"
+    },
+    "assets": {
+      "title": "我的受保资产",
+      "desc": "以 3D 方式展示你已投保的一切。"
+    },
+    "coverageCheck": {
+      "title": "重叠与缺口",
+      "desc": "跨保险公司的重叠与缺口检查，包括兼职平台工作。"
+    },
+    "switchCheck": {
+      "title": "换保检查",
+      "desc": "退保换新损失计算与误导销售风险信号。"
+    },
     "home": {
       "title": "首页",
       "desc": "保障总览：保额环形图、可滑动的保单卡片、提醒、保障缺口与进行中的理赔。"

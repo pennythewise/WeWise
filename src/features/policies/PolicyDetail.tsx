@@ -4,10 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Badge, CardShell, EmptyState, Notice } from '@/components/ui';
 import { InsurerMark } from '@/components/InsurerMark';
-import { insurerById } from '@/mock/insurers';
+import { INSURER_DISCLAIMER, insurerById } from '@/mock/insurers';
 import { policyById } from '@/mock/policies';
 import { clausesFor, type ClauseType } from '@/mock/clauses';
 import { ClauseViewer } from './ClauseViewer';
+import { LocalPolicyCard } from '../crossborder/LocalPolicyCard';
+import { INCIDENTS } from '@/mock/incidents';
 import { useTx } from '@/i18n/useTx';
 import { useAgentStore } from '@/agentStore';
 
@@ -49,6 +51,8 @@ export function PolicyDetail() {
               <div className="flex justify-between gap-3 py-2"><dt className="text-muted">{t(p.status === 'upcoming' ? 'policies.coverPeriod' : 'policies.renews')}</dt><dd className="text-right font-semibold text-ink">{p.status === 'upcoming' ? `${date(p.inception, false)} – ${date(p.renewal)}` : date(p.renewal)}</dd></div>
             </dl>
           </CardShell>
+          <p className="text-[11px] leading-snug text-muted">{tx(INSURER_DISCLAIMER)}</p>
+          {p.type === 'travel' && <TravelLocal />}
         </Tabs.Content>
 
         <Tabs.Content value="clauses" className="space-y-3 pt-4 outline-none">
@@ -75,6 +79,21 @@ export function PolicyDetail() {
           <button type="button" className="btn-secondary w-full" onClick={() => { useAgentStore.getState().setDraft(t('chat.chips.gapSend')); navigate('/ask'); }}>{t('policies.gapCheck')}</button>
         </Tabs.Content>
       </Tabs.Root>
+    </div>
+  );
+}
+
+/** Travel policies: policy facts in the language of the destination (PRD A4). */
+function TravelLocal() {
+  const { tx } = useTx();
+  const [country, setCountry] = useState('TH');
+  return (
+    <div className="space-y-2">
+      <label className="block text-xs font-medium text-muted" htmlFor="travel-country">{tx({ en: 'Country you are in', zh: '您所在的国家' })}</label>
+      <select id="travel-country" value={country} onChange={(e) => setCountry(e.target.value)} className="min-h-[44px] w-full rounded-input border border-line bg-white px-3 text-[14px] text-ink">
+        {INCIDENTS.map((i) => <option key={i.country} value={i.country}>{i.flag} {tx(i.name)}</option>)}
+      </select>
+      <LocalPolicyCard country={country} />
     </div>
   );
 }

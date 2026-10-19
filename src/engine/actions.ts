@@ -21,6 +21,22 @@ export const ACTIONS: Record<string, { confirm: Outcome; reject: Outcome }> = {
       done(250),
     ],
   },
+  act_followup_send: {
+    confirm: () => [
+      at(120, { type: 'understand.done', intent: 'send_followup', slots: { claim: 'clm_mei_001' }, language: 'en' }),
+      at(250, { type: 'plan.created', steps: [step('send', L('Send through the insurer\'s official channel', '通过保险公司官方渠道发送'))] }),
+      at(300, { type: 'plan.step.started', stepId: 'send' }),
+      ...tool(340, 'claim_reply_send', 'T3', { claim: 'clm_mei_001', attachments: 1 }, L('Sent. Insurer acknowledged.', '已发送，保险公司已确认收到。'), 500),
+      at(900, { type: 'plan.step.done', stepId: 'send' }),
+      at(950, { type: 'notify.push', title: L('Your insurer received your reply', '保险公司已收到您的回复'), body: L('Your claim is back in review. Usual reply: 2–3 working days.', '您的理赔已重新进入审核，通常 2–3 个工作日内回复。') }),
+      at(1000, { type: 'message.final', text: L('Sent. Your claim is back with the insurer for review. I\'ll let you know when it moves.', '已发送，您的理赔已回到保险公司审核中，有进展我会通知您。') }),
+      done(1050),
+    ],
+    reject: () => [
+      at(200, { type: 'message.final', text: L('Not sent. The draft is kept if you change your mind.', '未发送，草稿已保留。') }),
+      done(250),
+    ],
+  },
   act_claim_submit: {
     confirm: (ctx) => s3SubmitDone.events(ctx),
     reject: () => [

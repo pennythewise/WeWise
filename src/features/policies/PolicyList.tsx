@@ -10,7 +10,6 @@ import { POLICIES } from '@/mock/policies';
 import type { InsuranceType } from '@/mock/products';
 import { daysUntil } from '@/mock';
 import { useTx } from '@/i18n/useTx';
-import { useUiStore } from '@/store';
 
 const TYPES: InsuranceType[] = ['medical', 'accident', 'travel', 'motor', 'home'];
 
@@ -57,7 +56,7 @@ export function PolicyList() {
         })}
       </ul>
       {rows.length === 0 && <p className="text-center text-[13px] text-muted">{t('policies.none')}</p>}
-      <button type="button" className="btn-secondary w-full" onClick={() => useUiStore.getState().setUploadOpen(true)}>+ {t('home.addPolicy')}</button>
+      <Link className="btn-secondary w-full" to="/upload">+ {t('home.addPolicy')}</Link>
     </div>
   );
 }

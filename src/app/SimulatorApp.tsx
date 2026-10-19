@@ -9,6 +9,10 @@ import { ChatView } from '@/features/chat/ChatView';
 import { MemoryPage } from '@/features/settings/MemoryPage';
 import { CaptureEvidence } from '@/features/capture/CaptureEvidence';
 import { About } from '@/features/settings/About';
+import { UploadPage } from '@/features/settings/UploadSheet';
+import { EmergencyCall } from '@/features/settings/EmergencyCall';
+import { SwitchCheck } from '@/features/switch/SwitchCheck';
+import { CoverageCheck } from '@/features/home/CoverageCheck';
 
 // AppShell is the layout route; pages render inside PhoneFrame via <Outlet/>.
 export default function App() {
@@ -30,6 +34,10 @@ export default function App() {
               <Route path="/memory" element={<MemoryPage />} />
               <Route path="/capture" element={<CaptureEvidence />} />
               <Route path="/about" element={<About />} />
+              <Route path="/upload" element={<UploadPage />} />
+              <Route path="/emergency" element={<EmergencyCall />} />
+              <Route path="/coverage-check" element={<CoverageCheck />} />
+              <Route path="/switch-check" element={<SwitchCheck />} />
               <Route path="*" element={<PortfolioHome />} />
             </Route>
           </Routes>

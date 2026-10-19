@@ -29,7 +29,7 @@ export const s2Compare: TurnScript = {
   keywords: ['standard ward', 'private room', 'ward is fine', '普通病房', '单人病房'],
   events: (ctx) => [
     understand(ctx, 'compare_products', { room: /private|单人/i.test(ctx.text) ? 'private' : 'ward', budget: '~¥300', bill_example: '¥200,000' }),
-    at(250, { type: 'plan.created', parallel: true, steps: [step('search', L('Shortlist products', '筛选候选产品')), step('advA', L('Advocate A: argue for Banyan Care Lite', '正方 A：为榕树轻享医疗辩护')), step('advB', L('Advocate B: argue for Orchid MediPlus', '正方 B：为兰花医保加强版辩护')), step('judge', L('Judge: weigh both', '评审：权衡两方')), step('verify', L('Verify numbers', '核验数字'))] }),
+    at(250, { type: 'plan.created', parallel: true, steps: [step('search', L('Shortlist products', '筛选候选产品')), step('advA', L('Advocate A: argue for PICC Haoyibao Long-term Medical', '正方 A：为人保健康好医保·长期医疗辩护')), step('advB', L('Advocate B: argue for ZhongAn Zunxiang e-Sheng', '正方 B：为众安尊享e生辩护')), step('judge', L('Judge: weigh both', '评审：权衡两方')), step('verify', L('Verify numbers', '核验数字'))] }),
     at(300, { type: 'plan.step.started', stepId: 'search' }),
     ...tool(340, 'product_search', 'T0', { type: 'medical', max_premium: 320 }, L('4 candidates, shortlisted 2', '4 个候选，入围 2 个'), 450),
     at(850, { type: 'plan.step.done', stepId: 'search' }),
@@ -73,7 +73,7 @@ export const s2Compare: TurnScript = {
     }),
     at(2900, {
       type: 'message.final',
-      text: L('Banyan Care Lite is cheaper each month, but for a ¥200,000 admission you would pay about ¥42,500 more than with Orchid MediPlus. Try the slider to test your own bill. For a final decision, a licensed agent can help.', '榕树轻享医疗每月更便宜，但如果住院花费 ¥200,000，您自付的金额会比兰花医保加强版多约 ¥42,500。可拖动滑块测试不同账单。最终决定可咨询持牌顾问。'),
+      text: L('PICC Haoyibao Long-term Medical is cheaper each month, but for a ¥200,000 admission you would pay about ¥42,500 more than with ZhongAn Zunxiang e-Sheng. Try the slider to test your own bill. For a final decision, a licensed agent can help.', '人保健康好医保·长期医疗每月更便宜，但如果住院花费 ¥200,000，您自付的金额会比众安尊享e生多约 ¥42,500。可拖动滑块测试不同账单。最终决定可咨询持牌顾问。'),
       chips: [chip(L('Talk to a licensed agent', '联系持牌顾问'), L('Talk to a licensed agent', '联系持牌顾问'))],
     }),
     done(2950),
@@ -110,7 +110,7 @@ export const handoffPreview: TurnScript = {
             { id: 'sh_name', label: L('Name', '姓名'), value: 'M** L** T**' },
             { id: 'sh_contact', label: L('Phone', '电话'), value: '+86 138****5082' },
             { id: 'sh_needs', label: L('Needs summary', '需求摘要'), value: L('Hospital cover · ~¥300/mo · 1 child', '住院保障 · 约 ¥300/月 · 1 个孩子') },
-            { id: 'sh_compare', label: L('Comparison result', '比较结果'), value: L('Banyan Care Lite vs Orchid MediPlus', '榕树轻享医疗 对比 兰花医保加强版') },
+            { id: 'sh_compare', label: L('Comparison result', '比较结果'), value: L('PICC Haoyibao Long-term Medical vs ZhongAn Zunxiang e-Sheng', '人保健康好医保·长期医疗 对比 众安尊享e生') },
           ],
         },
       },

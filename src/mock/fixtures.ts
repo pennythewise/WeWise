@@ -3,14 +3,16 @@ import type { ExtractedField } from '@/engine/types';
 
 export interface Fixture { id: string; name: string; label: L; kind: 'policy' | 'document' }
 export const FIXTURES: Fixture[] = [
-  { id: 'policy_sample', name: 'sample_policy_harbour.pdf', label: L('Sample policy (Hospital & Surgical Plan)', '示例保单（住院手术计划）'), kind: 'policy' },
+  { id: 'policy_sample', name: 'sample_policy_harbour.pdf', label: L('Sample policy (Ping An e-Sheng Bao Medical)', '示例保单（平安e生保·百万医疗）'), kind: 'policy' },
+  { id: 'med_report', name: 'health_screening_sep2026.pdf', label: L('Health screening report (medical)', '体检报告（医疗）'), kind: 'document' },
+  { id: 'fin_report', name: 'payslip_and_bank_statement_sep.pdf', label: L('Payslip and bank statement (financial)', '工资单和银行流水（财务）'), kind: 'document' },
   { id: 'inj_doc_01', name: 'discharge_summary_kl.pdf', label: L('Hospital discharge summary (hidden instruction)', '医院出院小结（含隐藏指令）'), kind: 'document' },
 ];
 
 /** What the OCR "read" from the sample policy. Annual limit is deliberately misread so the user can correct it (S1). */
 export const SAMPLE_POLICY_FIELDS: ExtractedField[] = [
-  { key: 'insurer', group: 'basics', label: L('Insurer', '保险公司'), value: L('Harbour Mutual', '海港互助'), page: 1, confidence: 0.98 },
-  { key: 'product', group: 'basics', label: L('Product', '产品'), value: L('Hospital & Surgical Plan', '住院手术计划'), page: 1, confidence: 0.97 },
+  { key: 'insurer', group: 'basics', label: L('Insurer', '保险公司'), value: L('Ping An', '中国平安'), page: 1, confidence: 0.98 },
+  { key: 'product', group: 'basics', label: L('Product', '产品'), value: L('Ping An e-Sheng Bao Medical', '平安e生保·百万医疗'), page: 1, confidence: 0.97 },
   { key: 'inception', group: 'basics', label: L('Start date', '生效日期'), value: '2025-11-25', page: 1, confidence: 0.95 },
   { key: 'annual_limit', group: 'limits', label: L('Annual limit', '年度限额'), value: '¥200,000', page: 8, confidence: 0.62, clauseId: 'HS-4.1' },
   { key: 'deductible', group: 'limits', label: L('Deductible', '自付额'), value: '¥10,000', page: 9, confidence: 0.93, clauseId: 'HS-5.4' },

@@ -80,7 +80,7 @@ export const s1Coverage: TurnScript = {
     at(1950, {
       type: 'message.final',
       verdict: 'covered',
-      text: L('Yes. Dengue hospitalisation is covered under your Hospital & Surgical Plan, with cost-sharing.', '是的，登革热住院属于您住院手术计划的保障范围，但需要承担部分费用。'),
+      text: L('Yes. Dengue hospitalisation is covered under your Ping An e-Sheng Bao Medical, with cost-sharing.', '是的，登革热住院属于您平安e生保·百万医疗的保障范围，但需要承担部分费用。'),
       bullets: [
         L('Hospitalisation for infectious diseases such as dengue is covered like any other illness [[HS-3.4]].', '登革热等传染性疾病的住院与其他疾病同等条件赔付 [[HS-3.4]]。'),
         L('Your 90-day waiting period ended on 23 Feb 2026, so it no longer blocks a claim [[HS-4.2]].', '您的 90 天等待期已于 2026 年 2 月 23 日结束，不再影响理赔 [[HS-4.2]]。'),

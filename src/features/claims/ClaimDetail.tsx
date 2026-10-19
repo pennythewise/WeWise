@@ -9,6 +9,7 @@ import { useClaimView } from './useClaimView';
 import { ClaimPrepare } from './ClaimPrepare';
 import { ClaimStatusBadge } from './ClaimStatusBadge';
 import { Timeline } from './Timeline';
+import { FollowUpAgent } from './ClaimAgents';
 import { policyById } from '@/mock/policies';
 import { useAgentStore } from '@/agentStore';
 
@@ -17,6 +18,7 @@ export function ClaimDetail() {
   const { t } = useTranslation();
   const { tx } = useTx();
   const status = useClaimStore((s) => s.status);
+  const replied = useClaimStore((s) => s.sentReplies.includes(id));
   const view = useClaimView(id);
   if (!view) return <EmptyState icon="file" title={t('claims.notFound')} text={t('claims.notFoundText')} />;
   if (id === 'clm_mei_001' && status === 'DRAFT') return <ClaimPrepare />;
@@ -28,7 +30,7 @@ export function ClaimDetail() {
       <CardShell>
         <div className="flex items-start justify-between gap-2"><h2 className="text-[17px] font-semibold leading-snug text-ink">{tx(claim.title)}</h2><ClaimStatusBadge status={claim.status} /></div>
         <p className="mt-1 text-xs text-muted">{pol ? tx(pol.product) : ''}</p>
-        {claim.waitingOn && <p className="mt-2"><Badge tone={claim.waitingOn === 'user' ? 'warn' : 'info'} icon="clock">{t(`claims.waitingOn.${claim.waitingOn}`)}</Badge></p>}
+        {claim.waitingOn && <p className="mt-2"><Badge tone={claim.waitingOn === 'user' && !replied ? 'warn' : 'info'} icon="clock">{t(`claims.waitingOn.${replied ? 'insurer' : claim.waitingOn}`)}</Badge></p>}
       </CardShell>
 
       {claim.decline && (
@@ -42,7 +44,8 @@ export function ClaimDetail() {
         </CardShell>
       )}
 
-      {claim.status === 'INFO_REQUESTED' && <Notice tone="warn" icon="bell">{t('claims.infoNeeded')}</Notice>}
+      {claim.status === 'INFO_REQUESTED' && !replied && <Notice tone="warn" icon="bell">{t('claims.infoNeeded')}</Notice>}
+      {claim.status === 'INFO_REQUESTED' && <FollowUpAgent claimId={claim.id} />}
       <CardShell title={t('claims.timeline')} icon="clock"><Timeline steps={timeline} current={current} /></CardShell>
     </div>
   );
