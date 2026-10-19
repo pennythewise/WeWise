@@ -16,3 +16,6 @@ __pycache__/
 .pytest_cache/
 test-results/
 *.log
+
+# Retired code kept locally only
+tobe_deleted/
