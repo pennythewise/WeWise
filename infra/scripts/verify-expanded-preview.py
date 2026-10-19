@@ -1,7 +1,7 @@
 """Repeatable expanded API acceptance using isolated synthetic workspaces.
 
-Run: python scripts/verify-expanded-preview.py http://127.0.0.1:8017
-     python scripts/verify-expanded-preview.py https://preview.example --expect-semantic --expect-tencent
+Run: python infra/scripts/verify-expanded-preview.py http://127.0.0.1:8017
+     python infra/scripts/verify-expanded-preview.py https://preview.example --expect-semantic --expect-tencent
 
 No model key is required. The script refuses a model-enabled runtime before
 chatting. It creates only synthetic fixtures, downloads real generated files,

@@ -1,8 +1,8 @@
 $ErrorActionPreference = 'Stop'
-$projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+$projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $pythonPath = Join-Path $projectRoot '.venv/Scripts/python.exe'
 $coreRoot = Join-Path $projectRoot 'backend/vendor/tencent-agent-memory/MemoryCore'
-if (-not (Test-Path -LiteralPath $coreRoot)) { throw 'Run scripts/setup-memory.ps1 first.' }
+if (-not (Test-Path -LiteralPath $coreRoot)) { throw 'Run infra/scripts/setup-memory.ps1 first.' }
 $env:TDAI_GATEWAY_CONFIG = Join-Path $projectRoot 'backend/tencent-memory.yaml'
 $env:TDAI_DATA_DIR = Join-Path $projectRoot 'backend/.data/tencent'
 $env:V3_STRICT_ISOLATION = 'true'

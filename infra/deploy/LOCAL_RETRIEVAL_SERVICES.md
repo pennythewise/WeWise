@@ -50,7 +50,7 @@ Install `backend/requirements.lock.txt` in the existing virtual environment.
 The current Sandbox uses a uv-managed environment; from `/vercel/WeWise` run
 `uv pip install --python .venv/bin/python -r backend/requirements.lock.txt`.
 After stopping only that app's own uvicorn process, run its fixed
-`deploy/ensure_backend.py`. The helper resumes MemoryCore first, enables the
+`infra/deploy/ensure_backend.py`. The helper resumes MemoryCore first, enables the
 pinned local embedding directory, and starts the backend with external models
 disabled. A healthy existing backend is left running. Its public health response
 must report the actual semantic and Tencent state before claiming activation.

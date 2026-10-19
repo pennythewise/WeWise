@@ -1,6 +1,6 @@
 """Run the executable task/attack corpus and save evidence with honest limits.
 
-Run with .venv/Scripts/python.exe eval/run.py. Provider keys and optional services
+Run with .venv/bin/python backend/eval/run.py. Provider keys and optional services
 are disabled by isolated pytest fixtures. This reports regression assertions, not
 real insurer acceptance, population-level AI accuracy or production assurance.
 """
@@ -16,7 +16,7 @@ import time
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 
@@ -43,7 +43,7 @@ class Evidence:
 def main():
     evidence = Evidence()
     started = time.perf_counter()
-    code = pytest.main([str(ROOT / "backend/tests"), "-q"], plugins=[evidence])
+    code = pytest.main([str(ROOT / "backend/tests"), "-q", "-c", str(ROOT / "backend/pytest.ini")], plugins=[evidence])
     cases = list(evidence.cases.values())
     sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, capture_output=True).stdout.strip()
     dirty = bool(subprocess.run(["git", "status", "--porcelain"], cwd=ROOT, text=True, capture_output=True).stdout.strip())
@@ -53,7 +53,7 @@ def main():
                          "Test durations include setup and do not measure user-turn latency.",
                          "Pass rate describes the named executable corpus, not general hallucination or attack resistance.",
                          "Optional integration skips are not passes. Live provider accuracy, tokens and cost remain unmeasured."]}
-    out = ROOT / "eval"
+    out = ROOT / "backend/eval"
     out.mkdir(exist_ok=True)
     (out / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     lines = ["# WeWise executable evaluation", "", f"Measured {report['checked_at']}. Base commit `{sha}`; working tree dirty: {dirty}.", "",
@@ -66,7 +66,7 @@ def main():
         folder.mkdir(exist_ok=True)
         (folder / "cases.json").write_text(json.dumps(group_cases, ensure_ascii=False, indent=2), encoding="utf-8")
     lines += ["", f"Total measured suite time: {report['duration_seconds']} seconds.", "", "## Interpretation", ""] + ["- " + value for value in report["limits"]]
-    lines += ["", "Run `python eval/run.py` to regenerate. See `docs/qa/agent-measurements-local.json` for separately measured streaming turn timings and `docs/REQUIREMENTS_STATUS.md` for feature boundaries."]
+    lines += ["", "Run `python backend/eval/run.py` to regenerate. See `docs/qa/agent-measurements-local.json` for separately measured streaming turn timings and `docs/REQUIREMENTS_STATUS.md` for feature boundaries."]
     failures = [c for c in cases if c["status"] == "failed"]
     if failures:
         lines += ["", "## Failures", ""] + [f"- `{c['id']}`" for c in failures]

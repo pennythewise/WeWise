@@ -1,5 +1,5 @@
 $ErrorActionPreference = 'Stop'
-$projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+$projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $vendorRoot = Join-Path $projectRoot 'backend/vendor/tencent-agent-memory'
 if (-not (Test-Path -LiteralPath $vendorRoot)) {
     git clone --filter=blob:none https://github.com/TencentCloud/TencentDB-Agent-Memory.git $vendorRoot
@@ -14,4 +14,4 @@ try {
     npm.cmd install --ignore-scripts --omit=dev --no-audit --no-fund
     if ($LASTEXITCODE -ne 0) { throw 'Tencent runtime install failed.' }
 } finally { Pop-Location }
-Write-Host 'Tencent standalone runtime installed. Start with scripts/start-memory.ps1.'
+Write-Host 'Tencent standalone runtime installed. Start with infra/scripts/start-memory.ps1.'

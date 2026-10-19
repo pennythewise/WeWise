@@ -26,7 +26,7 @@ test('retrieves only the provisioned sandbox and invokes the fixed backend helpe
   assert.equal(response.status, 200);
   assert.deepEqual(calls.sandbox, [{ name: 'wewise-preview', resume: true }]);
   assert.equal(calls.command[0].cmd, '/vercel/WeWise/.venv/bin/python');
-  assert.deepEqual(calls.command[0].args, ['deploy/ensure_backend.py']);
+  assert.deepEqual(calls.command[0].args, ['infra/deploy/ensure_backend.py']);
   assert.equal(calls.fetch[0].url.href, `${BACKEND}/api/health`);
 });
 

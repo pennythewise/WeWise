@@ -1,6 +1,6 @@
 # WeWise executable evaluation
 
-Measured 2026-10-19T17:59:41.538363+00:00. Base commit `69ba76cb35af632ae8e52d8917d2935a134b8017`; working tree dirty: True.
+Measured 2026-10-19T18:40:55.769250+00:00. Base commit `e426e262e020fc1d77364d5a02a7f22002874280`; working tree dirty: True.
 
 | Corpus | Passed | Failed | Skipped | Not run |
 |---|---:|---:|---:|---:|
@@ -8,7 +8,7 @@ Measured 2026-10-19T17:59:41.538363+00:00. Base commit `69ba76cb35af632ae8e52d89
 | attack | 158 | 0 | 1 | 0 |
 | support | 0 | 0 | 0 | 0 |
 
-Total measured suite time: 118.534 seconds.
+Total measured suite time: 137.775 seconds.
 
 ## Interpretation
 
@@ -17,4 +17,4 @@ Total measured suite time: 118.534 seconds.
 - Pass rate describes the named executable corpus, not general hallucination or attack resistance.
 - Optional integration skips are not passes. Live provider accuracy, tokens and cost remain unmeasured.
 
-Run `python eval/run.py` to regenerate. See `docs/qa/agent-measurements-local.json` for separately measured streaming turn timings and `docs/REQUIREMENTS_STATUS.md` for feature boundaries.
+Run `python backend/eval/run.py` to regenerate. See `docs/qa/agent-measurements-local.json` for separately measured streaming turn timings and `docs/REQUIREMENTS_STATUS.md` for feature boundaries.

@@ -39,7 +39,7 @@ export function createGateway({ getSandbox, fetchImpl = fetch, environment = pro
       const sandbox = await getSandbox({ name: SANDBOX_NAME, resume: true });
       const start = await sandbox.runCommand({
         cmd: '/vercel/WeWise/.venv/bin/python',
-        args: ['deploy/ensure_backend.py'],
+        args: ['infra/deploy/ensure_backend.py'],
         cwd: '/vercel/WeWise',
         timeoutMs: 45_000,
         env: { PUBLIC_ORIGIN: environment.PUBLIC_ORIGIN || 'https://wewise-retrieval-preview.vercel.app' },

@@ -8,7 +8,7 @@ import sys
 
 import httpx
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from backend.app.semantic_retrieval import MODEL, REVISION, WEIGHTS_SHA256, TOKENIZER_SHA256
 
 

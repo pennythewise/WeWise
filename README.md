@@ -22,22 +22,18 @@ pnpm dev        # http://localhost:5173, proxies /api to the backend on :8017
 pnpm build      # type-check + production build
 ```
 
-Evidence: `.venv/bin/python eval/run.py` runs the golden-task and attack corpora and rewrites `eval/report.md`.
+Evidence: `.venv/bin/python backend/eval/run.py` runs the golden-task and attack corpora and rewrites `backend/eval/report.md`.
 
 ## Layout
 
 | Path | Contents |
 |------|----------|
-| `src/app` | App entry, router, responsive shell (`AppShell`) |
-| `src/layout` | Phone frame, header, tab bar, side navigation, inspector pane |
-| `src/features` | Screens by area: home, policies, claims, chat, cards, capture, showcase (3D), settings, stage |
-| `src/engine` | Agent clients: scripted mock (scenarios S1–S7) and `HttpAgentClient` for the backend |
-| `backend/` | FastAPI service: auth, documents/OCR, retrieval, agent planner and tools, claims, buying |
-| `eval/`, `tests/` | Golden-task and attack corpora, evidence report, gateway tests |
-| `api/`, `server/`, `deploy/` | Serverless gateway and deployment helpers |
-| `src/mock` | Synthetic policies, claims, clauses, insurers, 3D assets |
-| `src/i18n` | English / Chinese strings |
-| `public/models` | 3D models (credits in the About screen) |
-| `01_PRD.md`, `02_TECH_SPEC.md`, `03_FRONTEND_PRD.md` | Product and frontend specs |
+| `src/` | React app: `app` shell and router, `layout` phone frame, `features` screens, `engine` agent clients and scenarios (S1–S7), `mock` synthetic data, `i18n` |
+| `public/models/` | 3D models (credits in the About screen) |
+| `backend/` | FastAPI service (`app/`), its tests (`tests/`) and the evidence suite (`eval/`) |
+| `api/` | Vercel serverless entry (must stay at the root) |
+| `infra/` | `server/` sandbox gateway, `deploy/` runtime helpers, `scripts/` tooling, `tests/` gateway tests |
+| `docs/` | PRD, tech spec and frontend PRD |
+| `tobe_deleted/` | Retired live-app UI, pending removal |
 
-`tobe_deleted/` holds the retired live-app UI, pending removal.
+Tests: `.venv/bin/python -m pytest -q -c backend/pytest.ini` · `node --test infra/tests/gateway.test.mjs`

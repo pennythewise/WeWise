@@ -1,6 +1,6 @@
 """HTTPS preview smoke using two private synthetic workspaces, never provider keys.
 
-Run with the project Python: python scripts/verify-deployed.py https://preview.example
+Run with the project Python: python infra/scripts/verify-deployed.py https://preview.example
 This creates two browser-like demo accounts and one synthetic claim, then removes
 the claim and logs out. It does not submit claims or contact an insurer/model.
 """
@@ -30,7 +30,7 @@ class Assets(HTMLParser):
 
 def main():
     if len(sys.argv) != 2:
-        raise SystemExit("Usage: python scripts/verify-deployed.py https://preview.example")
+        raise SystemExit("Usage: python infra/scripts/verify-deployed.py https://preview.example")
     base = sys.argv[1].rstrip("/")
     parsed = urlsplit(base)
     assert parsed.scheme == "https" and parsed.netloc and parsed.path in {"", "/"}, "Use the public HTTPS origin."
