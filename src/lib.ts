@@ -11,6 +11,6 @@ export const queryFlags = {
   lang: () => params().get('lang'),
   scenario: () => {
     const n = Number(params().get('scenario'));
-    return n >= 1 && n <= 6 ? n : null;
+    return n >= 1 && n <= 7 ? n : null;
   },
 };

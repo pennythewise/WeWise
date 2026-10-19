@@ -10,6 +10,7 @@ import { ClaimPrepare } from './ClaimPrepare';
 import { ClaimStatusBadge } from './ClaimStatusBadge';
 import { Timeline } from './Timeline';
 import { FollowUpAgent } from './ClaimAgents';
+import { CrossBorderClaim } from './CrossBorderClaim';
 import { policyById } from '@/mock/policies';
 import { useAgentStore } from '@/agentStore';
 
@@ -44,6 +45,7 @@ export function ClaimDetail() {
         </CardShell>
       )}
 
+      {claim.id === 'clm_mei_004' && <CrossBorderClaim />}
       {claim.status === 'INFO_REQUESTED' && !replied && <Notice tone="warn" icon="bell">{t('claims.infoNeeded')}</Notice>}
       {claim.status === 'INFO_REQUESTED' && <FollowUpAgent claimId={claim.id} />}
       <CardShell title={t('claims.timeline')} icon="clock"><Timeline steps={timeline} current={current} /></CardShell>

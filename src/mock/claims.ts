@@ -3,6 +3,13 @@ import type { Claim } from '@/engine/types';
 
 export const CLAIMS: Claim[] = [
   {
+    // S3: cross-border claim. Prepared with the agent, not yet submitted to the insurer.
+    id: 'clm_mei_004', policyId: 'pol_mei_travel_01', status: 'DRAFT', title: L('Dengue hospitalisation, Phuket (Thailand)', '登革热住院，泰国普吉'), updated: '2026-12-25', waitingOn: 'user',
+    timeline: [
+      { stage: 'SUBMITTED' }, { stage: 'DOCUMENT_REVIEW' }, { stage: 'INFO_REQUESTED' }, { stage: 'ASSESSMENT' }, { stage: 'DECISION' }, { stage: 'PAYOUT' },
+    ],
+  },
+  {
     id: 'clm_mei_001', policyId: 'pol_mei_health_01', status: 'DRAFT', title: L('Dengue hospitalisation, admitted 10 Oct', '登革热住院，10 月 10 日入院'), updated: '2026-10-14', waitingOn: 'user',
     timeline: [
       { stage: 'SUBMITTED' }, { stage: 'DOCUMENT_REVIEW' }, { stage: 'INFO_REQUESTED' }, { stage: 'ASSESSMENT' }, { stage: 'DECISION' }, { stage: 'PAYOUT' },
@@ -43,7 +50,7 @@ export interface ClaimDoc {
   sample?: { fields: DocField[]; warning?: L };
 }
 
-/** Starting checklist for the S3 claim: 3 of 5 prepared, 2 to add (PRD §6.8 "3 / 5"). */
+/** Starting checklist for the S4 claim: 3 of 5 prepared, 2 to add (PRD §6.8 "3 / 5"). */
 export const CLAIM_DOCS_TEMPLATE: ClaimDoc[] = [
   { id: 'doc_form', name: L('Claim form', '理赔申请表'), required: true, state: 'recognised', fields: [{ key: 'claimant', label: L('Claimant', '申请人'), value: 'M** L** T**' }, { key: 'policy', label: L('Policy', '保单'), value: 'HM-2025-48****91' }] },
   { id: 'doc_id', name: L('Identity document', '身份证明'), required: true, state: 'confirmed', fields: [{ key: 'name', label: L('Name', '姓名'), value: 'M** L** T**' }] },

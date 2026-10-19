@@ -32,7 +32,7 @@ export const isPrepared = (d: ClaimDoc) => d.state === 'recognised' || d.state =
 export const preparedCount = (docs: ClaimDoc[]) => docs.filter((d) => d.required && isPrepared(d)).length;
 export const requiredCount = (docs: ClaimDoc[]) => docs.filter((d) => d.required).length;
 
-/** Claim draft + status for clm_mei_001 (S3). Submitted state is a snapshot: later edits cannot change it. */
+/** Claim draft + status for clm_mei_001 (S4). Submitted state is a snapshot: later edits cannot change it. */
 export const useClaimStore = create<ClaimState>((set) => ({
   docs: fresh(), step: 1, status: 'DRAFT', waitingOn: 'user', submittedDay: null, daysAdvanced: 0, sheetOpen: false,
   setSheetOpen: (sheetOpen) => set({ sheetOpen }),

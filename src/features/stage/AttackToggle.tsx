@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useUiStore } from '@/store';
 
-/** Swaps the next turn for the adversarial variant (S4/S5) and highlights the Safety tab. */
+/** Swaps the next turn for the adversarial variant (S5/S6) and highlights the Safety tab. */
 export function AttackToggle() {
   const { t } = useTranslation();
   const { attack, setAttack, setInspectorTab } = useUiStore();

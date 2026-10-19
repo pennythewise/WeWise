@@ -5,7 +5,7 @@ import { matchRoute } from '@/app/routes';
 import type { LayoutMode } from './useBreakpoint';
 import { useUiStore } from '@/store';
 
-/** In-app header: ☰ (phone) / back, title, ⓘ (phone), and the "Concept demo" pill. */
+/** In-app header: ☰ (phone) / back, title, ⓘ (phone). */
 export function AppHeader({ mode }: { mode: LayoutMode }) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -34,12 +34,6 @@ export function AppHeader({ mode }: { mode: LayoutMode }) {
             <AppIcon name="info" />
           </button>
         )}
-      </div>
-      <div className="px-4 pb-2.5">
-        <span className="pill">
-          <AppIcon name="info" size={13} strokeWidth={2} />
-          {t('badge.concept')}
-        </span>
       </div>
     </header>
   );

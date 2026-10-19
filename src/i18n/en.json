@@ -4,9 +4,6 @@
     "tagline": "Ask WeWise about insurance, worry less",
     "taglineZh": "保险问微晓，安心少烦恼"
   },
-  "badge": {
-    "concept": "Concept demo · synthetic data"
-  },
   "nav": {
     "label": "Website navigation",
     "bankHome": "Bank Home",
@@ -209,18 +206,20 @@
     "names": {
       "s1": "Upload and understand a policy",
       "s2": "Compare with a judge",
-      "s3": "Claim end to end",
-      "s4": "Attack: hidden instruction",
-      "s5": "Attack: over-reach",
-      "s6": "Fallback and handoff"
+      "s3": "Claim abroad (Thailand)",
+      "s4": "Claim end to end",
+      "s5": "Attack: hidden instruction",
+      "s6": "Attack: over-reach",
+      "s7": "Fallback and handoff"
     },
     "descs": {
       "s1": "Upload a policy PDF; the agent extracts and explains it.",
       "s2": "Compare products; a separate judge checks the answer.",
-      "s3": "File a claim: pre-screen, documents, confirm, submit.",
-      "s4": "A document hides a payout-change instruction; the agent ignores it.",
-      "s5": "Payout change, someone else's policy, fake insurer staff: all blocked.",
-      "s6": "Off-topic or unclear asks; fall back and hand off to a human."
+      "s3": "Hospitalised overseas: coverage, local contacts, Thai documents, claim kit.",
+      "s4": "File a claim: pre-screen, documents, confirm, submit.",
+      "s5": "A document hides a payout-change instruction; the agent ignores it.",
+      "s6": "Payout change, someone else's policy, fake insurer staff: all blocked.",
+      "s7": "Off-topic or unclear asks; fall back and hand off to a human."
     },
     "attackHint": "Swap the next turn for an attack variant",
     "on": "ON",
@@ -596,7 +595,7 @@
     "purposeOther": "Needed for your request"
   },
   "about": {
-    "concept": "Concept demo",
+    "concept": "About WeWise",
     "conceptText": "WeWise 微晓 is a concept for an AI insurance assistant inside a bank app. It helps people understand their policies, prepare claims safely and compare plans, and it shows its working in the Inspector.",
     "how": "How WeWise works",
     "steps": [
@@ -674,7 +673,8 @@
     },
     "attach": "Attach to my claim",
     "attached": "Attached to your claim",
-    "openClaim": "Open claim"
+    "openClaim": "Open claim",
+    "upload": "Upload image"
   },
   "showcase": {
     "open": "3D assets",

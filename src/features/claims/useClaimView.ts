@@ -3,7 +3,7 @@ import type { Claim, TimelineStep } from '@/engine/types';
 import { claimById } from '@/mock/claims';
 import { useClaimStore } from './claimStore';
 
-/** Claim with the live state of the S3 claim (clm_mei_001) overlaid on the static fixtures. */
+/** Claim with the live state of the S4 claim (clm_mei_001) overlaid on the static fixtures. */
 export function useClaimView(id: string): { claim: Claim; timeline: TimelineStep[]; current?: TimelineStep['stage'] } | null {
   const base = claimById(id);
   const live = useClaimStore();

@@ -10,6 +10,7 @@ import { useUiStore } from '@/store';
 import { useCaptureStore } from '@/features/capture/captureStore';
 import { useMemoryStore } from '@/features/settings/memoryStore';
 import { useLocationStore } from '@/features/location/locationStore';
+import { syncCrossBorder, useCrossBorderStore } from '@/features/claims/crossBorderStore';
 import type { Locale } from '@/engine/l';
 
 export interface ChatMessage {
@@ -92,6 +93,7 @@ export const useAgentStore = create<AgentState>((set, get) => {
     set({ running: true });
     try {
       for await (const e of stream) {
+        syncCrossBorder(e);
         set((s) => ({
           events: [...s.events, e],
           messages: applyEvent(s.messages, e),
@@ -154,6 +156,7 @@ export const useAgentStore = create<AgentState>((set, get) => {
       useCaptureStore.getState().reset();
       useMemoryStore.getState().reset();
       useLocationStore.getState().reset();
+      useCrossBorderStore.getState().reset();
       set({ ...initial });
     },
   };

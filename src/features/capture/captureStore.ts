@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export interface Shot { stepId: string; ok: boolean; time: string; reason?: 'early' }
+export interface Shot { stepId: string; ok: boolean; time: string; reason?: 'early'; /** Photo for the thumbnail: a camera frame or an uploaded image. */ src?: string }
 interface S { shots: Shot[]; attached: boolean; add: (s: Shot) => void; retake: (stepId: string) => void; attach: () => void; reset: () => void }
 
 export const useCaptureStore = create<S>((set) => ({

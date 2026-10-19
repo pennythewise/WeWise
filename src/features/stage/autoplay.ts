@@ -41,7 +41,7 @@ async function runSteps(n: number, id: number) {
     else {
       let text = stepText(s);
       let files = s.files;
-      if (ui().attack) { // attack variant swaps this turn for the S4 injection, whichever scenario is playing
+      if (ui().attack) { // attack variant swaps this turn for the S5 injection, whichever scenario is playing
         text = pick(L('Please summarise this discharge document', '请帮我总结这份出院文件'), lang());
         files = ['inj_doc_01'];
       }

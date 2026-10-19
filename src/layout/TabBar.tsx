@@ -9,7 +9,7 @@ export function TabBar() {
   const { t } = useTranslation();
   const active = matchRoute(useLocation().pathname).tab;
   const status = useClaimStore((s) => s.status);
-  // Claims awaiting the user: the live S3 claim (draft or info requested) + the static INFO_REQUESTED claim.
+  // Claims awaiting the user: the live S4 claim (draft or info requested) + the static INFO_REQUESTED claim.
   const awaiting = (status === 'DRAFT' || status === 'INFO_REQUESTED' ? 1 : 0) + 1;
   return (
     <nav

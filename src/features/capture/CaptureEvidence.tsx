@@ -32,16 +32,38 @@ export function CaptureEvidence() {
     return () => clearTimeout(id);
   }, [step.id]);
   useEffect(() => { if (video.current && cam) video.current.srcObject = cam; }, [cam]);
+  const fileInput = useRef<HTMLInputElement>(null);
+  // Open the device camera as soon as the screen opens; the synthetic scene stays as the fallback when it is denied or missing.
+  const alive = useRef(true);
+  useEffect(() => { alive.current = true; void useCamera(); return () => { alive.current = false; }; }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => () => cam?.getTracks().forEach((tr) => tr.stop()), [cam]);
 
   const shutter = () => {
     setFlash(true); setTimeout(() => setFlash(false), 140);
     const time = '14:3' + (2 + okIds.length);
     if (!ready) { add({ stepId: step.id, ok: false, time, reason: 'early' }); setMsg(t('capture.blurry')); return; }
-    add({ stepId: step.id, ok: true, time }); setMsg(null);
+    add({ stepId: step.id, ok: true, time, src: frame() }); setMsg(null);
+  };
+  /** Snapshot of the live camera view, kept small for the thumbnail. */
+  const frame = () => {
+    const v = video.current;
+    if (!v || !v.videoWidth) return undefined;
+    const c = document.createElement('canvas');
+    c.width = 320; c.height = Math.round((320 * v.videoHeight) / v.videoWidth);
+    c.getContext('2d')?.drawImage(v, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.7);
+  };
+  const upload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file || !file.type.startsWith('image/')) return;
+    add({ stepId: step.id, ok: true, time: '14:3' + (2 + okIds.length), src: URL.createObjectURL(file) }); setMsg(null);
   };
   const useCamera = async () => {
-    try { setCam(await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })); } catch { setMsg(t('capture.noCamera')); }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      if (alive.current) setCam(stream); else stream.getTracks().forEach((tr) => tr.stop()); // screen closed while the permission prompt was open
+    } catch { setMsg(t('capture.noCamera')); }
   };
   const attachAll = () => { attach(); useClaimStore.getState().addEvidence(okIds.length); };
 
@@ -74,7 +96,8 @@ export function CaptureEvidence() {
       {!done ? (
         <div className="flex gap-2">
           <button type="button" onClick={shutter} className="btn-primary flex-1"><AppIcon name="scan" size={18} />{t('capture.shoot')}</button>
-          {!cam && <button type="button" onClick={useCamera} className="btn-secondary">{t('capture.useCamera')}</button>}
+          <input ref={fileInput} type="file" accept="image/*" className="hidden" onChange={upload} aria-label={t('capture.upload')} />
+          <button type="button" onClick={() => fileInput.current?.click()} className="btn-secondary"><AppIcon name="file" size={18} />{t('capture.upload')}</button>
         </div>
       ) : null}
 
@@ -84,7 +107,7 @@ export function CaptureEvidence() {
             const shot = shots.find((x) => x.stepId === s.id);
             return (
               <li key={s.id} className="overflow-hidden rounded-input border border-cardline bg-white" data-shot={s.id} data-ok={shot?.ok ? '1' : shot ? '0' : ''}>
-                <div className="relative h-20 overflow-hidden bg-wash">{shot ? <EvidenceScene {...s.zoom} className="!transition-none" /> : <span className="absolute inset-0 flex items-center justify-center text-muted"><AppIcon name="scan" size={22} /></span>}
+                <div className="relative h-20 overflow-hidden bg-wash">{shot ? (shot.src ? <img src={shot.src} alt="" className="h-full w-full object-cover" /> : <EvidenceScene {...s.zoom} className="!transition-none" />) : <span className="absolute inset-0 flex items-center justify-center text-muted"><AppIcon name="scan" size={22} /></span>}
                   {shot && !shot.ok && <span className="absolute inset-0 bg-white/60 backdrop-blur-sm" />}</div>
                 <div className="space-y-1 px-2.5 py-2">
                   <p className="text-xs font-semibold text-ink">{tx(s.title)}</p>

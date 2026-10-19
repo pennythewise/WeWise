@@ -21,6 +21,21 @@ export const ACTIONS: Record<string, { confirm: Outcome; reject: Outcome }> = {
       done(250),
     ],
   },
+  act_xb_kit: {
+    confirm: () => [
+      at(120, { type: 'understand.done', intent: 'export_claim_kit', slots: { claim: 'xb_001' }, language: 'en' }),
+      at(250, { type: 'plan.created', steps: [step('export', L('Save the kit for you', '为您保存资料包'))] }),
+      at(300, { type: 'plan.step.started', stepId: 'export' }),
+      ...tool(340, 'crossborder_kit_export', 'T3', { claim: 'xb_001', recipient: 'user_download_only', external_delivery: false }, L('Kit saved for download. Nothing sent to the insurer', '资料包已保存供下载，未发送给保险公司'), 520),
+      at(900, { type: 'plan.step.done', stepId: 'export' }),
+      at(950, { type: 'message.final', text: L('Your claim kit is ready to download. It contains the English summary, the Thai originals, the translations and a pre-filled claim form. Nothing was sent to your insurer. When you are ready, submit it through your insurer\'s official channel.', '您的理赔资料包已可下载，包含英文摘要、泰文原件、译文和预填的理赔表格。没有任何内容发送给保险公司，准备好后请通过保险公司官方渠道提交。'), chips: [{ label: L('How long will it take?', '这个需要多久？'), send: L('How long will it take?', '这个需要多久？') }] }),
+      done(1000),
+    ],
+    reject: () => [
+      at(200, { type: 'message.final', text: L('No problem. Nothing was saved or sent.', '没问题，没有保存或发送任何内容。') }),
+      done(250),
+    ],
+  },
   act_followup_send: {
     confirm: () => [
       at(120, { type: 'understand.done', intent: 'send_followup', slots: { claim: 'clm_mei_001' }, language: 'en' }),

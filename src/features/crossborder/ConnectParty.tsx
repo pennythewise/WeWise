@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCrossBorderStore } from '@/features/claims/crossBorderStore';
 import { AppIcon } from '@/components/AppIcon';
 import { Badge } from '@/components/ui';
 import { L } from '@/engine/l';
@@ -19,6 +20,8 @@ function Connected({ kind, country }: { kind: PartyKind; country: string }) {
     return () => clearTimeout(id);
   }, [n, p.steps.length]);
   const done = n >= p.steps.length;
+  // The insurer's guarantee of payment (last hospital step) also moves the cross-border claim forward.
+  useEffect(() => { if (done && p.kind === 'hospital') useCrossBorderStore.getState().mark('guarantee'); }, [done, p.kind]);
   const localText = p.reply.local[local as keyof typeof p.reply.local];
 
   return (
