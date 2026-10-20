@@ -1,3 +1,4 @@
+import { SIM_PROOFS, anchorEvents } from './chain';
 import { L } from '../l';
 import { at, chip, cid, done, step, tool, understand, type TurnScript } from '../script';
 
@@ -146,8 +147,9 @@ export const s3SubmitDone: TurnScript = {
     ...tool(340, 'claim_submit', 'T3', { claim: 'clm_mei_001', action_id: 'act_claim_submit', payout: '•••• 4821' }, L('Submitted. Reference HM-CL-70418', '已提交，受理编号 HM-CL-70418'), 700),
     at(1100, { type: 'plan.step.done', stepId: 'send' }),
     at(1150, { type: 'ui.card', card: { kind: 'ClaimStatusCard', id: cid('status'), data: { claimId: 'clm_mei_001' } } }),
-    at(1300, { type: 'message.final', text: L('Submitted. Your reference is HM-CL-70418. Materials prepared is not approval: the insurer will review it now. I\'ll tell you if they need anything.', '已提交，受理编号为 HM-CL-70418。材料齐全不等于获批，保险公司现在开始审核，如需补充材料我会通知您。'), chips: [chip(L('Why is it taking long?', '为什么这么久？'), L('Why is it taking long?', '为什么这么久？'))] }),
-    done(1350),
+    ...anchorEvents(1160, SIM_PROOFS.s4),
+    at(1500, { type: 'message.final', text: L('Submitted. Your reference is HM-CL-70418. Materials prepared is not approval: the insurer will review it now. I\'ll tell you if they need anything.', '已提交，受理编号为 HM-CL-70418。材料齐全不等于获批，保险公司现在开始审核，如需补充材料我会通知您。'), chips: [chip(L('Why is it taking long?', '为什么这么久？'), L('Why is it taking long?', '为什么这么久？'))] }),
+    done(1550),
   ],
 };
 

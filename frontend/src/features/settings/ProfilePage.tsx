@@ -107,6 +107,7 @@ export function ProfilePage() {
           </div>
         )}
         <div className="border-t border-cardline">
+          <NavRow to="/verify" icon="shield" label={t('Verify a claim package', '验证理赔资料包')} hint={t('Check a package against its on-chain fingerprint', '与链上指纹比对，确认未被篡改')} />
           <NavRow to="/memory" icon="lock" label={t('Memory and access log', '记忆与访问记录')} hint={t('What it remembers and every tool it used', '它记住了什么、调用过哪些工具')} />
         </div>
       </CardShell>

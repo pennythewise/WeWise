@@ -49,6 +49,7 @@ export interface ExtractedField {
 export interface GapRow { area: Txt; status: 'covered' | 'partial' | 'gap'; why: Txt; cite?: string }
 export interface VerdictCriterion { name: Txt; a: number; b: number }
 export interface ShareItem { id: string; label: Txt; value: Txt }
+export type ChainProofKind = 'claim_package' | 'consent' | 'audit_batch';
 export interface ReportFinding { label: Txt; value: Txt; status: 'ok' | 'watch' | 'disclose'; note?: Txt; page: number }
 
 export type Card =
@@ -71,7 +72,8 @@ export type Card =
   | { kind: 'OverlapReportCard'; id: string; data: { gig: boolean } }
   | { kind: 'SwitchCheckCard'; id: string; data: Record<string, never> }
   | { kind: 'LocationPermissionCard'; id: string; data: Record<string, never> }
-  | { kind: 'LocationSuggestCard'; id: string; data: { cityId: string } };
+  | { kind: 'LocationSuggestCard'; id: string; data: { cityId: string } }
+  | { kind: 'ChainProofCard'; id: string; data: { proofKind: ChainProofKind; network: string; contract: string; block: number; txHash: string; root: string; anchoredAt: string; title: Txt; items: Txt[]; simulated?: boolean } };
 
 export type CardKind = Card['kind'];
 

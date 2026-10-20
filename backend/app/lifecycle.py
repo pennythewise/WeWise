@@ -17,7 +17,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Upload
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, ConfigDict
 
-from . import core, documents
+from . import chain, core, documents
 
 router = APIRouter(prefix="/api", tags=["temporary ingestion and private vault"])
 KINDS = {"policy", "evidence", "medical_report", "financial_report"}
@@ -34,7 +34,9 @@ def init_db():
 
 
 def consent(db, user_id, purpose, granted, entity_id=None):
-    db.execute("INSERT INTO processing_consents VALUES(?,?,?,?,?,?)", (core.uid("cns_"), user_id, purpose, int(granted), entity_id, core.now_iso()))
+    record = {"id": core.uid("cns_"), "user_id": user_id, "purpose": purpose, "granted": int(granted), "entity_id": entity_id, "created_at": core.now_iso()}
+    db.execute("INSERT INTO processing_consents VALUES(?,?,?,?,?,?)", tuple(record.values()))
+    chain.anchor_consent(db, user_id, record["id"], record)
 
 
 def purge_expired(user_id=None):

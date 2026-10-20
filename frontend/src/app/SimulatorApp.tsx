@@ -20,6 +20,7 @@ import { ShopCategory } from '@/features/shop/ShopCategory';
 import { ShopProduct } from '@/features/shop/ShopProduct';
 import { ShopCheckout } from '@/features/shop/ShopCheckout';
 import { CoverageCheck } from '@/features/home/CoverageCheck';
+import { VerifyPage } from '@/features/verify/VerifyPage';
 
 // AppShell is the layout route; pages render inside PhoneFrame via <Outlet/>.
 export default function App() {
@@ -51,6 +52,7 @@ export default function App() {
               <Route path="/emergency" element={<EmergencyCall />} />
               <Route path="/coverage-check" element={<CoverageCheck />} />
               <Route path="/switch-check" element={<SwitchCheck />} />
+              <Route path="/verify" element={<VerifyPage />} />
               <Route path="*" element={<PortfolioHome />} />
             </Route>
           </Routes>

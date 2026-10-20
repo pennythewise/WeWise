@@ -1,6 +1,6 @@
 import type { IconName } from '@/components/AppIcon';
 
-export type ScreenKey = 'home' | 'policies' | 'policyDetail' | 'claims' | 'claimDetail' | 'ask' | 'memory' | 'profile' | 'about' | 'capture' | 'upload' | 'emergency' | 'coverageCheck' | 'switchCheck' | 'shop' | 'shopCategory' | 'shopProduct' | 'shopCheckout';
+export type ScreenKey = 'home' | 'policies' | 'policyDetail' | 'claims' | 'claimDetail' | 'ask' | 'memory' | 'profile' | 'verify' | 'about' | 'capture' | 'upload' | 'emergency' | 'coverageCheck' | 'switchCheck' | 'shop' | 'shopCategory' | 'shopProduct' | 'shopCheckout';
 
 export interface RouteMeta {
   key: ScreenKey;
@@ -32,6 +32,7 @@ export const ROUTES: RouteMeta[] = [
   { key: 'coverageCheck', path: '/coverage-check', href: '/coverage-check', prd: '§4.1 D2', parent: '/' },
   { key: 'switchCheck', path: '/switch-check', href: '/switch-check', prd: '§4.1 B5', parent: '/' },
   { key: 'profile', path: '/profile', href: '/profile', prd: '§6.11', parent: '/' },
+  { key: 'verify', path: '/verify', href: '/verify', prd: 'On-chain proofs', parent: '/claims' },
   { key: 'about', path: '/about', href: '/about', prd: '§2.4 (nav) / §15', parent: '/' },
 ];
 

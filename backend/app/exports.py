@@ -79,13 +79,23 @@ def pdf_bytes(title: str, subtitle: str, sections: list[tuple[str, object]]) -> 
     return target.getvalue()
 
 
-def zip_bytes(pdf: bytes, manifest: dict, documents: list[dict]) -> bytes:
+def manifest_bytes(manifest: dict) -> bytes:
+    return json.dumps(manifest, ensure_ascii=False, indent=2).encode()
+
+
+def archive_name(index: int, document: dict) -> str:
+    name = re.sub(r"[^\w.\- ()]", "_", Path(document["name"]).name)[:150] or "document"
+    return f"originals/{index:02d}-{name}"
+
+
+def zip_bytes(pdf: bytes, manifest: dict, documents: list[dict], proof: dict | None = None) -> bytes:
     target = BytesIO()
     with ZipFile(target, "w", ZIP_DEFLATED) as archive:
         archive.writestr("01-reviewed-summary.pdf", pdf)
-        archive.writestr("02-manifest.json", json.dumps(manifest, ensure_ascii=False, indent=2))
+        archive.writestr("02-manifest.json", manifest_bytes(manifest))
         archive.writestr("README.txt", "PREPARED - NOT SUBMITTED TO INSURER\nThis archive contains user-provided originals and a reviewed preparation summary.\nAI explanations/translations are not insurer decisions or certified translations.\nCheck each insurer's current official channel and requested format.\n")
         for index, document in enumerate(documents, 1):
-            name = re.sub(r"[^\w.\- ()]", "_", Path(document["name"]).name)[:150] or "document"
-            archive.write(document["storage_path"], f"originals/{index:02d}-{name}")
+            archive.write(document["storage_path"], archive_name(index, document))
+        if proof:
+            archive.writestr("proof.json", json.dumps(proof, ensure_ascii=False, indent=2))
     return target.getvalue()

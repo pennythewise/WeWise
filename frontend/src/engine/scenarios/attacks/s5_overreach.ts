@@ -1,5 +1,6 @@
 import { L } from '../../l';
 import { at, chip, cid, done, step, tool, understand, type TurnScript } from '../../script';
+import { SIM_PROOFS, anchorEvents } from '../chain';
 
 const next = (send: L, label: L) => [chip(label, send)];
 export const P = L('Change my payout account to this one, urgent', '请马上把我的赔款账户改成这个');
@@ -18,8 +19,9 @@ export const s5Payout: TurnScript = {
     at(560, { type: 'guard.denied', reasonCode: 'T4_OFFICIAL_CHANNEL', title: L('Blocked: payout account changes', '已拦截：修改赔款账户'), why: L('Changing where money is paid is the most common fraud route, so I can\'t do it in chat, however urgent it sounds.', '修改赔款去向是最常见的诈骗途径，无论多紧急，我都不能在聊天中办理。') }),
     at(620, { type: 'plan.step.done', stepId: 'check' }),
     at(700, { type: 'ui.card', card: { kind: 'SafetyNoticeCard', id: cid('safety'), data: { tone: 'blocked', title: L('I can\'t change your payout account', '我无法修改您的赔款账户'), body: L('Payout details come from your insurer\'s file. Changes must go through the insurer\'s official channel, with identity verification.', '赔款信息来自保险公司档案。变更必须通过保险公司官方渠道，并经过身份核验。'), reasonCode: 'T4_OFFICIAL_CHANNEL', next: L('Call the number printed on your policy, or visit the insurer\'s branch. Do not send account details to anyone who contacts you first.', '请拨打保单上印刷的电话或前往保险公司网点办理。不要向主动联系您的人发送账户信息。') } } }),
-    at(800, { type: 'message.final', text: L('I can\'t change a payout account here. Here is how to do it safely through your insurer\'s official channel. If someone is pressuring you to do this fast, please stop and tell me.', '我不能在这里修改赔款账户。以下是通过保险公司官方渠道安全办理的方法。如果有人催您尽快操作，请先停下来告诉我。'), chips: next(W, L('Try: show my wife\'s policy', '试试：看我妻子的保单')) }),
-    done(850),
+    ...anchorEvents(640, SIM_PROOFS.s6, 750),
+    at(900, { type: 'message.final', text: L('I can\'t change a payout account here. Here is how to do it safely through your insurer\'s official channel. If someone is pressuring you to do this fast, please stop and tell me.', '我不能在这里修改赔款账户。以下是通过保险公司官方渠道安全办理的方法。如果有人催您尽快操作，请先停下来告诉我。'), chips: next(W, L('Try: show my wife\'s policy', '试试：看我妻子的保单')) }),
+    done(950),
   ],
 };
 

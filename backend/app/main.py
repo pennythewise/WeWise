@@ -13,7 +13,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import core, documents, intelligence
+from . import chain, core, documents, intelligence
 from .semantic_retrieval import embedding_health
 from .jev_adapter import jev_health
 
@@ -31,6 +31,7 @@ def create_app():
     @asynccontextmanager
     async def lifespan(app):
         core.init_db()
+        chain.init_db()
         if workflows:
             workflows.init_workflow_db()
         if memory:
@@ -72,6 +73,7 @@ def create_app():
     app.include_router(core.router)
     app.include_router(documents.router)
     app.include_router(intelligence.router)
+    app.include_router(chain.router)
     if workflows:
         app.include_router(workflows.router)
     if memory:
@@ -87,6 +89,7 @@ def create_app():
                 "ocr": {"engine": "PyMuPDF text + RapidOCR CPU", "scan_page_quota": 12, "manual_fallback": True},
                 "retrieval": {"engine": "Local multilingual E5 + SQLite BM25/RRF" if semantic["configured"] else "SQLite FTS5/BM25 + multilingual lexical", "vector_embeddings": semantic["configured"], "semantic": semantic},
                 "jev": jev_health(),
+                "chain": {"mode": (os.getenv("CHAIN_MODE", "local") or "local").lower(), "on_chain_data": "salted references and SHA-256 Merkle roots only"},
                 "memory": memory.memory_health() if memory and hasattr(memory, "memory_health") else {"engine": "not_initialized"},
                 "synthetic_data_only": True,
                 "simulation_boundary": ["insurer receipts", "insurer processing timelines", "agent callback requests"],

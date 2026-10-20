@@ -21,7 +21,8 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from .core import get_db, current_user, now_iso, uid, DATA_DIR, UPLOAD_DIR, ROOT, audit
-from .exports import pdf_bytes, zip_bytes
+from .exports import archive_name, manifest_bytes, pdf_bytes, zip_bytes
+from . import chain
 from . import claims_tracker as tracking
 from .insurance_features import DOCUMENT_LABELS, requirements, incident_library, estimate_cost, comparison, match_agents, DEMO_AGENTS
 
@@ -518,6 +519,7 @@ def delete_claim(claim_id: str, confirmed: bool = Query(False), user=Depends(cur
             db.execute(f"DELETE FROM {table} WHERE claim_id=? AND user_id=?", (claim_id, user["id"]))
         db.execute("DELETE FROM workflow_actions WHERE entity_id=? AND user_id=?", (claim_id, user["id"]))
         db.execute("DELETE FROM claims WHERE id=? AND user_id=?", (claim_id, user["id"]))
+        chain.forget(db, "claim_package", claim_id)  # Erasure: the salt goes, so the on-chain root can no longer be linked to this case.
         audit(db, user["id"], "claim_and_local_packages_deleted", "claim", claim_id, {"retrieval_removed": True})
     return {"ok": True, "deleted_id": claim_id, "retrieval_removed": True, "notice": "Local case files and generated packages removed. Policy documents shared with the portfolio are retained there. No insurer submission existed to revoke."}
 
@@ -701,7 +703,11 @@ def export_claim(claim_id: str, payload: ActionConfirmation, user=Depends(curren
             if document and _doc_valid(document):
                 documents.append(dict(document))
         manifest = current | {"created_at": now_iso(), "files": [{"id": d["id"], "name": d["name"], "sha256": d["sha256"]} for d in documents]}
-        archive = zip_bytes(content, manifest, documents)
+        # Fingerprint every file in the package and anchor only the Merkle root (no claim data leaves the store).
+        files = [("01-reviewed-summary.pdf", hashlib.sha256(content).hexdigest()), ("02-manifest.json", hashlib.sha256(manifest_bytes(manifest)).hexdigest())]
+        files += [(archive_name(i, d), d["sha256"]) for i, d in enumerate(documents, 1)]
+        proof = chain.anchor_package(db, user["id"], claim_id, files)
+        archive = zip_bytes(content, manifest, documents, proof)
         pdf_path.write_bytes(content)
         zip_path.write_bytes(archive)
         db.execute("INSERT INTO workflow_exports VALUES(?,?,?,?,?,?,?,?,?,?)", (export_id, user["id"], claim_id, token["action"], current["mode"], str(pdf_path), str(zip_path), _json(manifest), hashlib.sha256(content).hexdigest(), now_iso()))
@@ -709,7 +715,8 @@ def export_claim(claim_id: str, payload: ActionConfirmation, user=Depends(curren
         if current["mode"] == "prepared":
             db.execute("UPDATE claims SET status='PREPARED_NOT_SUBMITTED',updated_at=? WHERE id=? AND user_id=?", (now_iso(), claim_id, user["id"]))
         audit(db, user["id"], "claim_package_exported_not_submitted", "claim", claim_id, {"export_id": export_id, "mode": current["mode"], "document_count": len(documents)})
-    return {"export_id": export_id, "pdf_url": f"/api/exports/{export_id}/pdf", "zip_url": f"/api/exports/{export_id}/zip", "actual_status": "PREPARED_NOT_SUBMITTED" if current["mode"] == "prepared" else "DRAFT", "mode": current["mode"], "submitted": False, "recipient": "User download only", "sha256": hashlib.sha256(content).hexdigest()}
+    return {"export_id": export_id, "pdf_url": f"/api/exports/{export_id}/pdf", "zip_url": f"/api/exports/{export_id}/zip", "actual_status": "PREPARED_NOT_SUBMITTED" if current["mode"] == "prepared" else "DRAFT", "mode": current["mode"], "submitted": False, "recipient": "User download only", "sha256": hashlib.sha256(content).hexdigest(),
+            "proof": {k: proof[k] for k in ("root", "status", "network", "contract", "real_chain", "tx_hash", "block", "version", "anchored_at") if k in proof} if proof else None}
 
 
 @router.get("/exports/{export_id}/{format}")

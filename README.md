@@ -26,6 +26,7 @@ WeWise is a customer-side AI insurance assistant. It consolidates a person's pol
 3. **No money tools.** There is no transfer, payout, refund or premium-payment function anywhere in the codebase.
 4. **Every claim is sourced.** A coverage statement carries a clause id, page and verbatim quote, or the assistant says it is not sure and offers a human.
 5. **Customer-side and neutral.** WeWise does not underwrite and does not sell insurance. It prepares the customer and hands off to a licensed agent with consent.
+6. **Provable, not just logged.** Claim packages, consent records and the agent's audit trail are fingerprinted and anchored on-chain, so the customer and the insurer can both check that nothing was changed. Only salted hashes go on-chain.
 
 ---
 
@@ -100,7 +101,7 @@ The UI and engine share one contract: a typed stream of events (`turn.started`, 
 
 - **Pre-screen.** Waiting-period and inception date arithmetic, exclusion matching and limit checks produce *likely covered / likely excluded / uncertain*, with clause citations and the information still missing.
 - **Checklist and preparation tracker.** Policy requirements are translated into a per-claim document checklist; each upload runs through OCR and extraction, and the user confirms the fields. The tracker records outstanding tasks and next steps.
-- **Claim package.** Private, source-labelled PDF and ZIP exports, served only through owner-scoped routes.
+- **Claim package.** Private, source-labelled PDF and ZIP exports, served only through owner-scoped routes. Each ZIP carries a `proof.json` whose Merkle root is anchored on-chain (see below).
 - **Insurer state machine.** An isolated, separately labelled FSM (submitted → document review → info requested → assessment → decision → payout) driven by a **controllable clock**, so timelines are reproducible. Notifications are generated from state transitions, with plain-language explanations of delays and next steps.
 - **Evidence capture.** Guided multi-photo capture with a 3D orientation guide (React Three Fiber) that links scene evidence to the claim checklist.
 - **Cross-border kit.** Policy facts in the local language, local emergency numbers, a bilingual incident report and a flow to connect the other party.
@@ -126,6 +127,32 @@ Your personal shopper for insurance: it knows what you already own, so it shows 
 - **Generative rendering.** Assistant text streams token by token (Latin words, CJK character pairs, citation markers kept atomic). Cards are built by a DOM-level reveal wrapper that types text in reading order and un-hides visual elements as the stream reaches them, so no card needs bespoke animation code. Both respect reduced-motion and stage speed.
 - **State** in small Zustand stores (agent, claims, cross-border, memory, location, extraction, capture, shop, typing). **i18n** with i18next (Chinese and English, switchable live). **3D** asset showcase and evidence guide with React Three Fiber.
 - **Adaptive layout.** One app, three modes (phone, tablet, showcase), the app column never wider than 430 px, with an optional stage panel for demos.
+
+---
+
+## On-chain proofs (FISCO BCOS)
+
+WeWise sits between two parties that do not fully trust each other: the customer and the insurer. Neither should have to trust WeWise's own database, so the facts that matter are anchored on a shared ledger.
+
+| Proof | When it is anchored | What goes on-chain |
+|---|---|---|
+| **Claim package** | The user confirms a package export | Merkle root over every file in the ZIP (summary PDF, manifest, originals) |
+| **Consent record** | Any consent is granted or withdrawn (save a document, memory, sharing) | Hash of the consent record |
+| **Agent audit seal** | The user seals a session | Merkle root over the user's audit log, including every blocked tool call |
+
+- **Only hashes.** Each entry is a salted reference, a SHA-256 root, a kind and a time. No names, policy numbers, amounts or files. Deleting a case deletes its salt, so the on-chain entry can no longer be linked to it.
+- **No money, no model authority.** `ProofRegistry.sol` has no payable or transfer function. Anchoring is a deterministic side effect of a user-confirmed action; the model has no chain tool.
+- **Anyone can verify.** `/verify` (and `POST /api/verify`) takes an exported ZIP, recomputes every file hash and the Merkle root, and checks the ledger. Changing one byte, adding or removing a file, or forging `proof.json` fails. Older exports are flagged when a newer version exists.
+- **Tamper-evident agent.** `GET /api/chain/audit/verify` recomputes sealed audit roots, so a rewritten log row is detected.
+- **Domain-separated Merkle tree.** Leaves are `H(0x00‖sha256)`, nodes `H(0x01‖left‖right)`, which prevents second-preimage forgeries.
+
+| `CHAIN_MODE` | Ledger |
+|---|---|
+| `local` (default) | Append-only, hash-linked ledger in SQLite, clearly labelled **Local dev ledger** |
+| `evm` | `backend/contracts/ProofRegistry.sol` over JSON-RPC: FISCO BCOS (web3-compatible RPC), Hardhat or Anvil. Deploy with `backend/contracts/deploy.py`; bytecode targets the `paris` EVM for consortium-chain compatibility |
+| `off` | No anchoring |
+
+The S1–S7 simulations show the same proofs with fixed, labelled demo values. Tests run the compiled contract on an in-process EVM (`backend/tests/test_chain.py`). The design and roadmap (WeIdentity credentials, oracle attestations) are in `docs/onchainplan.md`.
 
 ---
 
@@ -232,12 +259,14 @@ pnpm build        # type-check + production build
 | `WEWISE_EMBEDDING_DIR` | Local multilingual E5 embeddings, installed by the operator |
 | `TENCENT_MEMORY_URL`, `TDAI_GATEWAY_API_KEY` | Optional private Tencent MemoryCore sidecar |
 | `TYPESAFE_API_KEY`, `TYPESAFE_MODEL` | Optional TypeSafe JEV adapter (advisory only) |
+| `CHAIN_MODE`, `CHAIN_RPC_URL`, `CHAIN_CONTRACT`, `CHAIN_SUBMITTER_KEY`, `CHAIN_NETWORK` | On-chain proofs: `local` (default), `evm` (FISCO BCOS / any EVM RPC) or `off`. `evm` needs `backend/requirements-chain.txt` |
 
 </details>
 
 ## Tests
 
 ```bash
+.venv/bin/pip install -r backend/requirements-chain.txt  # optional: runs the ProofRegistry contract tests on an in-process EVM
 .venv/bin/python -m pytest -q -c backend/pytest.ini     # backend functional and attack tests
 node --test infra/tests/gateway.test.mjs                # gateway boundary tests
 pnpm --dir frontend build                               # TypeScript + production build
@@ -251,11 +280,12 @@ CI (`.github/workflows/verify.yml`) runs all of the above on every push to `main
 | Path | Contents |
 |---|---|
 | `frontend/` | React 18, Vite, TypeScript, Tailwind. `src/app` router and shell · `src/layout` phone frame and tab bar · `src/features` screens (`home`, `shop`, `policies`, `claims`, `chat`, `cards`, `capture`, `crossborder`, `location`, `switch`, `settings`, `showcase`, `inspector`, `stage`) · `src/engine` agent clients, scenarios, types · `src/mock` synthetic data, shop catalogue and compare logic · `src/i18n` Chinese and English |
-| `backend/app` | `core` identity and storage · `documents`, `document_analysis` ingestion and review · `intelligence`, `semantic_retrieval` retrieval · `agent_foundation` planner and 34 gated tools · `workflows`, `claims_tracker` claims and insurer FSM · `lifecycle` temporary uploads and vault · `memory` · `exports` · `insurance_features` · `jev_adapter` |
+| `backend/app` | `core` identity and storage · `documents`, `document_analysis` ingestion and review · `intelligence`, `semantic_retrieval` retrieval · `agent_foundation` planner and 34 gated tools · `workflows`, `claims_tracker` claims and insurer FSM · `lifecycle` temporary uploads and vault · `memory` · `exports` · `chain` on-chain proofs and public verification · `insurance_features` · `jev_adapter` |
+| `backend/contracts` | `ProofRegistry.sol`, compiled ABI and bytecode, `deploy.py` |
 | `backend/tests`, `backend/eval` | Pytest suite, golden-task and attack corpora, evaluation runner and report |
 | `api/gateway.mjs` | Vercel serverless entry (stays at the repo root with `package.json`) |
 | `infra/` | Sandbox gateway, deploy helpers, tooling scripts and gateway tests |
-| `docs/` | `01_PRD.md` product requirements · `02_TECH_SPEC.md` backend and agent · `03_FRONTEND_PRD.md` frontend |
+| `docs/` | `01_PRD.md` product requirements · `02_TECH_SPEC.md` backend and agent · `03_FRONTEND_PRD.md` frontend · `onchainplan.md` on-chain design |
 
 **Deployment.** The static frontend is served by Vercel and `/api/*` is routed through `api/gateway.mjs` to the FastAPI backend inside a named Vercel Sandbox (port 8017 only). The gateway restricts hosts, methods and body size, and private retrieval services stay inside the sandbox. Details: `infra/deploy/LOCAL_RETRIEVAL_SERVICES.md`.
 

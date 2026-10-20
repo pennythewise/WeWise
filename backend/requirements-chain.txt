@@ -1,0 +1,5 @@
+# Optional: only needed for CHAIN_MODE=evm (FISCO BCOS web3 RPC, Hardhat, Anvil) and the contract tests.
+# CHAIN_MODE=local (default) needs nothing beyond requirements.txt.
+web3==7.6.0
+eth-tester==0.12.1b1
+py-evm==0.10.1b2

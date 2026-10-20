@@ -77,6 +77,10 @@
       "title": "Ask WeWise",
       "desc": "Chat with the assistant: cited answers, cards, quick replies and a composer."
     },
+    "verify": {
+      "title": "Verify a package",
+      "desc": "Check an exported claim package against its on-chain fingerprint. No account needed."
+    },
     "profile": {
       "title": "Profile",
       "desc": "Account, assistant permissions, notifications and privacy."

@@ -1,6 +1,19 @@
 # WeWise On-Chain Plan: Verifiable Claims Ledger
 
-Status: proposal · Owner: WeWise team · Target: FinTechathon 2026 International Track, Topic D (Insurance Assistant), on-chain challenge bonus (0–5 pts)
+Status: P0 implemented, F2 and F3 implemented early · Owner: WeWise team · Target: FinTechathon 2026 International Track, Topic D (Insurance Assistant), on-chain challenge bonus (0–5 pts)
+
+### Implementation status (20 Oct 2026)
+
+| Item | Status | Where |
+|---|---|---|
+| F1 Claim package anchor + `proof.json` + public verify | Done | `backend/app/chain.py`, `workflows.export_claim`, `/verify` page |
+| F2 Agent audit seal + integrity check | Done (API) | `POST /api/chain/audit/seal`, `GET /api/chain/audit/verify` |
+| F3 Consent ledger | Done | `lifecycle.consent()` anchors every grant or withdrawal |
+| Contract | Done. **One** `ProofRegistry.sol` with a `kind` field replaces the three contracts sketched in §5.2 | `backend/contracts/` |
+| `CHAIN_MODE=local` | Done, tested | hash-linked SQLite ledger, labelled "Local dev ledger" |
+| `CHAIN_MODE=evm` | Done, tested on an in-process EVM (py-evm) and against a Hardhat JSON-RPC node | **Not yet run against a FISCO BCOS node** (P1) |
+| S1–S7 simulations | Done, with fixed demo values labelled "Simulation" | `frontend/src/engine/scenarios/chain.ts` |
+| F4 WeIdentity VC, F5 oracle attestation, FISCO node script | Not started (P2/P1) | |
 
 ---
 
