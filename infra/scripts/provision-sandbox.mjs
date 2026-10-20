@@ -30,11 +30,11 @@ try {
 }
 
 await run(sandbox, 'Directories and system libraries',
-  'mkdir -p /vercel/WeWise /vercel/wewise-data && chown -R vercel-sandbox:vercel-sandbox /vercel/WeWise /vercel/wewise-data 2>/dev/null || chmod 777 /vercel/WeWise /vercel/wewise-data; '
+  'mkdir -p /vercel/WeWise /vercel/wewise-data && chown -R "${SUDO_USER:-vercel-sandbox}" /vercel/WeWise /vercel/wewise-data; '
   + '(command -v dnf >/dev/null && dnf install -y -q git mesa-libGL glib2 >/dev/null) || (command -v apt-get >/dev/null && apt-get update -qq && apt-get install -y -qq git libgl1 libglib2.0-0 >/dev/null) || true',
   { sudo: true });
 await run(sandbox, `Checkout ${revision}`,
-  `cd /vercel/WeWise && if [ -d .git ]; then git fetch -q --depth 1 origin ${revision} && git checkout -q -f FETCH_HEAD; else git clone -q --depth 1 --branch ${revision} ${REPO} . ; fi && git log --oneline -1`);
+  `git config --global --add safe.directory /vercel/WeWise; cd /vercel/WeWise && if [ -d .git ]; then git fetch -q --depth 1 origin ${revision} && git checkout -q -f FETCH_HEAD; else git clone -q --depth 1 --branch ${revision} ${REPO} . ; fi && git log --oneline -1`);
 await run(sandbox, 'Python 3.11 environment and dependencies',
   'export PATH="$HOME/.local/bin:$PATH"; command -v uv >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh >/dev/null; '
   + 'cd /vercel/WeWise && uv python install -q 3.11 && ([ -x .venv/bin/python ] || uv venv -q --python 3.11 .venv) && '
