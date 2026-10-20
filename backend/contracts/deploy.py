@@ -18,6 +18,8 @@ BUILD = Path(__file__).resolve().parent / "build" / "ProofRegistry.json"
 
 def main():
     w3 = Web3(Web3.HTTPProvider(os.environ["CHAIN_RPC_URL"], request_kwargs={"timeout": 30}))
+    if w3.eth.chain_id in {1, 10, 56, 137, 8453, 42161}:
+        raise SystemExit("Refusing to deploy on a mainnet with real funds. Use a testnet or a consortium chain.")
     account = w3.eth.account.from_key(os.environ["CHAIN_SUBMITTER_KEY"])
     build = json.loads(BUILD.read_text())
     factory = w3.eth.contract(abi=build["abi"], bytecode=build["bytecode"])

@@ -11,7 +11,7 @@ Status: P0 implemented, F2 and F3 implemented early · Owner: WeWise team · Tar
 | F3 Consent ledger | Done | `lifecycle.consent()` anchors every grant or withdrawal |
 | Contract | Done. **One** `ProofRegistry.sol` with a `kind` field replaces the three contracts sketched in §5.2 | `backend/contracts/` |
 | `CHAIN_MODE=local` | Done, tested | hash-linked SQLite ledger, labelled "Local dev ledger" |
-| `CHAIN_MODE=evm` | Done, tested on an in-process EVM (py-evm) and against a Hardhat JSON-RPC node | **Not yet run against a FISCO BCOS node** (P1) |
+| `CHAIN_MODE=evm` | Done, tested on an in-process EVM (py-evm), a Hardhat node, and **live on Ethereum Sepolia** (contract `0x32d87197Ebccb47e8B5D46677Df5db4672A515D7`) | **Not yet run against a FISCO BCOS node** (P1) |
 | S1–S7 simulations | Done, with fixed demo values labelled "Simulation" | `frontend/src/engine/scenarios/chain.ts` |
 | F4 WeIdentity VC, F5 oracle attestation, FISCO node script | Not started (P2/P1) | |
 

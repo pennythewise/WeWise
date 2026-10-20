@@ -716,7 +716,7 @@ def export_claim(claim_id: str, payload: ActionConfirmation, user=Depends(curren
             db.execute("UPDATE claims SET status='PREPARED_NOT_SUBMITTED',updated_at=? WHERE id=? AND user_id=?", (now_iso(), claim_id, user["id"]))
         audit(db, user["id"], "claim_package_exported_not_submitted", "claim", claim_id, {"export_id": export_id, "mode": current["mode"], "document_count": len(documents)})
     return {"export_id": export_id, "pdf_url": f"/api/exports/{export_id}/pdf", "zip_url": f"/api/exports/{export_id}/zip", "actual_status": "PREPARED_NOT_SUBMITTED" if current["mode"] == "prepared" else "DRAFT", "mode": current["mode"], "submitted": False, "recipient": "User download only", "sha256": hashlib.sha256(content).hexdigest(),
-            "proof": {k: proof[k] for k in ("root", "status", "network", "contract", "real_chain", "tx_hash", "block", "version", "anchored_at") if k in proof} if proof else None}
+            "proof": {k: proof[k] for k in ("root", "status", "network", "contract", "real_chain", "tx_hash", "block", "version", "anchored_at", "explorer_tx", "explorer_contract") if k in proof} if proof else None}
 
 
 @router.get("/exports/{export_id}/{format}")

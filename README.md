@@ -152,6 +152,8 @@ WeWise sits between two parties that do not fully trust each other: the customer
 | `evm` | `backend/contracts/ProofRegistry.sol` over JSON-RPC: FISCO BCOS (web3-compatible RPC), Hardhat or Anvil. Deploy with `backend/contracts/deploy.py`; bytecode targets the `paris` EVM for consortium-chain compatibility |
 | `off` | No anchoring |
 
+**Live deployment.** `ProofRegistry` is deployed on Ethereum Sepolia (testnet) at [`0x32d87197Ebccb47e8B5D46677Df5db4672A515D7`](https://sepolia.etherscan.io/address/0x32d87197Ebccb47e8B5D46677Df5db4672A515D7). First anchored claim package: [tx `0x1c29…6930`](https://sepolia.etherscan.io/tx/0x1c29b59b4e4f15cec76401c7cab7ef8652de012144557e5e96edaabe8e326930). Start the backend with `--env-file .env` to use it. The ledger refuses to run against mainnets with real funds.
+
 The S1–S7 simulations show the same proofs with fixed, labelled demo values. Tests run the compiled contract on an in-process EVM (`backend/tests/test_chain.py`). The design and roadmap (WeIdentity credentials, oracle attestations) are in `docs/onchainplan.md`.
 
 ---
@@ -235,7 +237,7 @@ Requires Node 24 with pnpm 11, and Python 3.11 or newer.
 python3.11 -m venv .venv
 .venv/bin/pip install -r backend/requirements.txt
 WEWISE_RETRIEVAL_ONLY=1 WEWISE_SEED_DEMO=1 \
-  .venv/bin/python -m uvicorn backend.app.main:app --port 8017
+  .venv/bin/python -m uvicorn backend.app.main:app --port 8017 --env-file .env
 
 # Frontend
 cd frontend

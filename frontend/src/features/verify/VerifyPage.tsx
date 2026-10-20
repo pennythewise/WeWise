@@ -10,9 +10,9 @@ type Verdict = 'verified' | 'verified_older_version' | 'tampered' | 'not_anchore
 interface FileCheck { path: string; status: 'ok' | 'changed' | 'missing' }
 interface Result {
   verdict: Verdict; files?: FileCheck[]; unlisted?: string[]; computed_root?: string; network?: string; real_chain?: boolean;
-  ledger?: { found: boolean; version: number; latest: number; block?: number; tx_hash?: string; anchored_at?: string }; detail?: string; sample?: boolean;
+  ledger?: { found: boolean; version: number; latest: number; block?: number; tx_hash?: string; anchored_at?: string; explorer_tx?: string }; detail?: string; sample?: boolean;
 }
-interface Status { mode: string; network?: string; contract?: string; height?: number; head?: string; integrity?: string; real_chain?: boolean; live: boolean }
+interface Status { mode: string; network?: string; contract?: string; height?: number; head?: string; integrity?: string; real_chain?: boolean; explorer_contract?: string; live: boolean }
 
 const VERDICT: Record<Verdict, { tone: Tone; label: L; body: L }> = {
   verified: { tone: 'ok', label: L('Verified', '验证通过'), body: L('Every file matches the fingerprint anchored on-chain. Nothing was changed after export.', '每个文件都与链上存证的指纹一致，导出后未被改动。') },
@@ -120,6 +120,9 @@ export function VerifyPage() {
               <dt className="text-muted">{t('Version', '版本')}</dt><dd className="text-ink">{result.ledger.found ? `${result.ledger.version} / ${result.ledger.latest}` : `— / ${result.ledger.latest}`}</dd>
             </dl>
           )}
+          {result.ledger?.explorer_tx && (
+            <a href={result.ledger.explorer_tx} target="_blank" rel="noreferrer" className="btn-secondary btn-compact mt-3 w-full">{t('View the transaction on the block explorer', '在区块浏览器查看交易')}</a>
+          )}
           <p className="mt-3 text-xs text-muted">{t('This checks integrity only. It is not an insurer receipt, approval or payment.', '此处只验证完整性，不代表保险公司已受理、批准或付款。')}</p>
         </CardShell>
       )}
@@ -136,6 +139,9 @@ export function VerifyPage() {
           {status.live && !status.real_chain && <Badge tone="warn" icon="info">{t('Local dev ledger', '本地开发账本')}</Badge>}
           {status.live && status.real_chain && <Badge tone="ok">{t('Live chain', '真实链')}</Badge>}
         </div>
+        {status.explorer_contract && (
+          <a href={status.explorer_contract} target="_blank" rel="noreferrer" className="btn-secondary btn-compact mt-3 w-full">{t('Open the contract on the block explorer', '在区块浏览器查看合约')}</a>
+        )}
         <ul className="mt-3 space-y-1 text-xs text-body">
           <li>✓ {t('On-chain: salted reference, SHA-256 Merkle root, kind, time', '链上：加盐引用、SHA-256 默克尔根、类型、时间')}</li>
           <li>✗ {t('Never on-chain: names, policy numbers, amounts, documents, contact details, money', '绝不上链：姓名、保单号、金额、文件、联系方式、资金')}</li>

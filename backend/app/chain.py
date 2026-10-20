@@ -31,6 +31,7 @@ SCHEMA = "wewise.proof/1"
 CONTRACT_BUILD = Path(__file__).resolve().parents[1] / "contracts" / "build" / "ProofRegistry.json"
 ARCHIVE_EXEMPT = {"README.txt", "proof.json"}
 MAX_ENTRIES, MAX_UNCOMPRESSED = 300, 64 * 1024 * 1024
+MAINNETS = {1, 10, 56, 137, 8453, 42161}  # Ethereum, Optimism, BNB, Polygon, Base, Arbitrum: never spend real funds
 _verify_limits: dict[str, list[float]] = {}
 
 
@@ -152,6 +153,9 @@ class EvmLedger:
     def __init__(self, w3=None, address: str | None = None, key: str | None = None, network: str | None = None):
         from web3 import Web3
         self.w3 = w3 or Web3(Web3.HTTPProvider(os.environ["CHAIN_RPC_URL"], request_kwargs={"timeout": 15}))
+        if self.w3.eth.chain_id in MAINNETS:
+            raise RuntimeError("Refusing to anchor on a mainnet with real funds. Use a testnet or a consortium chain.")
+        self.explorer = os.getenv("CHAIN_EXPLORER_URL", "").rstrip("/")
         build = json.loads(CONTRACT_BUILD.read_text())
         self.contract_obj = self.w3.eth.contract(address=Web3.to_checksum_address(address or os.environ["CHAIN_CONTRACT"]), abi=build["abi"])
         self.contract = self.contract_obj.address
@@ -169,7 +173,13 @@ class EvmLedger:
         if receipt["status"] != 1:
             raise RuntimeError("Anchor transaction reverted.")
         event = self.contract_obj.events.Anchored().process_receipt(receipt)[0]["args"]
-        return {"tx_hash": receipt["transactionHash"].to_0x_hex(), "block": receipt["blockNumber"], "version": event["version"], "anchored_at": core.now_iso()}
+        tx_hex = receipt["transactionHash"].to_0x_hex()
+        return {"tx_hash": tx_hex, "block": receipt["blockNumber"], "version": event["version"], "anchored_at": core.now_iso()} | self.links(tx_hex)
+
+    def links(self, tx_hash: str | None = None) -> dict:
+        if not self.explorer:
+            return {}
+        return {"explorer_contract": f"{self.explorer}/address/{self.contract}"} | ({"explorer_tx": f"{self.explorer}/tx/{tx_hash}"} if tx_hash else {})
 
     def verify(self, db, ref: str, root: str) -> dict:
         found, version, latest = self.contract_obj.functions.verify(bytes.fromhex(ref), bytes.fromhex(root)).call()
@@ -177,11 +187,11 @@ class EvmLedger:
         if found:
             proof = self.contract_obj.functions.proofAt(bytes.fromhex(ref), version).call()
             row = db.execute("SELECT tx_hash,block FROM chain_proofs WHERE ref=? AND root=? AND status='anchored' LIMIT 1", (ref, root)).fetchone()
-            result |= {"anchored_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(proof[2])), "tx_hash": row["tx_hash"] if row else None, "block": row["block"] if row else None}
+            result |= {"anchored_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(proof[2])), "tx_hash": row["tx_hash"] if row else None, "block": row["block"] if row else None} | self.links(row["tx_hash"] if row else None)
         return result
 
     def status(self, db) -> dict:
-        return {"height": self.w3.eth.block_number, "head": self.w3.eth.get_block("latest")["hash"].to_0x_hex(), "integrity": "consensus", "recent": []}
+        return {"height": self.w3.eth.block_number, "head": self.w3.eth.get_block("latest")["hash"].to_0x_hex(), "integrity": "consensus", "recent": []} | self.links()
 
 
 _ledger = None

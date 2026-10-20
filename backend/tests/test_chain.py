@@ -224,3 +224,12 @@ def test_evm_mode_runs_the_whole_export_flow(evm, workflow_client, monkeypatch):
     assert body["proof"]["real_chain"] is True and body["proof"]["tx_hash"].startswith("0x")
     result = verify(workflow_client, data)
     assert result["verdict"] == "verified" and result["real_chain"] is True
+
+
+def test_evm_ledger_refuses_mainnets():
+    class FakeEth:
+        chain_id = 1
+    class FakeW3:
+        eth = FakeEth()
+    with pytest.raises(RuntimeError, match="mainnet"):
+        chain.EvmLedger(w3=FakeW3(), address="0x" + "11" * 20)
