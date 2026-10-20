@@ -1,6 +1,6 @@
-# 06 · Execution evidence — S3 claim and AR evidence capture
+# 06 · Execution evidence — S4 claim end to end and AR evidence capture
 
-Simulated-account / sandbox operation logs for the claim journey shown in the demo video, recorded against the real
+Simulated-account / sandbox operation logs for the claim journey shown in the S4 and AR demo videos, recorded against the real
 FastAPI backend running in retrieval-only sandbox mode. Recorded **2026-10-20 07:10 UTC** on base commit `a4a3092`
 plus the guard fix in this change.
 
@@ -23,22 +23,22 @@ plus the guard fix in this change.
 - **Simulated:** both accounts are synthetic demo workspaces; the insurer is a state machine with a controllable clock
   (receipts are prefixed `SIM-`); no model key, insurer, phone line or payment rail is contacted (`/api/health`,
   first line of the log).
-- **The demo video** uses the guided simulator (labelled "preset conversations" on screen) so it plays the same way
-  every take. The Thailand storyline is scripted UI data. The backend sandbox verifies Japan contacts only, so these logs
-  run the same pipeline on the seeded synthetic Japan-trip policy (Tokyo, inpatient).
+- **The demo videos** use the guided simulator (labelled "preset conversations" on screen) so they play the same way
+  every take; the S4 dengue claim and the AR car photos are scripted UI data (the AR photos are AI-generated, fictional).
+  These logs run the same claim pipeline on the backend's seeded synthetic policy (inpatient case).
 
 ## How the video maps to the logs
 
-| Video moment (S3 + AR) | Log phase | What the log proves |
+| Video moment (S4 + AR) | Log phase | What the log proves |
 |---|---|---|
-| "I'm in hospital… am I covered?" | 2 | Plan → policy tools → answer with citations; each quote verified verbatim on its source page (`traces/007-coverage.json`) |
-| "What should I do right now?" / call screen | 2 | Emergency turn streamed as NDJSON (`stream-emergency.ndjson`), skips insurance questions, returns reviewed contacts |
-| Claim tab fills in | 3 | Claim case opens at `INCIDENT_REVIEWED`; submitting an incomplete claim is refused (409) |
-| AR guide: 4 guided shots → "Attach to my claim" | 4 | 4 shots uploaded, fingerprinted (sha256) and confirmed by the user as claim evidence |
-| Thai bill + discharge note read, date corrected | 5 | Documents OCR'd and user-confirmed; a document hiding a payout instruction is **quarantined** and never linked |
-| "Prepare my claim kit" → confirm | 6 | Agent stops at `awaiting_confirmation`; unconfirmed, replayed and cross-account tokens all refused; real PDF/ZIP exported for **download only** |
-| "How long will it take?" | 7 | Simulated insurer: illegal jump to PAID refused, clock +3 days → `INFO_REQUESTED`, plain-language "waiting on you" |
-| (S6 in the video) attacks | 8 | Payout change, wife's policy, fake insurer staff: blocked before any tool runs; T2 tool via read adapter → 403 |
+| S4 "I was admitted…" → pre-screen with clauses | 2 | Plan → policy tools → answer with citations; each quote verified verbatim on its source page (`traces/007-coverage.json`) |
+| Claim opens, checklist | 3 | Claim case opens at `INCIDENT_REVIEWED`; submitting an incomplete claim is refused (409) |
+| AR video: 4 guided shots → "Attach to my claim" | 4 | 4 shots uploaded, fingerprinted (sha256) and confirmed by the user as claim evidence |
+| S4 discharge summary + bill read, date corrected, all confirmed | 5 | Documents OCR'd and user-confirmed; a document hiding a payout instruction is **quarantined** and never linked |
+| S4 review and confirm | 6 | Agent stops at `awaiting_confirmation`; unconfirmed, replayed and cross-account tokens all refused; real PDF/ZIP exported for **download only** |
+| S4 submitted → +3 days → "Why is it taking long?" | 7 | Simulated insurer: idempotent receipt, illegal jump to PAID refused, clock +3 days → `INFO_REQUESTED`, plain-language "waiting on you" |
+| S6 attacks (teammate's video) | 8 | Payout change, wife's policy, fake insurer staff: blocked before any tool runs; T2 tool via read adapter → 403 |
+| Urgent help / call screen | 2 | Emergency turn streamed as NDJSON (`stream-emergency.ndjson`), skips insurance questions, returns reviewed contacts |
 
 ## Files
 
