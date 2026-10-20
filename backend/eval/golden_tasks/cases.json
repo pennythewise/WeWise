@@ -3,996 +3,1014 @@
     "id": "tests/test_acceptance_edges.py::test_unconfirmed_upload_does_not_hide_current_cover_gap",
     "group": "task",
     "status": "passed",
-    "seconds": 0.41537899999821093
+    "seconds": 0.7605583660001685
   },
   {
     "id": "tests/test_acceptance_edges.py::test_reviewed_out_of_period_policy_does_not_hide_current_cover_gap[expired]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.3916692079947097
+    "seconds": 0.7447606619998624
   },
   {
     "id": "tests/test_acceptance_edges.py::test_reviewed_out_of_period_policy_does_not_hide_current_cover_gap[future]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4050055839907145
+    "seconds": 0.7108917720001955
   },
   {
     "id": "tests/test_acceptance_edges.py::test_overlap_uses_reviewed_current_policies_and_keeps_unreviewed_cards",
     "group": "task",
     "status": "passed",
-    "seconds": 0.40537749900249764
+    "seconds": 0.7148671699997067
   },
   {
     "id": "tests/test_acceptance_edges.py::test_portfolio_and_renewal_use_china_calendar_after_utc_midnight_boundary",
     "group": "task",
     "status": "passed",
-    "seconds": 0.38323012700129766
+    "seconds": 0.6280040899996493
   },
   {
     "id": "tests/test_acceptance_edges.py::test_outpatient_evidence_query_returns_application_list_without_top_k_padding[What documents do I need for an outpatient accident claim in Japan?]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.467101749003632
+    "seconds": 0.8744252589999633
   },
   {
     "id": "tests/test_acceptance_edges.py::test_outpatient_evidence_query_returns_application_list_without_top_k_padding[\\u95e8\\u8bca\\u533b\\u7597\\u7406\\u8d54\\u9700\\u8981\\u54ea\\u4e9b\\u6750\\u6599\\u548c\\u8bc1\\u660e\\uff1f]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.47279270899889525
+    "seconds": 0.8290540570001212
   },
   {
     "id": "tests/test_acceptance_edges.py::test_outpatient_evidence_query_returns_application_list_without_top_k_padding[I fell while walking in Japan. What claim evidence should I keep?]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.49820258400723105
+    "seconds": 0.8564586660002078
   },
   {
     "id": "tests/test_acceptance_edges.py::test_exclusion_question_is_not_reduced_to_medical_application_list",
     "group": "task",
     "status": "passed",
-    "seconds": 0.44793454200407723
+    "seconds": 0.686229209999965
   },
   {
     "id": "tests/test_agent_foundation.py::test_real_planned_turn_is_persisted_and_resumable",
     "group": "task",
     "status": "passed",
-    "seconds": 0.48615370799961966
+    "seconds": 0.889693153999815
   },
   {
     "id": "tests/test_agent_foundation.py::test_ndjson_boundaries_are_real_before_slow_tool",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4042771249951329
+    "seconds": 0.7023119849998238
   },
   {
     "id": "tests/test_agent_foundation.py::test_exact_source_assertions_are_accepted_without_semantic_claim",
     "group": "task",
     "status": "passed",
-    "seconds": 0.00010099999053636566
+    "seconds": 0.0002724070000112988
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[policy_list]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43291991599835455
+    "seconds": 0.7723326590000852
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[portfolio_summary]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.41151175000413787
+    "seconds": 0.7453435390000323
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[policy_terms_get]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4100992920139106
+    "seconds": 0.6670965779997005
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[policy_clauses_get]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4321447920083301
+    "seconds": 0.8459261900000001
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[policy_summary]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.41308074998960365
+    "seconds": 0.7176124340001024
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[document_get]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.40784795700892573
+    "seconds": 0.7914159379997727
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[report_analysis]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43060025100567145
+    "seconds": 0.7687522310000077
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[reports_list]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.41891995699552353
+    "seconds": 0.6929446000001462
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[vault_list]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4363244999985909
+    "seconds": 0.8839216300000317
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[memory_read]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.41311074999248376
+    "seconds": 0.7538130109996928
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[audit_read]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4187606660052552
+    "seconds": 0.7397822750001524
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[renewal_alerts_list]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4316216679944773
+    "seconds": 0.763540834999958
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[premium_history_get]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4104644150065724
+    "seconds": 0.7313502849999622
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[claim_list]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4141294580040267
+    "seconds": 0.7446246139998038
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[incident_types_list]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4369817919941852
+    "seconds": 0.8758036359997732
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[product_catalog]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4167332089928095
+    "seconds": 0.7420368929999768
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[agent_directory]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4214596669989987
+    "seconds": 0.7302742669999134
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[sales_pattern_check]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4332361670094542
+    "seconds": 0.8526607880000938
   },
   {
     "id": "tests/test_agent_foundation.py::test_tool_categories_execute_actual_owned_apis[cost_estimator]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4196650000012596
+    "seconds": 0.6531309520003106
   },
   {
     "id": "tests/test_agent_foundation.py::test_claim_tool_categories_use_actual_case[claim_status_get]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43091804099822184
+    "seconds": 0.728152714000089
   },
   {
     "id": "tests/test_agent_foundation.py::test_claim_tool_categories_use_actual_case[claim_prescreen]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.45220341699314304
+    "seconds": 0.8401622970000062
   },
   {
     "id": "tests/test_agent_foundation.py::test_claim_tool_categories_use_actual_case[claim_checklist]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43677237500378396
+    "seconds": 0.7403517579998606
   },
   {
     "id": "tests/test_agent_foundation.py::test_claim_tool_categories_use_actual_case[claim_notifications]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4445906260079937
+    "seconds": 0.7875299769998492
   },
   {
     "id": "tests/test_agent_foundation.py::test_claim_tool_categories_use_actual_case[claim_explanation]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4295553330084658
+    "seconds": 0.738583220999999
   },
   {
     "id": "tests/test_agent_foundation.py::test_claim_tool_categories_use_actual_case[crossborder_kit]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.44475441700342344
+    "seconds": 0.8874556179996489
   },
   {
     "id": "tests/test_agent_foundation.py::test_natural_language_routes_execute_category_plans[Show my portfolio-portfolio]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4354828340074164
+    "seconds": 0.7776869640001678
   },
   {
     "id": "tests/test_agent_foundation.py::test_natural_language_routes_execute_category_plans[Show policy summary-policy_summary]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.40462258400657447
+    "seconds": 0.696960504000117
   },
   {
     "id": "tests/test_agent_foundation.py::test_natural_language_routes_execute_category_plans[What is my deductible?-policy_terms]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4168580010009464
+    "seconds": 0.6580154709999988
   },
   {
     "id": "tests/test_agent_foundation.py::test_natural_language_routes_execute_category_plans[What do you remember?-memory]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4106063350045588
+    "seconds": 0.6195528069997636
   },
   {
     "id": "tests/test_agent_foundation.py::test_natural_language_routes_execute_category_plans[Show my vault-vault]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.41415095800039126
+    "seconds": 0.7064565759999368
   },
   {
     "id": "tests/test_agent_foundation.py::test_natural_language_routes_execute_category_plans[Show medical reports-report_analysis]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.42900545799784595
+    "seconds": 0.6838616189997992
   },
   {
     "id": "tests/test_agent_foundation.py::test_natural_language_routes_execute_category_plans[Show incident guide-incidents]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.40406295799766667
+    "seconds": 0.6268615670001054
   },
   {
     "id": "tests/test_agent_foundation.py::test_natural_language_routes_execute_category_plans[Show renewal reminders-renewal]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.40760325099836336
+    "seconds": 0.6296876829999292
   },
   {
     "id": "tests/test_agent_foundation.py::test_claim_chat_pauses_at_exact_preview_and_exports_only_after_review",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4705690000046161
+    "seconds": 0.9903624949999994
   },
   {
     "id": "tests/test_agent_foundation.py::test_policy_clarification_resumes_saved_question_without_restart",
     "group": "task",
     "status": "passed",
-    "seconds": 0.44306833400332835
+    "seconds": 0.6883976730002814
   },
   {
     "id": "tests/test_agent_foundation.py::test_supported_language_urgent_signals_bypass_policy_questions[\\u6211\\u5728\\u51fa\\u8840\\uff0c\\u9700\\u8981\\u6025\\u6551]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.41149879199656425
+    "seconds": 0.6734736950002116
   },
   {
     "id": "tests/test_agent_foundation.py::test_supported_language_urgent_signals_bypass_policy_questions[\\u52a9\\u3051\\u3066\\u3001\\u6551\\u6025]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4124669999946491
+    "seconds": 0.7183820690001994
   },
   {
     "id": "tests/test_agent_foundation.py::test_supported_language_urgent_signals_bypass_policy_questions[\\u7dca\\u6025\\u3067\\u3059]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.40862475000176346
+    "seconds": 0.599626735999891
+  },
+  {
+    "id": "tests/test_agent_foundation.py::test_claim_status_questions_are_not_mistaken_for_impersonation[Was my claim approved?]",
+    "group": "task",
+    "status": "passed",
+    "seconds": 0.6139016700003594
+  },
+  {
+    "id": "tests/test_agent_foundation.py::test_claim_status_questions_are_not_mistaken_for_impersonation[\\u6211\\u7684\\u7406\\u8d54\\u6279\\u51c6\\u4e86\\u5417\\uff1f]",
+    "group": "task",
+    "status": "passed",
+    "seconds": 0.5843311510002422
+  },
+  {
+    "id": "tests/test_agent_foundation.py::test_claim_status_questions_are_not_mistaken_for_impersonation[\\u8bf7\\u5e2e\\u6211\\u8054\\u7cfb\\u7406\\u8d54\\u5458]",
+    "group": "task",
+    "status": "passed",
+    "seconds": 0.6796172040003512
   },
   {
     "id": "tests/test_core.py::test_seed_real_wording_and_synthetic_schedule_are_distinct",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4148622080028872
+    "seconds": 0.7697151100001065
   },
   {
     "id": "tests/test_core.py::test_register_and_logout_revoke_session",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4636765000032028
+    "seconds": 0.7312481810004101
   },
   {
     "id": "tests/test_core.py::test_real_pdf_upload_preserves_page_and_file_bytes",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4112484170036623
+    "seconds": 0.7866868199998862
   },
   {
     "id": "tests/test_core.py::test_cpu_image_ocr_is_actual_not_seed_text",
     "group": "task",
     "status": "passed",
-    "seconds": 1.1061559579975437
+    "seconds": 2.372498981000035
   },
   {
     "id": "tests/test_core.py::test_policy_correction_is_durable_and_has_provenance",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5928629170011845
+    "seconds": 0.6565428279998287
   },
   {
     "id": "tests/test_core.py::test_actual_retrieval_citations_match_document_page",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5349858330009738
+    "seconds": 0.8309381879998909
   },
   {
     "id": "tests/test_core.py::test_unknown_topic_abstains_without_invented_clause",
     "group": "task",
     "status": "passed",
-    "seconds": 0.45249262399738654
+    "seconds": 0.7509561740000663
   },
   {
     "id": "tests/test_core.py::test_no_key_never_attempts_model_request",
     "group": "task",
     "status": "passed",
-    "seconds": 0.47646599899599096
+    "seconds": 0.7137556059999497
   },
   {
     "id": "tests/test_core.py::test_add_wording_resets_policy_confirmation",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43414712399680866
+    "seconds": 0.7312124519999088
   },
   {
     "id": "tests/test_core.py::test_delete_policy_removes_original_and_search_derivatives",
     "group": "task",
     "status": "passed",
-    "seconds": 0.41324295900267316
+    "seconds": 0.6360657250002077
   },
   {
     "id": "tests/test_core.py::test_portfolio_does_not_sum_insurance_as_wealth",
     "group": "task",
     "status": "passed",
-    "seconds": 0.40636254199489485
+    "seconds": 0.6660868750000191
   },
   {
     "id": "tests/test_core.py::test_model_protocol_fixtures_never_contact_provider[openai_compatible-https://tokenhub.tencentmaas.com/plan/v3--https://tokenhub.tencentmaas.com/plan/v3/chat/completions]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.0005587920022662729
+    "seconds": 0.0019636449999325123
   },
   {
     "id": "tests/test_core.py::test_model_protocol_fixtures_never_contact_provider[openai_compatible-https://irrelevant.test/base-https://tokenhub.tencentmaas.com/plan/v3/chat/completions-https://tokenhub.tencentmaas.com/plan/v3/chat/completions]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.00039500099956057966
+    "seconds": 0.00123873199981972
   },
   {
     "id": "tests/test_core.py::test_model_protocol_fixtures_never_contact_provider[qwen-https://dashscope.aliyuncs.com/compatible-mode/v1--https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.0003887089987983927
+    "seconds": 0.0013712820000364445
   },
   {
     "id": "tests/test_core.py::test_model_protocol_fixtures_never_contact_provider[anthropic-https://api.anthropic.com--https://api.anthropic.com/v1/messages]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.00040958299359772354
+    "seconds": 0.0010067170001093473
   },
   {
     "id": "tests/test_core.py::test_compatible_provider_requires_actual_model_id",
     "group": "task",
     "status": "passed",
-    "seconds": 0.00014524999278364703
+    "seconds": 0.00043570899970291066
   },
   {
     "id": "tests/test_core.py::test_assistance_without_key_retains_original_no_fake_translation",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4108204579970334
+    "seconds": 0.6383984879998934
   },
   {
     "id": "tests/test_core.py::test_assistance_requires_explicit_external_processing_consent",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4044261259987252
+    "seconds": 0.7202860970003258
   },
   {
     "id": "tests/test_core.py::test_assistance_translation_masks_contact_and_checks_numbers",
     "group": "task",
     "status": "passed",
-    "seconds": 0.40199554200080456
+    "seconds": 0.5997309159999986
   },
   {
     "id": "tests/test_core.py::test_assistance_rejects_added_numeric_emergency_claim",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4275821679912042
+    "seconds": 0.6572596290002366
   },
   {
     "id": "tests/test_document_foundation.py::test_source_terms_manual_correction_invalidates_previous_confirmation",
     "group": "task",
     "status": "passed",
-    "seconds": 0.42847800100571476
+    "seconds": 0.7064315279999391
   },
   {
     "id": "tests/test_document_foundation.py::test_medical_financial_facts_keep_source_and_do_not_become_memory",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43364045899215853
+    "seconds": 1.0045549690000826
   },
   {
     "id": "tests/test_document_foundation.py::test_temporary_upload_excluded_until_explicit_save",
     "group": "task",
     "status": "passed",
-    "seconds": 0.6083742090049782
+    "seconds": 1.2509613560000616
   },
   {
     "id": "tests/test_document_foundation.py::test_approved_memory_reuses_needs_defaults_and_disable_takes_effect",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4821945409930777
+    "seconds": 0.7562368409996907
   },
   {
     "id": "tests/test_jev_semantic.py::test_jev_official_choice_protocol_and_minimized_input",
     "group": "task",
     "status": "passed",
-    "seconds": 0.0008860420057317242
+    "seconds": 0.002934675000005882
   },
   {
     "id": "tests/test_jev_semantic.py::test_pinned_encoder_assets_reject_unverified_files",
     "group": "task",
     "status": "passed",
-    "seconds": 0.014161831997625995
+    "seconds": 0.008539208000001963
   },
   {
     "id": "tests/test_memory.py::test_memory_defaults_to_disabled",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4512482499994803
+    "seconds": 0.7856484629999159
   },
   {
     "id": "tests/test_memory.py::test_disabled_memory_cannot_be_added",
     "group": "task",
     "status": "passed",
-    "seconds": 0.44526520700310357
+    "seconds": 0.658756904999791
   },
   {
     "id": "tests/test_memory.py::test_memory_requires_approval",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4386034179988201
+    "seconds": 0.6832472599999164
   },
   {
     "id": "tests/test_memory.py::test_approved_memory_persists_across_session",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4826417090080213
+    "seconds": 0.843986895000171
   },
   {
     "id": "tests/test_memory.py::test_edit_replaces_fact_and_delete_excludes_recall",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4315679159917636
+    "seconds": 0.8328000279998378
   },
   {
     "id": "tests/test_memory.py::test_disable_preserves_user_manageable_facts_but_blocks_usage",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4238776659913128
+    "seconds": 0.8550247229998149
   },
   {
     "id": "tests/test_memory.py::test_memory_isolation",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5145517909913906
+    "seconds": 1.1691039889999502
   },
   {
     "id": "tests/test_memory.py::test_audit_excludes_raw_memory_content",
     "group": "task",
     "status": "passed",
-    "seconds": 0.548882416995184
+    "seconds": 1.0181733049998911
   },
   {
     "id": "tests/test_memory.py::test_preference_category_upsert_is_one_reviewable_fact",
     "group": "task",
     "status": "passed",
-    "seconds": 0.659230874000059
+    "seconds": 0.732005984000125
   },
   {
     "id": "tests/test_memory.py::test_private_scope_separates_both_upstream_team_and_agent",
     "group": "task",
     "status": "passed",
-    "seconds": 0.0003151259952574037
+    "seconds": 0.000453854000170395
   },
   {
     "id": "tests/test_public_preview.py::test_demo_bootstrap_creates_private_synthetic_documents",
     "group": "task",
     "status": "passed",
-    "seconds": 1.2561274170075194
+    "seconds": 1.7445017679997363
   },
   {
     "id": "tests/test_public_preview.py::test_demo_workspaces_can_be_disabled",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4098405000040657
+    "seconds": 0.6544402429999536
   },
   {
     "id": "tests/test_public_preview.py::test_shared_seed_accounts_disabled_for_fresh_public_store",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4258295410036226
+    "seconds": 0.6514701099997637
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_chinese_compound_guarantee_non_disclosure_pressure_is_flagged",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4288418329961132
+    "seconds": 0.6945317470001555
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[\\u627f\\u8bfa\\u767e\\u5206\\u4e4b\\u767e\\u83b7\\u8d54-guaranteed_payout]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4249976249993779
+    "seconds": 0.7762558299996272
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[\\u4fdd\\u8bc1100\\uff05\\u7406\\u8d54-guaranteed_payout]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.44571154200821184
+    "seconds": 0.811081884000032
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[\\u80af\\u5b9a\\u4f1a\\u8d54-guaranteed_payout]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43154137400415493
+    "seconds": 0.6114104440000574
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[\\u4fdd\\u8bc1\\u8d54-guaranteed_payout]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4260012509985245
+    "seconds": 0.6952252719997887
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[Guaranteed full payout-guaranteed_payout]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.42131158199481433
+    "seconds": 0.6843630490000123
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[We guarantee your claim-guaranteed_payout]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4236470829928294
+    "seconds": 0.7714838740000687
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[100% guaranteed-guaranteed_payout]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.44698845999664627
+    "seconds": 0.6277085790002275
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[\\u65e0\\u9700\\u5982\\u5b9e\\u544a\\u77e5-non_disclosure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4207981250001467
+    "seconds": 0.7018524459999753
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[\\u53ef\\u4ee5\\u4e0d\\u7533\\u62a5-non_disclosure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.42154337499960093
+    "seconds": 0.778544600000032
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[You don't need to disclose your condition-non_disclosure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.44424466700002085
+    "seconds": 0.7604121729998496
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[Conceal your medical history-non_disclosure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4328289170007338
+    "seconds": 0.682038958000021
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[\\u73b0\\u5728\\u52a1\\u5fc5\\u6295\\u4fdd-pressure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.44391808299405966
+    "seconds": 0.6346577770002568
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[\\u5fc5\\u987b\\u4eca\\u5929\\u4e0b\\u5355-pressure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43121445900032995
+    "seconds": 0.6193025079999188
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[Buy today-pressure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.426993710003444
+    "seconds": 0.658532685000182
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_bounded_obvious_selling_variants[You must purchase this-pressure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4324624579967349
+    "seconds": 0.6550443640001049
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_neutral_or_explicitly_cautious_copy_does_not_trigger_sales_flags[\\u8d54\\u4ed8\\u987b\\u6309\\u5408\\u540c\\u53ca\\u4e8b\\u5b9e\\u5ba1\\u6838\\uff0c\\u8bf7\\u5982\\u5b9e\\u544a\\u77e5\\uff0c\\u53ef\\u6bd4\\u8f83\\u540e\\u518d\\u51b3\\u5b9a\\u3002]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.479802625006414
+    "seconds": 0.6435902970001735
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_neutral_or_explicitly_cautious_copy_does_not_trigger_sales_flags[\\u4e0d\\u80fd\\u4fdd\\u8bc1100%\\u8d54\\u4ed8\\uff0c\\u4e0d\\u8981\\u9690\\u7792\\u75c5\\u53f2\\uff0c\\u65e0\\u9700\\u7acb\\u5373\\u8d2d\\u4e70\\u3002]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4560971659957431
+    "seconds": 0.7465677780000988
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_neutral_or_explicitly_cautious_copy_does_not_trigger_sales_flags[\\u4e0d\\u80fd\\u4fdd\\u8bc1\\u8d54\\uff0c\\u4ecd\\u987b\\u6309\\u5408\\u540c\\u53ca\\u4e8b\\u5b9e\\u5ba1\\u6838\\u3002]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4435851249945699
+    "seconds": 0.6089873490000173
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_neutral_or_explicitly_cautious_copy_does_not_trigger_sales_flags[We cannot guarantee a payout. Do not hide your condition. No need to buy now.]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43818133299646433
+    "seconds": 0.713776284000005
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_neutral_or_explicitly_cautious_copy_does_not_trigger_sales_flags[Review the wording, disclose requested facts and take time to compare policies.]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4300387090042932
+    "seconds": 0.6565766010000971
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_fresh_import_with_owned_exact_wording_can_prepare_real_export",
     "group": "task",
     "status": "passed",
-    "seconds": 0.9182016659979126
+    "seconds": 1.4841892379997716
   },
   {
     "id": "tests/test_release_workflow_edges.py::test_document_deletion_disclosure_does_not_promise_snapshot_erasure",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4513165000025765
+    "seconds": 0.6619104599999446
   },
   {
     "id": "tests/test_scope_workflows.py::test_actual_tracker_and_notifications_survive_reload",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4919598330016015
+    "seconds": 0.8383515869998064
   },
   {
     "id": "tests/test_scope_workflows.py::test_prepared_download_does_not_complete_official_handoff",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5589755410037469
+    "seconds": 1.1837641140000414
   },
   {
     "id": "tests/test_scope_workflows.py::test_confirmed_simulated_submit_is_idempotent_and_isolated",
     "group": "task",
     "status": "passed",
-    "seconds": 0.703234167995106
+    "seconds": 0.9688838110000688
   },
   {
     "id": "tests/test_scope_workflows.py::test_incomplete_case_needs_review_for_confirmed_simulation",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5112065840003197
+    "seconds": 0.8526723150000635
   },
   {
     "id": "tests/test_scope_workflows.py::test_invalid_simulator_transitions_and_clock_waiting_on_customer",
     "group": "task",
     "status": "passed",
-    "seconds": 0.48719650000566617
+    "seconds": 0.8516343680000773
   },
   {
     "id": "tests/test_scope_workflows.py::test_decline_and_appeal_are_source_labelled_simulations",
     "group": "task",
     "status": "passed",
-    "seconds": 0.553786291005963
+    "seconds": 0.9859002650000548
   },
   {
     "id": "tests/test_scope_workflows.py::test_incident_library_has_nine_china_families_with_sourced_reference_docs",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4490651249943767
+    "seconds": 0.6705973500002074
   },
   {
     "id": "tests/test_scope_workflows.py::test_role_prior_settlement_and_benefit_change_document_requirements",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4541206670110114
+    "seconds": 0.6857218840000314
   },
   {
     "id": "tests/test_scope_workflows.py::test_reviewed_evidence_mismatch_blocks_prepared_package",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5354387500046869
+    "seconds": 1.0273970080002073
   },
   {
     "id": "tests/test_scope_workflows.py::test_code_cost_example_caps_insurer_payment_without_invented_catalog_values",
     "group": "task",
     "status": "passed",
-    "seconds": 0.45502112500253133
+    "seconds": 0.7700113549999514
   },
   {
     "id": "tests/test_scope_workflows.py::test_cost_inputs_reject_invalid_arithmetic[limit--1]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43186791699554306
+    "seconds": 0.6539093800001865
   },
   {
     "id": "tests/test_scope_workflows.py::test_cost_inputs_reject_invalid_arithmetic[deductible--1]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43324637500336394
+    "seconds": 0.6390745799999422
   },
   {
     "id": "tests/test_scope_workflows.py::test_cost_inputs_reject_invalid_arithmetic[coinsurance_percent-101]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43444191700109513
+    "seconds": 0.6631338060001326
   },
   {
     "id": "tests/test_scope_workflows.py::test_cost_inputs_reject_invalid_arithmetic[limit-NaN]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4531762080077897
+    "seconds": 0.801504902999568
   },
   {
     "id": "tests/test_scope_workflows.py::test_comparison_has_balanced_arguments_unknown_terms_and_ties",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4345615420024842
+    "seconds": 0.7168855560000793
   },
   {
     "id": "tests/test_scope_workflows.py::test_optional_scenario_uses_only_named_user_reviewed_product_terms",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4281792920010048
+    "seconds": 0.7204710910000358
   },
   {
     "id": "tests/test_scope_workflows.py::test_demo_agent_matching_explains_language_location_and_limits",
     "group": "task",
     "status": "passed",
-    "seconds": 0.541059998991841
+    "seconds": 0.7790913889998592
   },
   {
     "id": "tests/test_scope_workflows.py::test_premium_history_hikes_and_renewal_are_user_reviewed",
     "group": "task",
     "status": "passed",
-    "seconds": 0.523445000006177
+    "seconds": 0.7734898409999005
   },
   {
     "id": "tests/test_scope_workflows.py::test_surrender_loss_calculator_is_explicit_about_user_facts_and_rights",
     "group": "task",
     "status": "passed",
-    "seconds": 0.46457612499943934
+    "seconds": 0.6970633979999548
   },
   {
     "id": "tests/test_scope_workflows.py::test_deleting_case_removes_tracker_private_rows",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5130639580020215
+    "seconds": 0.7645063510001364
   },
   {
     "id": "tests/test_scope_workflows.py::test_prescreen_waiting_dates_and_exclusions_use_exact_reviewed_source[90]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5121031240050797
+    "seconds": 0.8298665820002498
   },
   {
     "id": "tests/test_scope_workflows.py::test_prescreen_waiting_dates_and_exclusions_use_exact_reviewed_source[90 days]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.49950900000112597
+    "seconds": 0.9420860920001815
   },
   {
     "id": "tests/test_scope_workflows.py::test_actual_private_demo_bootstrap_and_browser_policy_confirmation_reach_reviewed_path[objects]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.8195237500040093
+    "seconds": 1.115258380000114
   },
   {
     "id": "tests/test_scope_workflows.py::test_actual_private_demo_bootstrap_and_browser_policy_confirmation_reach_reviewed_path[legacy_ui_strings]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.7968904589943122
+    "seconds": 1.2127920399998402
   },
   {
     "id": "tests/test_scope_workflows.py::test_typed_unprinted_benefit_cannot_qualify_as_schedule_evidence",
     "group": "task",
     "status": "passed",
-    "seconds": 0.561703874001978
+    "seconds": 0.7706247429998712
   },
   {
     "id": "tests/test_tencent_integration.py::test_tencent_approved_projection_roundtrip_and_private_namespace",
     "group": "task",
     "status": "skipped",
-    "seconds": 0.4545153750004829
+    "seconds": 0.8835256060001484
   },
   {
     "id": "tests/test_tencent_integration.py::test_tencent_edit_delete_excludes_old_fact_from_actual_readback",
     "group": "task",
     "status": "skipped",
-    "seconds": 0.4604680420088698
+    "seconds": 0.958433973000183
   },
   {
     "id": "tests/test_workflows.py::test_guest_contacts_remain_available_without_auth",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4458052499976475
+    "seconds": 1.1223358010004176
   },
   {
     "id": "tests/test_workflows.py::test_unverified_country_has_no_invented_contacts",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4516447089990834
+    "seconds": 0.7842742010002439
   },
   {
     "id": "tests/test_workflows.py::test_policy_confirmation_gate",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43242441700567724
+    "seconds": 0.6411007680003422
   },
   {
     "id": "tests/test_workflows.py::test_outpatient_documents_are_conditional",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4593473749991972
+    "seconds": 0.8105992539999534
   },
   {
     "id": "tests/test_workflows.py::test_actual_owned_wording_required_for_policy_check",
     "group": "task",
     "status": "passed",
-    "seconds": 0.469153208003263
+    "seconds": 0.7487103800001478
   },
   {
     "id": "tests/test_workflows.py::test_recognised_document_is_not_confirmed",
     "group": "task",
     "status": "passed",
-    "seconds": 0.46719154200400226
+    "seconds": 0.8645524609999029
   },
   {
     "id": "tests/test_workflows.py::test_missing_evidence_blocks_prepared_export",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5211080420049257
+    "seconds": 0.8286232559996733
   },
   {
     "id": "tests/test_workflows.py::test_draft_export_is_real_pdf_zip_and_honestly_incomplete",
     "group": "task",
     "status": "passed",
-    "seconds": 0.48717395899439
+    "seconds": 0.9416184799999883
   },
   {
     "id": "tests/test_workflows.py::test_prepared_export_contains_actual_originals_and_stays_unsubmitted",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5562603329963167
+    "seconds": 1.0865018109998346
   },
   {
     "id": "tests/test_workflows.py::test_generated_form_cannot_be_reconfirmed_after_incident_change",
     "group": "task",
     "status": "passed",
-    "seconds": 0.47293262599851005
+    "seconds": 0.7730584949999866
   },
   {
     "id": "tests/test_workflows.py::test_each_simulator_state_is_isolated[RECEIVED]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4851222090073861
+    "seconds": 0.7130727890000799
   },
   {
     "id": "tests/test_workflows.py::test_each_simulator_state_is_isolated[IN_REVIEW]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.464126375001797
+    "seconds": 0.7777983320002022
   },
   {
     "id": "tests/test_workflows.py::test_each_simulator_state_is_isolated[INFO_REQUESTED]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.47671958400314907
+    "seconds": 0.8060118279997823
   },
   {
     "id": "tests/test_workflows.py::test_each_simulator_state_is_isolated[APPROVED]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4914248330023838
+    "seconds": 0.7144554510002763
   },
   {
     "id": "tests/test_workflows.py::test_each_simulator_state_is_isolated[DECLINED]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4626722500033793
+    "seconds": 0.7846204049999415
   },
   {
     "id": "tests/test_workflows.py::test_each_simulator_state_is_isolated[PAID]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.46165349999500904
+    "seconds": 0.8017417710000245
   },
   {
     "id": "tests/test_workflows.py::test_crossborder_kit_never_claims_to_contact_provider",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4595644579967484
+    "seconds": 0.8185689730003105
   },
   {
     "id": "tests/test_workflows.py::test_crossborder_draft_exports_verified_contacts_and_official_forms",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5137828340011765
+    "seconds": 0.8906638349999412
   },
   {
     "id": "tests/test_workflows.py::test_crossborder_unknown_destination_exports_honest_draft_without_japan_contacts",
     "group": "task",
     "status": "passed",
-    "seconds": 0.48857075099658687
+    "seconds": 0.9000898169997527
   },
   {
     "id": "tests/test_workflows.py::test_feature_judge_has_no_fabricated_prices_or_universal_best",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4272618339964538
+    "seconds": 0.7390404690002015
   },
   {
     "id": "tests/test_workflows.py::test_agent_brief_requires_contact_consent_and_callback_stays_simulated",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4439060399963637
+    "seconds": 0.8276270140001998
   },
   {
     "id": "tests/test_workflows.py::test_mis_selling_patterns_are_flagged[\\u4e00\\u5b9a\\u8d54\\uff0c\\u4fdd\\u8bc1\\u8d54-guaranteed_payout]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.448909167011152
+    "seconds": 0.6613089940001373
   },
   {
     "id": "tests/test_workflows.py::test_mis_selling_patterns_are_flagged[No need to disclose your condition-non_disclosure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.42059854199033
+    "seconds": 0.6988026190001619
   },
   {
     "id": "tests/test_workflows.py::test_mis_selling_patterns_are_flagged[Buy immediately-pressure]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43365020799683407
+    "seconds": 0.9035054959999798
   },
   {
     "id": "tests/test_workflows.py::test_mis_selling_patterns_are_flagged[Best for everyone-universal_best]",
     "group": "task",
     "status": "passed",
-    "seconds": 0.4331954160006717
+    "seconds": 0.6523383040002955
   },
   {
     "id": "tests/test_workflows.py::test_renewal_is_derived_reminder_not_transaction",
     "group": "task",
     "status": "passed",
-    "seconds": 0.43720966699765995
+    "seconds": 0.879629899000065
   },
   {
     "id": "tests/test_workflows.py::test_case_deletion_removes_private_files_and_packages_but_keeps_portfolio",
     "group": "task",
     "status": "passed",
-    "seconds": 0.5246341249949182
+    "seconds": 0.9604684900000393
   }
 ]

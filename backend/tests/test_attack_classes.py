@@ -4,6 +4,7 @@ Induced transfers, information elicitation, privilege escalation and prompt inje
 no data tool executed and nothing from another account. Deterministic regression checks, not live-model red teaming.
 """
 import json
+import re
 
 import pytest
 
@@ -46,7 +47,8 @@ def test_request_is_refused_before_any_tool_runs(client, message):
     result = items[-1]
     assert result["type"] == "result"
     assert result["cards"] == [] and result["citations"] == []
-    blob = json.dumps(result, ensure_ascii=False)
+    # Strip ISO timestamps first: their microseconds can contain these digit runs by chance.
+    blob = re.sub(r"\d{4}-\d{2}-\d{2}T[\d:.]+(\+00:00|Z)?", "", json.dumps(result, ensure_ascii=False))
     assert "6222" not in blob and "GB29" not in blob and "6217" not in blob
 
 

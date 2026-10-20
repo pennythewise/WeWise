@@ -1,0 +1,99 @@
+{
+  "claim_id": "clm_350605ff11ca217407fe9f03",
+  "revision": 1,
+  "reviewed": true,
+  "incident": {
+    "applicant_role": "insured",
+    "city": "Tokyo",
+    "contact_phone": "",
+    "country": "Japan",
+    "currency": "JPY",
+    "date": "2026-10-17",
+    "death": false,
+    "description": "SYNTHETIC demo case: fictional traveller slipped on a wet platform, admitted overnight.",
+    "disability": false,
+    "english_summary": "",
+    "event_type": "",
+    "expenses": 180000.0,
+    "hospital": "SYNTHETIC Tokyo General Hospital",
+    "minor": false,
+    "police_involved": false,
+    "prior_reimbursement": false,
+    "third_party_involved": false,
+    "treatment_type": "inpatient"
+  },
+  "english_summary": "Incident date: 2026-10-17. Country: Japan. City: Tokyo. Treatment: inpatient. Reported words (original language): SYNTHETIC demo case: fictional traveller slipped on a wet platform, admitted overnight.",
+  "contacts": [
+    {
+      "id": "ambulance",
+      "name": "Ambulance / fire · 救护车 / 消防",
+      "number": "119",
+      "dial_uri": "tel:119",
+      "role": "local_emergency",
+      "source_url": "https://www.fdma.go.jp/publication/portal/items/portal001_pamphiet_english.pdf",
+      "verified_on": "2026-10-17"
+    },
+    {
+      "id": "police",
+      "name": "Police · 警察",
+      "number": "110",
+      "dial_uri": "tel:110",
+      "role": "local_emergency",
+      "source_url": "https://www.japan.travel/en/plan/hotline/",
+      "verified_on": "2026-10-17"
+    },
+    {
+      "id": "jnto",
+      "name": "Japan Visitor Hotline · 日本游客热线",
+      "number": "050-3816-2787",
+      "international_number": "+81-50-3816-2787",
+      "dial_uri": "tel:+815038162787",
+      "role": "visitor_assistance",
+      "languages": [
+        "Chinese",
+        "English",
+        "Japanese",
+        "Korean"
+      ],
+      "availability": "24/7/365 per official information; routing not tested",
+      "source_url": "https://www.japan.travel/en/plan/hotline/",
+      "verified_on": "2026-10-17"
+    }
+  ],
+  "cards": [
+    {
+      "zh": "请叫救护车。",
+      "en": "Please call an ambulance.",
+      "ja": "救急車を呼んでください。"
+    },
+    {
+      "zh": "我需要医疗帮助。",
+      "en": "I need medical help.",
+      "ja": "医療の助けが必要です。"
+    },
+    {
+      "zh": "请联系我的保险救援机构。",
+      "en": "Please help me contact my insurer's assistance service.",
+      "ja": "保険会社のアシスタンスサービスへの連絡を手伝ってください。"
+    }
+  ],
+  "official_forms": [
+    {
+      "label": "JNTO medical information form / 医疗信息表",
+      "url": "https://www.jnto.go.jp/emergency/common/pdf/guide_chi02_p7.pdf"
+    },
+    {
+      "label": "JNTO symptom pointing card / 症状指示卡",
+      "url": "https://www.jnto.go.jp/emergency/common/pdf/guide_chi02_p8.pdf"
+    },
+    {
+      "label": "Official medical facility search",
+      "url": "https://www.jnto.go.jp/emergency/eng/mi_guide.html"
+    }
+  ],
+  "translation_notice": "User-review required. The reported words remain in their original language unless the user adds and confirms an English summary. No certified translation, provider contact, report receipt or insurance guarantee is claimed.",
+  "export_action": "export_crossborder_kit",
+  "recipient": "User download only",
+  "is_live_transfer": false,
+  "official_insurer_channel": "https://sales.allianz.com.cn/ewebsite/pages/quicknav/quicknav_lplc.shtml"
+}
