@@ -26,3 +26,9 @@ tobe_deleted/
 
 # Vercel CLI link
 .vercel/
+
+# Submission exports and internal planning docs (kept locally only)
+docs/submission/
+docs/01_PRD.md
+docs/02_TECH_SPEC.md
+docs/03_FRONTEND_PRD.md

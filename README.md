@@ -292,7 +292,7 @@ CI ([`.github/workflows/verify.yml`](.github/workflows/verify.yml)) runs everyth
 | `backend/contracts` | `ProofRegistry.sol`, compiled ABI and bytecode, `deploy.py` |
 | `backend/tests`, `backend/eval` | Test suite, golden-task and attack corpora, evaluation runner |
 | `api/`, `infra/` | Vercel gateway, sandbox launcher and provisioning script |
-| `docs/` | `AGENT_ARCHITECTURE.md` · `onchainplan.md` · `01_PRD.md` · `02_TECH_SPEC.md` · `03_FRONTEND_PRD.md` |
+| `docs/` | `TECHNICAL_DOCUMENTATION.md` · `SECURITY_SELF_ASSESSMENT.md` · `EXECUTION_EVIDENCE.md` · `AGENT_ARCHITECTURE.md` · `onchainplan.md` · `evidence/` |
 
 ---
 
