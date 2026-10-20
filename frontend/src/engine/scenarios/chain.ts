@@ -3,8 +3,8 @@ import { at, cid, tool, type TimedEvent } from '../script';
 import type { ChainProofKind } from '../types';
 
 /** Scripted on-chain proofs for the S1–S7 simulations. Values are fixed so replays are identical; the live backend computes real ones. */
-export const SIM_NETWORK = 'FISCO BCOS · group0';
-export const SIM_CONTRACT = '0xcc8321d6375c494d043fdd0260f21bc0ec51dacc';
+export const SIM_NETWORK = 'Ethereum Sepolia';
+export const SIM_CONTRACT = '0x32d87197Ebccb47e8B5D46677Df5db4672A515D7';
 
 interface ProofSpec { kind: ChainProofKind; block: number; root: string; tx: string; anchoredAt: string; title: L; items: L[] }
 

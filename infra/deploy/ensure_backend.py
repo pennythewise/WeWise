@@ -58,6 +58,13 @@ def main() -> None:
             raise RuntimeError('Pinned local embedding assets require operator installation.')
         environment['WEWISE_EMBEDDING_DIR'] = str(embedding_dir)
         environment.update(memory_environment)
+        # On-chain proofs: the operator places CHAIN_* settings (mode 0600) on the VM; the key never enters Git or the browser.
+        chain_env = DATA / 'chain.env'
+        if chain_env.is_file():
+            for line in chain_env.read_text().splitlines():
+                key, sep, value = line.partition('=')
+                if sep and key.strip().startswith('CHAIN_'):
+                    environment[key.strip()] = value.strip()
         with (DATA / 'backend.log').open('ab') as output:
             process = subprocess.Popen(
                 [str(executable), '-m', 'uvicorn', 'backend.app.main:app', '--host', '0.0.0.0', '--port', '8017', '--proxy-headers', '--forwarded-allow-ips', '*'],
