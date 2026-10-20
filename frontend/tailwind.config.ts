@@ -43,6 +43,7 @@ export default {
         inBottom: { from: { transform: 'translateY(100%)' }, to: { transform: 'translateY(0)' } },
         scan: { from: { top: '4%' }, to: { top: '92%' } },
         outBottom: { from: { transform: 'translateY(0)' }, to: { transform: 'translateY(100%)' } },
+        handheld: { '0%,100%': { transform: 'translate(0,0) rotate(0deg)' }, '25%': { transform: 'translate(-0.6%,0.4%) rotate(-0.25deg)' }, '50%': { transform: 'translate(0.4%,-0.5%) rotate(0.2deg)' }, '75%': { transform: 'translate(0.5%,0.3%) rotate(-0.1deg)' } },
       },
       animation: {
         'fade-in': 'fadeIn 200ms ease-out', 'fade-out': 'fadeOut 150ms ease-in',
@@ -50,6 +51,7 @@ export default {
         'in-right': 'inRight 220ms ease-out', 'out-right': 'outRight 160ms ease-in',
         'in-bottom': 'inBottom 220ms ease-out', 'out-bottom': 'outBottom 160ms ease-in',
         scan: 'scan 1.6s linear infinite',
+        handheld: 'handheld 5s ease-in-out infinite',
       },
       maxWidth: { app: 'var(--app-max-width)' },
     },

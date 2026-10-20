@@ -672,7 +672,8 @@
     "capture": "Capture evidence"
   },
   "capture": {
-    "demo": "Demo: the camera view is a synthetic scene. Nothing is uploaded.",
+    "demo": "Demo: simulated camera showing AI-generated photos of a fictional car. Nothing is uploaded.",
+    "demoCamera": "Demo: photos stay on this device. Nothing is uploaded.",
     "blurry": "Too early: the shot is blurry. Wait for the green frame, then try again.",
     "noCamera": "Camera isn't available. Using the sample scene.",
     "holdSteady": "Hold steady…",
