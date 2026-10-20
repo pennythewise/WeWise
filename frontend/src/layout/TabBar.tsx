@@ -26,9 +26,9 @@ export function TabBar() {
                 aria-current={on ? 'page' : undefined}
                 className={`flex h-full flex-col items-center justify-center gap-1 px-1 text-center text-xs ${on ? 'font-semibold text-primary' : 'text-muted'}`}
               >
-                <span className="relative">
+                <span className={`relative flex h-8 w-14 items-center justify-center rounded-full transition-colors duration-200 ${on ? 'bg-bluewash' : ''}`}>
                   <AppIcon name={tab.icon} size={24} filled={on} />
-                  {tab.id === 'claims' && awaiting > 0 && <span className="absolute -right-2.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[11px] font-semibold text-white" aria-label={t('tabs.awaiting', { n: awaiting })}>{awaiting}</span>}
+                  {tab.id === 'claims' && awaiting > 0 && <span className="absolute right-1 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[11px] font-semibold text-white" aria-label={t('tabs.awaiting', { n: awaiting })}>{awaiting}</span>}
                 </span>
                 <span className="leading-tight">{t(`tabs.${tab.id}`)}</span>
               </NavLink>

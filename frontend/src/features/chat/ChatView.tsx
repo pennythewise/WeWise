@@ -8,6 +8,7 @@ import { Chips } from './Chips';
 import { Composer } from './Composer';
 import { Notice } from '@/components/ui';
 import { L } from '@/engine/l';
+import { useTx } from '@/i18n/useTx';
 import { useTypingStore } from './typingStore';
 
 const useDefaultChips = (): Chip[] => {
@@ -25,6 +26,7 @@ const useDefaultChips = (): Chip[] => {
 
 export function ChatView() {
   const { t } = useTranslation();
+  const { tx } = useTx();
   const messages = useAgentStore((s) => s.messages);
   const running = useAgentStore((s) => s.running);
   const defaults = useDefaultChips();
@@ -41,12 +43,15 @@ export function ChatView() {
     <div className="flex h-full min-h-0 flex-col" data-screen="ask">
       <div className="min-h-0 flex-1 space-y-4 overflow-y-auto bg-wash px-4 py-4" aria-live="polite" aria-relevant="additions">
         {messages.length === 0 && (
+          <div className="space-y-4">
+            <h2 className="pt-2 text-[26px] font-semibold leading-tight text-ink">{tx(L('How can I help with your cover today?', '今天想了解哪方面的保障？'))}</h2>
           <div className="flex gap-2.5">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-bluewash text-primary" aria-hidden="true"><AppIcon name="spark" size={18} strokeWidth={1.8} /></span>
             <div className="space-y-2">
               <p className="rounded-[16px] rounded-tl-[4px] border border-cardline bg-white px-3.5 py-3 text-[14px] leading-[1.7] text-body">{t('chat.greeting')}</p>
               <Notice tone="info">{t('chat.scope')}</Notice>
             </div>
+          </div>
           </div>
         )}
         {messages.map((m) => (m.role === 'user' ? <UserBubble key={m.id} m={m} /> : <AssistantBubble key={m.id} m={m} />))}

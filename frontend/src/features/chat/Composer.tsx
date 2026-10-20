@@ -21,7 +21,7 @@ export function Composer() {
   const attach = async (f: File | { name: string; fixtureId: string }) => { setTray(false); addPendingFile(await agentClient.uploadFile(f)); };
 
   return (
-    <div className="shrink-0 border-t border-cardline bg-white px-3 pb-[max(env(safe-area-inset-bottom),8px)] pt-2">
+    <div className="shrink-0 bg-wash px-3 pb-[max(env(safe-area-inset-bottom),8px)] pt-2">
       {pendingFiles.length > 0 && (
         <ul className="mb-2 flex flex-wrap gap-2">
           {pendingFiles.map((f) => <li key={f.id} className="inline-flex items-center gap-1.5 rounded-input border border-secline bg-bluewash px-2.5 py-1 text-xs text-brand"><AppIcon name="file" size={14} />{f.name}</li>)}
@@ -46,17 +46,19 @@ export function Composer() {
           </button>
         </div>
       )}
-      <div className="flex items-end gap-1.5">
-        <button type="button" className={`icon-btn shrink-0 ${tray ? 'bg-bluewash text-primary' : 'text-brand'}`} aria-label={t('chat.attach')} aria-expanded={tray} onClick={() => setTray(!tray)} data-testid="attach"><AppIcon name="file" /></button>
-        <input ref={fileRef} type="file" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void attach(f); e.target.value = ''; }} />
+      <div className="rounded-[22px] border border-line bg-white p-2 shadow-card focus-within:border-secline">
         <textarea
           rows={1} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder={t('chat.placeholder')} aria-label={t('chat.placeholder')}
           onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); } }}
-          className="max-h-28 min-h-[44px] min-w-0 flex-1 resize-none rounded-[22px] border border-line bg-wash px-4 py-[11px] text-[15px] text-ink placeholder:text-muted"
+          className="max-h-28 min-h-[40px] w-full resize-none bg-transparent px-2 py-2 text-[15px] text-ink placeholder:text-muted focus:outline-none"
         />
-        <button type="button" onClick={voice.listening ? voice.stop : voice.start} aria-pressed={voice.listening} disabled={running} aria-label={voice.listening ? t('chat.micStop') : t('chat.mic')} title={t('chat.mic')}
-          className={`icon-btn shrink-0 ${voice.listening ? 'bg-danger text-white hover:bg-danger' : 'text-brand'}`} data-testid="mic"><AppIcon name="mic" /></button>
-        <button type="button" onClick={submit} disabled={!can} aria-label={t('chat.send')} className="flex h-touch w-touch shrink-0 items-center justify-center rounded-full bg-primary text-white disabled:opacity-40"><AppIcon name="arrowUp" /></button>
+        <div className="flex items-center gap-1">
+          <button type="button" className={`icon-btn shrink-0 ${tray ? 'bg-bluewash text-primary' : 'text-brand'}`} aria-label={t('chat.attach')} aria-expanded={tray} onClick={() => setTray(!tray)} data-testid="attach"><AppIcon name="file" /></button>
+          <input ref={fileRef} type="file" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void attach(f); e.target.value = ''; }} />
+          <button type="button" onClick={voice.listening ? voice.stop : voice.start} aria-pressed={voice.listening} disabled={running} aria-label={voice.listening ? t('chat.micStop') : t('chat.mic')} title={t('chat.mic')}
+            className={`icon-btn shrink-0 ${voice.listening ? 'bg-danger text-white hover:bg-danger' : 'text-brand'}`} data-testid="mic"><AppIcon name="mic" /></button>
+          <button type="button" onClick={submit} disabled={!can} aria-label={t('chat.send')} className="ml-auto flex h-touch w-touch shrink-0 items-center justify-center rounded-full bg-primary text-white disabled:opacity-40"><AppIcon name="arrowUp" /></button>
+        </div>
       </div>
     </div>
   );

@@ -58,7 +58,7 @@ export function ProductCard({ product, reason }: { product: ShopProduct; reason?
     </>
   );
   return (
-    <div className={`card relative !p-3.5 transition-colors ${selected ? '!border-primary bg-bluewash' : ''} ${disabled ? 'opacity-45' : ''}`}>
+    <div className={`card relative !p-3.5 shadow-card transition-colors ${selected ? '!border-primary bg-bluewash' : ''} ${disabled ? 'opacity-45' : ''}`}>
       {reason && <p className="mb-2 flex items-center gap-1.5 text-xs font-medium text-brand"><AppIcon name="spark" size={14} />{reason}</p>}
       {mode ? (
         <div

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAgentStore } from '@/agentStore';
 import { useTranslation } from 'react-i18next';
 import { AppIcon } from '@/components/AppIcon';
 import { Notice } from '@/components/ui';
@@ -15,6 +16,13 @@ import { useShopStore } from './shopStore';
 export function ShopHome() {
   const { t } = useTranslation();
   const { tx, lang } = useTx();
+  const navigate = useNavigate();
+  const gaps = [
+    { label: t('home.gaps.outpatient'), prompt: t('home.gaps.outpatientSend') },
+    { label: t('home.gaps.ci'), prompt: t('chat.chips.gapSend') },
+    { label: t('home.gaps.child'), prompt: t('chat.chips.compareSend') },
+  ];
+  const ask = (prompt: string) => { useAgentStore.getState().setDraft(prompt); navigate('/ask'); };
   const [q, setQ] = useState('');
   const orders = useShopStore((s) => s.orders.length);
   const recs = useMemo(recommendations, []);
@@ -31,6 +39,11 @@ export function ShopHome() {
 
   return (
     <div className="space-y-5 pb-14" data-screen="shop">
+      <section aria-label={t('home.gapsTitle')}>
+        <h3 className="mb-2 text-[16px] font-semibold text-ink">{t('home.gapsTitle')}</h3>
+        <div className="flex flex-wrap gap-2">{gaps.map((g) => <button key={g.label} type="button" onClick={() => ask(g.prompt)} className="min-h-[40px] rounded-full border border-secline bg-white px-3.5 text-[13px] font-medium text-primary">{g.label}</button>)}</div>
+      </section>
+
       <div className="flex items-center gap-2">
         <label className="relative block min-w-0 flex-1">
           <span className="sr-only">{t('shop.search')}</span>
@@ -48,7 +61,7 @@ export function ShopHome() {
         </section>
       ) : (
         <>
-          <nav aria-label={t('shop.categories')} className="grid grid-cols-4 gap-y-4 rounded-card border border-cardline bg-white px-2 py-4">
+          <nav aria-label={t('shop.categories')} className="grid grid-cols-4 gap-y-4 rounded-card border border-cardline bg-white px-2 py-4 shadow-card">
             {SHOP_TYPES.map((x) => (
               <Link key={x} to={`/shop/c/${x}`} className="flex min-h-touch flex-col items-center gap-1.5 text-[13px] text-ink">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-bluewash text-primary"><AppIcon name={TYPE_ICON[x]} size={22} /></span>
@@ -70,7 +83,7 @@ export function ShopHome() {
 
           <section className="space-y-3">
             <h2 className="text-[15px] font-semibold text-ink">{t('shop.allProducts')}</h2>
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4" role="group" aria-label={t('shop.categories')}>
+            <div className="-mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto px-4 [scrollbar-width:none]" role="group" aria-label={t('shop.categories')}>
               <button type="button" aria-pressed={cat === 'all'} className={chip(cat === 'all')} onClick={() => setCat('all')}>{t('policies.all')}</button>
               {SHOP_TYPES.map((x) => <button key={x} type="button" aria-pressed={cat === x} className={chip(cat === x)} onClick={() => setCat(x)}>{t(`types.${x}`)}</button>)}
             </div>

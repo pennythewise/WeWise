@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AppIcon } from '@/components/AppIcon';
 import { Badge, CardShell, Notice } from '@/components/ui';
+import { SlideToConfirm } from '@/components/SlideToConfirm';
 import { L } from '@/engine/l';
 import { useAgentStore } from '@/agentStore';
 import { incidentFor } from '@/mock/incidents';
@@ -43,10 +44,10 @@ function DialRow({ label, number, confirm }: { label: string; number: string; co
           : <a className="btn-secondary btn-compact" href={tel(number)}><AppIcon name="bell" size={16} />{tx(L('Call', '拨打'))}</a>}
       </div>
       {arm && (
-        <div className="flex animate-fade-in items-center gap-2 border-t border-cardline bg-[var(--wb-danger-bg)] px-3 py-2">
-          <p className="min-w-0 flex-1 text-[13px] text-danger">{tx(L(`This calls ${number} for real. Only for a real emergency.`, `将真实拨打 ${number}，仅限真实紧急情况。`))}</p>
-          <a className="btn-compact inline-flex min-h-[38px] items-center rounded-control bg-danger px-3 text-[13px] font-semibold text-white" href={tel(number)} onClick={() => setArm(false)}>{tx(L('Call now', '立即拨打'))}</a>
-          <button type="button" className="min-h-[38px] px-2 text-[13px] font-medium text-muted" onClick={() => setArm(false)}>{tx(L('Cancel', '取消'))}</button>
+        <div className="animate-fade-in space-y-2 border-t border-cardline bg-[var(--wb-danger-bg)] px-3 py-3">
+          <p className="text-[13px] text-danger">{tx(L(`This calls ${number} for real. Only for a real emergency.`, `将真实拨打 ${number}，仅限真实紧急情况。`))}</p>
+          <SlideToConfirm label={tx(L(`Slide to call ${number}`, `滑动拨打 ${number}`))} onConfirm={() => { window.location.href = tel(number); setArm(false); }} />
+          <button type="button" className="min-h-[38px] w-full text-[13px] font-medium text-muted" onClick={() => setArm(false)}>{tx(L('Cancel', '取消'))}</button>
         </div>
       )}
     </li>
