@@ -8,7 +8,8 @@ import logo from '@/assets/webank-logo.png';
 
 /** In-app header: ☰ (phone) / back, title, ⓘ (phone). */
 export function AppHeader({ mode }: { mode: LayoutMode }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const zh = i18n.language === 'zh';
   const { pathname } = useLocation();
   const meta = matchRoute(pathname);
   const { setNavSheetOpen, setInspectorOpen } = useUiStore();
@@ -36,6 +37,10 @@ export function AppHeader({ mode }: { mode: LayoutMode }) {
           )}
           <span className={meta.key === 'home' ? 'sr-only' : 'truncate'}>{t(`screens.${meta.key}.title`)}</span>
         </h1>
+        <button type="button" onClick={() => i18n.changeLanguage(zh ? 'en' : 'zh')} aria-label={zh ? 'Switch to English' : '切换到中文'}
+          className="min-h-touch shrink-0 rounded-full border border-line px-2.5 text-[13px] font-semibold text-primary" lang={zh ? 'en' : 'zh-CN'}>
+          {zh ? 'EN' : '中文'}
+        </button>
         {meta.key !== 'profile' && (
           <Link to="/profile" className="icon-btn" aria-label={t('screens.profile.title')}>
             <span aria-hidden="true" className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-[13px] font-semibold text-white">M</span>

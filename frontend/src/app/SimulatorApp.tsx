@@ -27,9 +27,6 @@ export default function App() {
   useEffect(() => { void probeBackend(); }, []);
   return (
     <div className="simulator-root">
-      <aside aria-label="Simulation mode notice" className="simulator-notice">
-        <p>引导模拟器 · 此模式全部办理结果与对话均为预设演示<br /><span lang="en">Guided simulator · preset conversations and transactions</span></p>
-      </aside>
       <div className="simulator-viewport">
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Routes>
