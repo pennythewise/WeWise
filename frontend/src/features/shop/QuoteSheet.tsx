@@ -30,7 +30,7 @@ export function QuoteSheet({ type, open, onOpenChange, onDone }: { type: Insuran
   };
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange} side="bottom" title={t('shop.quote.title', { type: t(`types.${type}`) })} height="82%">
+    <Sheet open={open} onOpenChange={onOpenChange} side="bottom" inPhone title={t('shop.quote.title', { type: t(`types.${type}`) })} height="82%">
       <form className="space-y-4 p-5" onSubmit={(e) => { e.preventDefault(); submit(); }} noValidate>
         <p className="text-[13px] text-muted">{t('shop.quote.intro')}</p>
         {fields.map((f) => (

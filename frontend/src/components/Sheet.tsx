@@ -23,20 +23,24 @@ interface Props {
   height?: string;
   /** Extra header content (e.g. snap handle) rendered above the title row. */
   top?: ReactNode;
+  /** Render inside the phone (the app column) instead of over the whole page. */
+  inPhone?: boolean;
   children: ReactNode;
 }
 
 /** Radix Dialog presented as a side/bottom sheet: focus trap, Esc to close, restored focus. */
-export function Sheet({ open, onOpenChange, side, title, hideTitle, height, top, children }: Props) {
+export function Sheet({ open, onOpenChange, side, title, hideTitle, height, top, inPhone, children }: Props) {
   const { t } = useTranslation();
+  const container = inPhone && typeof document !== 'undefined' ? document.querySelector<HTMLElement>('[data-testid="app-column"]') : null;
+  const pos = container ? 'absolute' : 'fixed';
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/40 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
+      <Dialog.Portal container={container ?? undefined}>
+        <Dialog.Overlay className={`${pos} inset-0 z-40 bg-ink/40 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out`} />
         <Dialog.Content
           aria-describedby={undefined}
           style={side === 'bottom' ? { height } : undefined}
-          className={`fixed z-50 flex flex-col bg-white shadow-card outline-none ${SIDE_CLASS[side]}`}
+          className={`${pos} z-50 flex flex-col bg-white shadow-card outline-none ${SIDE_CLASS[side]}`}
         >
           {top}
           <div className="flex min-h-[56px] shrink-0 items-center justify-between border-b border-cardline pl-5 pr-2">
