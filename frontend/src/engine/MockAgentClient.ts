@@ -4,6 +4,7 @@ import { bothLangs, type Locale } from './l';
 import { TURNS, fallbackOos, turnById } from './scenarios';
 import { s5Owner, s5Payout, s5Privilege } from './scenarios/attacks/s5_overreach';
 import { resetCardSeq, resetToolSeq, type TimedEvent, type TurnCtx, type TurnScript } from './script';
+import { delegationEvents } from './scenarios/agents';
 import type { Claim, ClaimSummary, FileRef, MockFile, Portfolio, TraceEvent } from './types';
 import { CLAIMS } from '@/mock/claims';
 import { portfolio } from '@/mock';
@@ -99,7 +100,7 @@ export class MockAgentClient implements AgentClient {
     const epoch = this.epoch;
     const turnId = `turn_${++this.turnSeq}`;
     yield { type: 'turn.started', turnId, t: 0, userText };
-    const events: TimedEvent[] = turn.events(ctx).map((e, i) => ({ ...e, _i: i }) as TimedEvent & { _i: number });
+    const events: TimedEvent[] = [...turn.events(ctx), ...delegationEvents(turn.id)].map((e, i) => ({ ...e, _i: i }) as TimedEvent & { _i: number });
     events.sort((a, b) => a.at - b.at || (a as { _i?: number })._i! - (b as { _i?: number })._i!);
     const timeline = this.speed < 50 ? pace(events) : events;
     let prev = 0;

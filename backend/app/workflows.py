@@ -6,6 +6,8 @@ token to the exact current policy, incident, evidence and recipient snapshot.
 """
 from __future__ import annotations
 
+import asyncio
+
 from datetime import date, datetime, timezone, timedelta
 import hashlib
 import json
@@ -964,6 +966,13 @@ def compare_products(payload: CompareRequest, user=Depends(current_user)):
     debate = comparison(products, needs, payload.scenario.model_dump() if payload.scenario else None)
     return {"needs": needs, "products": products, "criteria": priorities, "existing_cover": existing, "existing_cover_notice": "Your existing cover may already meet this need. Review it before considering another policy.",
             **debate, "disclosure": "Educational comparison of a limited reference catalogue. Not licensed advice, a live quote or proof of current sale. A proposed licensed partner must perform suitability and final advice. Commercial commission does not affect this score."}
+
+
+@router.post("/buying/compare/debate")
+async def compare_debate(payload: CompareRequest, user=Depends(current_user)):
+    """Same comparison, with AI advocates (one checked model call per product) when a model is configured."""
+    from . import advocates
+    return await advocates.debate(await asyncio.to_thread(compare_products, payload, user))
 
 
 @router.get("/buying/needs")

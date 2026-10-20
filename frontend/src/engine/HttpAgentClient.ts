@@ -157,6 +157,13 @@ export class HttpAgentClient implements AgentClient {
       case 'verify':
         yield { ...base(), type: 'verify.result', citationsOk: e.status === 'ok', numbersOk: e.status === 'ok' };
         break;
+      case 'delegate': {
+        const det = (d ?? {}) as { to?: string; label?: string; allowed_tools?: string[]; context?: string[] };
+        const id = `delegate_${det.to ?? 'orchestrator'}`;
+        yield { ...base(), type: 'tool.call', callId: id, tool: 'route_to_specialist', tier: 'T0', args: { from: 'orchestrator', to: det.to ?? 'orchestrator', tools_in_scope: det.allowed_tools?.length ?? 0, context: det.context ?? [] } };
+        yield { ...base(), type: 'tool.result', callId: id, ok: true, summary: { en: `Delegated to ${det.label ?? 'orchestrator'}`, zh: `已委派给${det.label ?? '编排器'}` }, latencyMs: 0 };
+        break;
+      }
       default:
         break; // routing / respond are internal bookkeeping
     }

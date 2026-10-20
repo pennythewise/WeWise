@@ -64,6 +64,10 @@ WeWise is a customer-side AI insurance assistant. It consolidates a person's pol
 
 ## Agent design
 
+### Orchestrator and role-scoped specialists
+
+The orchestrator routes each goal to one of four specialist agents (**policy**, **claims**, **buying**, **records**). Each owns a disjoint set of the 34 tools and receives only the identifiers its role needs. The Policy Enforcement Point rejects any tool outside the delegated role (`DENY:TOOL_ROLE`) and any out-of-scope identifier (`DENY:CONTEXT_SCOPE`), so a manipulated buying turn cannot reach claim tools or claim data. The orchestrator itself holds no tools. Product comparison uses **AI advocates**, one separate model call per product, with every claim checked against that product's source facts, and a **rule-based judge** decides. Details, diagrams and limits: [`docs/AGENT_ARCHITECTURE.md`](docs/AGENT_ARCHITECTURE.md).
+
 ### Plan → execute → verify
 
 Each user turn produces a validated **plan** (an ordered list of tool steps with a declared purpose), then executes it step by step while streaming **trace events** to the UI, then verifies citations and numbers before the final message is emitted. Plans are bounded (8 tool calls, 45 seconds per turn) and every step is recorded in an audit log. The model can phrase the answer; it cannot add steps.
@@ -282,12 +286,12 @@ CI (`.github/workflows/verify.yml`) runs all of the above on every push to `main
 | Path | Contents |
 |---|---|
 | `frontend/` | React 18, Vite, TypeScript, Tailwind. `src/app` router and shell · `src/layout` phone frame and tab bar · `src/features` screens (`home`, `shop`, `policies`, `claims`, `chat`, `cards`, `capture`, `crossborder`, `location`, `switch`, `settings`, `showcase`, `inspector`, `stage`) · `src/engine` agent clients, scenarios, types · `src/mock` synthetic data, shop catalogue and compare logic · `src/i18n` Chinese and English |
-| `backend/app` | `core` identity and storage · `documents`, `document_analysis` ingestion and review · `intelligence`, `semantic_retrieval` retrieval · `agent_foundation` planner and 34 gated tools · `workflows`, `claims_tracker` claims and insurer FSM · `lifecycle` temporary uploads and vault · `memory` · `exports` · `chain` on-chain proofs and public verification · `insurance_features` · `jev_adapter` |
+| `backend/app` | `core` identity and storage · `documents`, `document_analysis` ingestion and review · `intelligence`, `semantic_retrieval` retrieval · `agent_foundation` planner and 34 gated tools · `workflows`, `claims_tracker` claims and insurer FSM · `lifecycle` temporary uploads and vault · `memory` · `exports` · `chain` on-chain proofs and public verification · `advocates` AI advocates for comparison · `insurance_features` · `jev_adapter` |
 | `backend/contracts` | `ProofRegistry.sol`, compiled ABI and bytecode, `deploy.py` |
 | `backend/tests`, `backend/eval` | Pytest suite, golden-task and attack corpora, evaluation runner and report |
 | `api/gateway.mjs` | Vercel serverless entry (stays at the repo root with `package.json`) |
 | `infra/` | Sandbox gateway, deploy helpers, tooling scripts and gateway tests |
-| `docs/` | `01_PRD.md` product requirements · `02_TECH_SPEC.md` backend and agent · `03_FRONTEND_PRD.md` frontend · `onchainplan.md` on-chain design |
+| `docs/` | `01_PRD.md` product requirements · `02_TECH_SPEC.md` backend and agent · `03_FRONTEND_PRD.md` frontend · `AGENT_ARCHITECTURE.md` orchestrator, specialists, advocates · `onchainplan.md` on-chain design |
 
 **Deployment.** The static frontend is served by Vercel and `/api/*` is routed through `api/gateway.mjs` to the FastAPI backend inside a named Vercel Sandbox (port 8017 only). The gateway restricts hosts, methods and body size, and private retrieval services stay inside the sandbox. Details: `infra/deploy/LOCAL_RETRIEVAL_SERVICES.md`.
 
