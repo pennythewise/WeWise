@@ -1,0 +1,533 @@
+{
+  "events": [
+    {
+      "id": "aud_833958eccb364135f6f68085",
+      "action": "agent_plan_completed",
+      "entity_type": "trace",
+      "entity_id": "tr_f746c353c306811c9afad919",
+      "created_at": "2026-10-20T07:10:04.358466+00:00",
+      "details": {
+        "goal": "outside_scope",
+        "tools_completed": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "id": "aud_023bb69c3aaae833f6a55ce5",
+      "action": "agent_plan_completed",
+      "entity_type": "trace",
+      "entity_id": "tr_75236c5e8d4772337d85ef9f",
+      "created_at": "2026-10-20T07:10:04.335621+00:00",
+      "details": {
+        "goal": "outside_scope",
+        "tools_completed": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "id": "aud_5844378084683b10772054bb",
+      "action": "agent_plan_completed",
+      "entity_type": "trace",
+      "entity_id": "tr_5d1d096888c7b200d23413c3",
+      "created_at": "2026-10-20T07:10:04.313441+00:00",
+      "details": {
+        "goal": "outside_scope",
+        "tools_completed": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "id": "aud_7b57b0e1c6e28252baa0f8e0",
+      "action": "simulation_clock_advanced",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:04.223287+00:00",
+      "details": {
+        "days": 3,
+        "is_simulated": true
+      }
+    },
+    {
+      "id": "aud_4c1e7b08a6a1792ab41ddf39",
+      "action": "simulated_submission_confirmed_no_external_delivery",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:04.171171+00:00",
+      "details": {
+        "is_simulated": true
+      }
+    },
+    {
+      "id": "aud_91d3210b5566d49c8d38ee43",
+      "action": "private_export_downloaded",
+      "entity_type": "export",
+      "entity_id": "exp_31ac6b468960c71dd53a769c",
+      "created_at": "2026-10-20T07:10:04.089683+00:00",
+      "details": {
+        "format": "zip"
+      }
+    },
+    {
+      "id": "aud_f0af8288f91ee6b26b54d42b",
+      "action": "private_export_downloaded",
+      "entity_type": "export",
+      "entity_id": "exp_31ac6b468960c71dd53a769c",
+      "created_at": "2026-10-20T07:10:04.078343+00:00",
+      "details": {
+        "format": "pdf"
+      }
+    },
+    {
+      "id": "aud_0b045a604b502897791762dc",
+      "action": "agent_reviewed_export_confirmed",
+      "entity_type": "conversation",
+      "entity_id": "conv_fd211a6583009b9b7691e239",
+      "created_at": "2026-10-20T07:10:04.044785+00:00",
+      "details": {
+        "external_delivery": false
+      }
+    },
+    {
+      "id": "aud_4e6f415032a4df4564bfe255",
+      "action": "claim_package_exported_not_submitted",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:04.041780+00:00",
+      "details": {
+        "export_id": "exp_31ac6b468960c71dd53a769c",
+        "mode": "draft",
+        "document_count": 12
+      }
+    },
+    {
+      "id": "aud_d2a23cd39526928effb39b75",
+      "action": "agent_plan_completed",
+      "entity_type": "trace",
+      "entity_id": "tr_c74b50543d84b15e56b22a52",
+      "created_at": "2026-10-20T07:10:03.975870+00:00",
+      "details": {
+        "goal": "claim_preview",
+        "tools_completed": 2,
+        "status": "awaiting_confirmation"
+      }
+    },
+    {
+      "id": "aud_8fd41a7d2613acb31d53101f",
+      "action": "export_preview_created",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.968582+00:00",
+      "details": {
+        "mode": "draft",
+        "action": "export_claim_package",
+        "document_count": 10
+      }
+    },
+    {
+      "id": "aud_3e33a0aefc0fe4c25d9233c2",
+      "action": "claim_critical_fields_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.891890+00:00",
+      "details": {
+        "revision": 1
+      }
+    },
+    {
+      "id": "aud_c20863e71b92debed5f72e74",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.851098+00:00",
+      "details": {
+        "document_id": "doc_5b64321b9bd7d7ba39fc4ce0",
+        "category": "claim_form"
+      }
+    },
+    {
+      "id": "aud_a03962f07c3f352e1fb1befc",
+      "action": "claim_form_generated_review_required",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.842535+00:00",
+      "details": {
+        "document_id": "doc_5b64321b9bd7d7ba39fc4ce0"
+      }
+    },
+    {
+      "id": "aud_5ad744eb44f2efbaae4e1a13",
+      "action": "document_viewed",
+      "entity_type": "document",
+      "entity_id": "doc_6281f887848cad4e42f05e49",
+      "created_at": "2026-10-20T07:10:03.811709+00:00",
+      "details": {}
+    },
+    {
+      "id": "aud_0c43689c062783fff32c2dfa",
+      "action": "agent_plan_completed",
+      "entity_type": "trace",
+      "entity_id": "tr_b4ab1efd682af3a8a48bd045",
+      "created_at": "2026-10-20T07:10:03.796917+00:00",
+      "details": {
+        "goal": "policy_question",
+        "tools_completed": 3,
+        "status": "completed"
+      }
+    },
+    {
+      "id": "aud_648c32b43ac721d588f96261",
+      "action": "policy_evidence_retrieved",
+      "entity_type": "policy",
+      "entity_id": "pol_b79ade17f3ec1e4c69e210ac",
+      "created_at": "2026-10-20T07:10:03.780296+00:00",
+      "details": {
+        "chunks": 0,
+        "quarantined_chunks": 0,
+        "engine": "multilingual_lexical_bm25"
+      }
+    },
+    {
+      "id": "aud_13b0b1a465e1b7839a653be4",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_6281f887848cad4e42f05e49",
+      "created_at": "2026-10-20T07:10:03.729641+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 108,
+        "ocr_status": "text_extracted"
+      }
+    },
+    {
+      "id": "aud_36ded20526733925a23e26c8",
+      "action": "untrusted_document_instruction_quarantined",
+      "entity_type": "document",
+      "entity_id": "doc_6281f887848cad4e42f05e49",
+      "created_at": "2026-10-20T07:10:03.729551+00:00",
+      "details": {
+        "chunks": 1
+      }
+    },
+    {
+      "id": "aud_f063ffb8d2d7b3a59e4f307d",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.709720+00:00",
+      "details": {
+        "document_id": "doc_a30c561fa1eae926b8f7f2a2",
+        "category": "discharge_record"
+      }
+    },
+    {
+      "id": "aud_9ee754cab4f68979d30701d5",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_a30c561fa1eae926b8f7f2a2",
+      "created_at": "2026-10-20T07:10:03.703023+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 111,
+        "ocr_status": "text_extracted"
+      }
+    },
+    {
+      "id": "aud_17c90c92fad53a8a9a4a0303",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.674748+00:00",
+      "details": {
+        "document_id": "doc_0772e93aa2d30bc7bc5410f6",
+        "category": "original_expense"
+      }
+    },
+    {
+      "id": "aud_e5c074df3583136d44bee442",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_0772e93aa2d30bc7bc5410f6",
+      "created_at": "2026-10-20T07:10:03.664295+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 111,
+        "ocr_status": "text_extracted"
+      }
+    },
+    {
+      "id": "aud_a30cda272490edbb2bb0f6c0",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.640284+00:00",
+      "details": {
+        "document_id": "doc_3e67115fa4b53ac91b9cec0c",
+        "category": "medical_record"
+      }
+    },
+    {
+      "id": "aud_af0d061a9c8ae6afef8f30b9",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_3e67115fa4b53ac91b9cec0c",
+      "created_at": "2026-10-20T07:10:03.633330+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 109,
+        "ocr_status": "text_extracted"
+      }
+    },
+    {
+      "id": "aud_d2eae4da6ec3bb0bfc2816a4",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.613445+00:00",
+      "details": {
+        "document_id": "doc_8eb154c8378607295545ede5",
+        "category": "travel_proof"
+      }
+    },
+    {
+      "id": "aud_701f607f8fec7d1d8c1d1230",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_8eb154c8378607295545ede5",
+      "created_at": "2026-10-20T07:10:03.606881+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 107,
+        "ocr_status": "text_extracted"
+      }
+    },
+    {
+      "id": "aud_21fb60d6ce299e0d79934f66",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.587857+00:00",
+      "details": {
+        "document_id": "doc_9f0196e355f2244e271d0251",
+        "category": "identity"
+      }
+    },
+    {
+      "id": "aud_309dcb1efe36c7645860d96b",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_9f0196e355f2244e271d0251",
+      "created_at": "2026-10-20T07:10:03.581484+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 103,
+        "ocr_status": "text_extracted"
+      }
+    },
+    {
+      "id": "aud_c5e28494a30788a279ecc688",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.559297+00:00",
+      "details": {
+        "document_id": "doc_d1d1d8de34e1bed88374c32f",
+        "category": "other"
+      }
+    },
+    {
+      "id": "aud_582aafa2ac20f6c6df045733",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_d1d1d8de34e1bed88374c32f",
+      "created_at": "2026-10-20T07:10:03.550983+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 243,
+        "ocr_status": "ocr_extracted"
+      }
+    },
+    {
+      "id": "aud_7684859459fe7faaacef1475",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.302591+00:00",
+      "details": {
+        "document_id": "doc_1582413c80ac15fff5f9a8fa",
+        "category": "other"
+      }
+    },
+    {
+      "id": "aud_ee3509ea1badc3a6e1aeb88f",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_1582413c80ac15fff5f9a8fa",
+      "created_at": "2026-10-20T07:10:03.283001+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 274,
+        "ocr_status": "ocr_extracted"
+      }
+    },
+    {
+      "id": "aud_f2348500c0c4195bf0d7c5c0",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:03.041772+00:00",
+      "details": {
+        "document_id": "doc_dce73eae7bc95a83f19b7a43",
+        "category": "other"
+      }
+    },
+    {
+      "id": "aud_a6fee8ff5ba4de835e572a88",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_dce73eae7bc95a83f19b7a43",
+      "created_at": "2026-10-20T07:10:03.033585+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 242,
+        "ocr_status": "ocr_extracted"
+      }
+    },
+    {
+      "id": "aud_2116273e2149f38f9aeb2d2d",
+      "action": "evidence_user_confirmed",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:02.779985+00:00",
+      "details": {
+        "document_id": "doc_91a0be3cc92b4c0b412f1109",
+        "category": "other"
+      }
+    },
+    {
+      "id": "aud_e11eb64cbf50989d21f1f829",
+      "action": "document_saved",
+      "entity_type": "document",
+      "entity_id": "doc_91a0be3cc92b4c0b412f1109",
+      "created_at": "2026-10-20T07:10:02.768532+00:00",
+      "details": {
+        "kind": "evidence",
+        "bytes": 243,
+        "ocr_status": "ocr_extracted"
+      }
+    },
+    {
+      "id": "aud_4c395dfcd4be2fc4a7e4dbbf",
+      "action": "claim_created",
+      "entity_type": "claim",
+      "entity_id": "clm_350605ff11ca217407fe9f03",
+      "created_at": "2026-10-20T07:10:02.469284+00:00",
+      "details": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac"
+      }
+    },
+    {
+      "id": "aud_46a17acfa829c877e23732f5",
+      "action": "agent_plan_completed",
+      "entity_type": "trace",
+      "entity_id": "tr_38339f3fad25803ced5e8762",
+      "created_at": "2026-10-20T07:10:02.452651+00:00",
+      "details": {
+        "goal": "emergency",
+        "tools_completed": 1,
+        "status": "completed"
+      }
+    },
+    {
+      "id": "aud_f7547a6dc868848d26b27620",
+      "action": "document_viewed",
+      "entity_type": "document",
+      "entity_id": "doc_db47997467525b9ed8efe2ce",
+      "created_at": "2026-10-20T07:10:02.296795+00:00",
+      "details": {}
+    },
+    {
+      "id": "aud_ccd4afb5ff7f98da89b77a0c",
+      "action": "document_viewed",
+      "entity_type": "document",
+      "entity_id": "doc_db47997467525b9ed8efe2ce",
+      "created_at": "2026-10-20T07:10:02.113495+00:00",
+      "details": {}
+    },
+    {
+      "id": "aud_4b4082f39752b78a5b677a35",
+      "action": "document_viewed",
+      "entity_type": "document",
+      "entity_id": "doc_db47997467525b9ed8efe2ce",
+      "created_at": "2026-10-20T07:10:01.964402+00:00",
+      "details": {}
+    },
+    {
+      "id": "aud_8367f092746531ed196034f2",
+      "action": "agent_plan_completed",
+      "entity_type": "trace",
+      "entity_id": "tr_d00252ba11a8f9510a872f89",
+      "created_at": "2026-10-20T07:10:01.946971+00:00",
+      "details": {
+        "goal": "policy_question",
+        "tools_completed": 3,
+        "status": "completed"
+      }
+    },
+    {
+      "id": "aud_7333b34b5de8b25ddf279bd0",
+      "action": "grounded_answer_prepared",
+      "entity_type": "policy",
+      "entity_id": "pol_b79ade17f3ec1e4c69e210ac",
+      "created_at": "2026-10-20T07:10:01.939582+00:00",
+      "details": {
+        "engine": "retrieval_only",
+        "citation_count": 3,
+        "revision": 2
+      }
+    },
+    {
+      "id": "aud_bba1c498224dc5002ab0d102",
+      "action": "policy_evidence_retrieved",
+      "entity_type": "policy",
+      "entity_id": "pol_b79ade17f3ec1e4c69e210ac",
+      "created_at": "2026-10-20T07:10:01.937117+00:00",
+      "details": {
+        "chunks": 5,
+        "quarantined_chunks": 0,
+        "engine": "sqlite_fts5_bm25+multilingual_lexical"
+      }
+    },
+    {
+      "id": "aud_4a981a66dd180c236e142576",
+      "action": "policy_facts_confirmed",
+      "entity_type": "policy",
+      "entity_id": "pol_b79ade17f3ec1e4c69e210ac",
+      "created_at": "2026-10-20T07:10:01.868881+00:00",
+      "details": {
+        "revision": 2,
+        "fields_changed": []
+      }
+    },
+    {
+      "id": "aud_66bde935e70752ba22346b56",
+      "action": "private_synthetic_workspace_started",
+      "entity_type": "system",
+      "entity_id": null,
+      "created_at": "2026-10-20T07:10:01.362721+00:00",
+      "details": {
+        "shared_account": false
+      }
+    },
+    {
+      "id": "aud_05462678b9148160dae70381",
+      "action": "synthetic_demo_seeded",
+      "entity_type": "policy",
+      "entity_id": "pol_b79ade17f3ec1e4c69e210ac",
+      "created_at": "2026-10-20T07:10:01.349709+00:00",
+      "details": {
+        "confirmed": false,
+        "real_insurer_connection": false
+      }
+    }
+  ]
+}

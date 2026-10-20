@@ -1,0 +1,171 @@
+{
+  "id": "tr_f746c353c306811c9afad919",
+  "trace_id": "tr_f746c353c306811c9afad919",
+  "conversation_id": "conv_588a08379906fb39d245509f",
+  "plan": {
+    "goal": "outside_scope",
+    "source": "deterministic_validated",
+    "steps": [],
+    "missing_slots": [],
+    "confirmations_required": [],
+    "user_visible_summary": "outside_scope: respond without data tools"
+  },
+  "events": [
+    {
+      "stage": "understand",
+      "status": "ok",
+      "detail": {
+        "intent": "outside_scope",
+        "locale": "en",
+        "slots": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": null
+        },
+        "resumed": false
+      },
+      "at": "2026-10-20T07:10:04.347255+00:00"
+    },
+    {
+      "stage": "routing",
+      "status": "fallback",
+      "detail": {
+        "used": false,
+        "reason": "deterministic_safety_priority",
+        "engine": "deterministic_allowed_intents",
+        "adopted": false
+      },
+      "at": "2026-10-20T07:10:04.347272+00:00"
+    },
+    {
+      "stage": "plan",
+      "status": "ok",
+      "detail": {
+        "goal": "outside_scope",
+        "source": "deterministic_validated",
+        "steps": [],
+        "missing_slots": [],
+        "confirmations_required": [],
+        "user_visible_summary": "outside_scope: respond without data tools"
+      },
+      "at": "2026-10-20T07:10:04.347291+00:00"
+    },
+    {
+      "stage": "safety",
+      "status": "blocked",
+      "detail": "Requested action is outside the registry; no data tool executed.",
+      "at": "2026-10-20T07:10:04.352979+00:00"
+    },
+    {
+      "stage": "verify",
+      "status": "ok",
+      "detail": "Owner checks and source validation applied; extractive evidence is not an insurer decision.",
+      "at": "2026-10-20T07:10:04.354584+00:00"
+    },
+    {
+      "stage": "respond",
+      "status": "ok",
+      "detail": "Prepared response and reviewable cards.",
+      "at": "2026-10-20T07:10:04.354605+00:00"
+    }
+  ],
+  "tools": [],
+  "safety": [
+    {
+      "stage": "safety",
+      "status": "blocked",
+      "detail": "Requested action is outside the registry; no data tool executed.",
+      "at": "2026-10-20T07:10:04.352979+00:00"
+    }
+  ],
+  "evidence": [],
+  "result": {
+    "engine": "deterministic_planned",
+    "citations": [],
+    "cards": [],
+    "chips": [
+      "查看保障",
+      "准备理赔材料",
+      "紧急帮助"
+    ],
+    "answer": "I cannot move money, change payout accounts or access another person's information. I can help with policies and evidence.",
+    "disclaimer": "This is preparation and explanation, not an underwriting or claim decision. The insurer reviews the complete contract and facts.",
+    "conversation_id": "conv_588a08379906fb39d245509f",
+    "conversation_revision": 1,
+    "trace_id": "tr_f746c353c306811c9afad919",
+    "plan": {
+      "goal": "outside_scope",
+      "source": "deterministic_validated",
+      "steps": [],
+      "missing_slots": [],
+      "confirmations_required": [],
+      "user_visible_summary": "outside_scope: respond without data tools"
+    },
+    "state": {
+      "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+      "claim_id": null,
+      "goal": "outside_scope",
+      "pending_question": null,
+      "status": "completed"
+    },
+    "trace": [
+      {
+        "stage": "understand",
+        "status": "ok",
+        "detail": {
+          "intent": "outside_scope",
+          "locale": "en",
+          "slots": {
+            "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+            "claim_id": null
+          },
+          "resumed": false
+        },
+        "at": "2026-10-20T07:10:04.347255+00:00"
+      },
+      {
+        "stage": "routing",
+        "status": "fallback",
+        "detail": {
+          "used": false,
+          "reason": "deterministic_safety_priority",
+          "engine": "deterministic_allowed_intents",
+          "adopted": false
+        },
+        "at": "2026-10-20T07:10:04.347272+00:00"
+      },
+      {
+        "stage": "plan",
+        "status": "ok",
+        "detail": {
+          "goal": "outside_scope",
+          "source": "deterministic_validated",
+          "steps": [],
+          "missing_slots": [],
+          "confirmations_required": [],
+          "user_visible_summary": "outside_scope: respond without data tools"
+        },
+        "at": "2026-10-20T07:10:04.347291+00:00"
+      },
+      {
+        "stage": "safety",
+        "status": "blocked",
+        "detail": "Requested action is outside the registry; no data tool executed.",
+        "at": "2026-10-20T07:10:04.352979+00:00"
+      },
+      {
+        "stage": "verify",
+        "status": "ok",
+        "detail": "Owner checks and source validation applied; extractive evidence is not an insurer decision.",
+        "at": "2026-10-20T07:10:04.354584+00:00"
+      },
+      {
+        "stage": "respond",
+        "status": "ok",
+        "detail": "Prepared response and reviewable cards.",
+        "at": "2026-10-20T07:10:04.354605+00:00"
+      }
+    ]
+  },
+  "started_at": "2026-10-20T07:10:04.344473+00:00",
+  "completed_at": "2026-10-20T07:10:04.358415+00:00"
+}

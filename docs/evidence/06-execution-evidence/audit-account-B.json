@@ -1,0 +1,25 @@
+{
+  "events": [
+    {
+      "id": "aud_bd23395175df459270d40d6d",
+      "action": "private_synthetic_workspace_started",
+      "entity_type": "system",
+      "entity_id": null,
+      "created_at": "2026-10-20T07:10:01.792816+00:00",
+      "details": {
+        "shared_account": false
+      }
+    },
+    {
+      "id": "aud_6758a59c31a26754a3c77285",
+      "action": "synthetic_demo_seeded",
+      "entity_type": "policy",
+      "entity_id": "pol_3ada0c5a11c761cdc21a9c90",
+      "created_at": "2026-10-20T07:10:01.783499+00:00",
+      "details": {
+        "confirmed": false,
+        "real_insurer_connection": false
+      }
+    }
+  ]
+}

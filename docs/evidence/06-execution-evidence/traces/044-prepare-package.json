@@ -1,0 +1,919 @@
+{
+  "id": "tr_c74b50543d84b15e56b22a52",
+  "trace_id": "tr_c74b50543d84b15e56b22a52",
+  "conversation_id": "conv_fd211a6583009b9b7691e239",
+  "plan": {
+    "goal": "claim_preview",
+    "source": "deterministic_validated",
+    "steps": [
+      {
+        "id": "s1",
+        "tool": "claim_status_get",
+        "args": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": "clm_350605ff11ca217407fe9f03",
+          "query": "Prepare a claim package",
+          "locale": "en",
+          "document_id": null,
+          "family": "",
+          "country": "Japan",
+          "cost": null,
+          "comparison": null
+        },
+        "depends_on": [],
+        "purpose": "claim_preview"
+      },
+      {
+        "id": "s2",
+        "tool": "claim_export_preview",
+        "args": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": "clm_350605ff11ca217407fe9f03",
+          "query": "Prepare a claim package",
+          "locale": "en",
+          "document_id": null,
+          "family": "",
+          "country": "Japan",
+          "cost": null,
+          "comparison": null
+        },
+        "depends_on": [
+          "s1"
+        ],
+        "purpose": "claim_preview"
+      }
+    ],
+    "missing_slots": [],
+    "confirmations_required": [
+      "exact_export_snapshot"
+    ],
+    "user_visible_summary": "claim_preview: claim_status_get → claim_export_preview"
+  },
+  "events": [
+    {
+      "stage": "understand",
+      "status": "ok",
+      "detail": {
+        "intent": "claim_preview",
+        "locale": "en",
+        "slots": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": "clm_350605ff11ca217407fe9f03"
+        },
+        "resumed": false
+      },
+      "at": "2026-10-20T07:10:03.922321+00:00"
+    },
+    {
+      "stage": "routing",
+      "status": "fallback",
+      "detail": {
+        "used": false,
+        "suggestion": null,
+        "engine": "deterministic_fallback",
+        "reason": "retrieval_only",
+        "adopted": false
+      },
+      "at": "2026-10-20T07:10:03.922339+00:00"
+    },
+    {
+      "stage": "plan",
+      "status": "ok",
+      "detail": {
+        "goal": "claim_preview",
+        "source": "deterministic_validated",
+        "steps": [
+          {
+            "id": "s1",
+            "tool": "claim_status_get",
+            "args": {
+              "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+              "claim_id": "clm_350605ff11ca217407fe9f03",
+              "query": "Prepare a claim package",
+              "locale": "en",
+              "document_id": null,
+              "family": "",
+              "country": "Japan",
+              "cost": null,
+              "comparison": null
+            },
+            "depends_on": [],
+            "purpose": "claim_preview"
+          },
+          {
+            "id": "s2",
+            "tool": "claim_export_preview",
+            "args": {
+              "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+              "claim_id": "clm_350605ff11ca217407fe9f03",
+              "query": "Prepare a claim package",
+              "locale": "en",
+              "document_id": null,
+              "family": "",
+              "country": "Japan",
+              "cost": null,
+              "comparison": null
+            },
+            "depends_on": [
+              "s1"
+            ],
+            "purpose": "claim_preview"
+          }
+        ],
+        "missing_slots": [],
+        "confirmations_required": [
+          "exact_export_snapshot"
+        ],
+        "user_visible_summary": "claim_preview: claim_status_get → claim_export_preview"
+      },
+      "at": "2026-10-20T07:10:03.922378+00:00"
+    },
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "claim_preview",
+      "at": "2026-10-20T07:10:03.928504+00:00",
+      "tool": "claim_status_get",
+      "step_id": "s1",
+      "tier": "T1",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": "clm_350605ff11ca217407fe9f03",
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:03.947901+00:00",
+      "tool": "claim_status_get",
+      "step_id": "s1",
+      "latency_ms": 18
+    },
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "claim_preview",
+      "at": "2026-10-20T07:10:03.950019+00:00",
+      "tool": "claim_export_preview",
+      "step_id": "s2",
+      "tier": "T2",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": "clm_350605ff11ca217407fe9f03",
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:03.970164+00:00",
+      "tool": "claim_export_preview",
+      "step_id": "s2",
+      "latency_ms": 18
+    },
+    {
+      "stage": "verify",
+      "status": "ok",
+      "detail": "Owner checks and source validation applied; extractive evidence is not an insurer decision.",
+      "at": "2026-10-20T07:10:03.971725+00:00"
+    },
+    {
+      "stage": "respond",
+      "status": "ok",
+      "detail": "Prepared response and reviewable cards.",
+      "at": "2026-10-20T07:10:03.971737+00:00"
+    }
+  ],
+  "tools": [
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "claim_preview",
+      "at": "2026-10-20T07:10:03.928504+00:00",
+      "tool": "claim_status_get",
+      "step_id": "s1",
+      "tier": "T1",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": "clm_350605ff11ca217407fe9f03",
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:03.947901+00:00",
+      "tool": "claim_status_get",
+      "step_id": "s1",
+      "latency_ms": 18
+    },
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "claim_preview",
+      "at": "2026-10-20T07:10:03.950019+00:00",
+      "tool": "claim_export_preview",
+      "step_id": "s2",
+      "tier": "T2",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": "clm_350605ff11ca217407fe9f03",
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:03.970164+00:00",
+      "tool": "claim_export_preview",
+      "step_id": "s2",
+      "latency_ms": 18
+    }
+  ],
+  "safety": [],
+  "evidence": [],
+  "result": {
+    "engine": "deterministic_planned",
+    "citations": [],
+    "cards": [
+      {
+        "type": "claim",
+        "path": "/claims/clm_350605ff11ca217407fe9f03"
+      }
+    ],
+    "chips": [],
+    "answer": "The current download preview is ready. Review the exact version and confirm; it will not be sent to an insurer.",
+    "disclaimer": "This is preparation and explanation, not an underwriting or claim decision. The insurer reviews the complete contract and facts.",
+    "pending_action": {
+      "kind": "export_claim_package",
+      "token": "GnnBxNd7kWODV0BwgsrEqmgU3g2GA6lDTczHmGC6arY",
+      "expires_at": "2026-10-20T07:20:03.968455+00:00",
+      "claim_id": "clm_350605ff11ca217407fe9f03",
+      "payload": {
+        "claim_id": "clm_350605ff11ca217407fe9f03",
+        "revision": 1,
+        "policy_revision": 2,
+        "policy_confirmed": true,
+        "confirmed_revision": 1,
+        "policy": {
+          "id": "pol_b79ade17f3ec1e4c69e210ac",
+          "title": "安联境外旅行（畅游版）互联网意外伤害保险 — synthetic Japan",
+          "policy_number": "DEMO-ALLIANZ-JP-2026",
+          "insured_name": "林美 (fictional customer)",
+          "start_date": "2026-10-15",
+          "end_date": "2026-10-25",
+          "fields_json": "{\"benefits\": [{\"name\": \"Selected benefit: Accidental outpatient medical\", \"source\": {\"document_id\": \"doc_8694664a9323b42d045246c7\", \"page\": 1, \"quote\": \"Selected benefit: Accidental outpatient medical\"}}, {\"name\": \"expenses / 意外伤害医疗费用\", \"source\": {\"document_id\": \"doc_8694664a9323b42d045246c7\", \"page\": 1, \"quote\": \"expenses / 意外伤害医疗费用\"}}], \"exclusions\": [], \"critical_sources\": {\"insurer\": {\"document_id\": \"doc_8694664a9323b42d045246c7\", \"page\": 1, \"quote\": \"Insurer: 安联人寿保险有限公司\"}, \"product_name\": {\"document_id\": \"doc_8694664a9323b42d045246c7\", \"page\": 1, \"quote\": \"Product: 安联境外旅行（畅游版）互联网意外伤害保险 — synthetic Japan\"}, \"policy_number\": {\"document_id\": \"doc_8694664a9323b42d045246c7\", \"page\": 1, \"quote\": \"Policy number: DEMO-ALLIANZ-JP-2026\"}, \"insured_name\": {\"document_id\": \"doc_8694664a9323b42d045246c7\", \"page\": 1, \"quote\": \"Insured name: 林美 (fictional customer)\"}, \"start_date\": {\"document_id\": \"doc_8694664a9323b42d045246c7\", \"page\": 1, \"quote\": \"Start date: 2026-10-15\"}, \"end_date\": {\"document_id\": \"doc_8694664a9323b42d045246c7\", \"page\": 1, \"quote\": \"End date: 2026-10-25\"}, \"destination\": {\"document_id\": \"doc_8694664a9323b42d045246c7\", \"page\": 1, \"quote\": \"Destination: Japan / 日本\"}}, \"synthetic\": true, \"family\": \"travel\", \"insurer\": \"安联人寿保险有限公司\", \"product_name\": \"安联境外旅行（畅游版）互联网意外伤害保险 — synthetic Japan\", \"policy_number\": \"DEMO-ALLIANZ-JP-2026\", \"insured_name\": \"林美 (fictional customer)\", \"start_date\": \"2026-10-15\", \"end_date\": \"2026-10-25\", \"destination\": \"Japan / 日本\", \"catalog_product_id\": \"allianz_changyou_2023\", \"source_url\": \"https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf\", \"last_confirmation\": {\"at\": \"2026-10-20T07:10:01.868512+00:00\", \"user_id\": \"usr_58763d7f61bc7ab886b3a7c8\", \"critical_fields_confirmed\": true}, \"user_corrections\": {}}"
+        },
+        "policy_files": [
+          {
+            "document_id": "doc_8694664a9323b42d045246c7",
+            "name": "SYNTHETIC-Japan-policy-schedule.pdf",
+            "sha256": "30ce141727411a7572d54b9b5af181488e4e106f9ca69783e81bfc1635c730da",
+            "exists": true,
+            "is_wording": false
+          },
+          {
+            "document_id": "doc_db47997467525b9ed8efe2ce",
+            "name": "Allianz-public-2023-wording.pdf",
+            "sha256": "5db397c86e767ee833c4a1b8efea67f11c6e93518679faf0736b3d3f5acf285d",
+            "exists": true,
+            "is_wording": true
+          }
+        ],
+        "incident": {
+          "applicant_role": "insured",
+          "city": "Tokyo",
+          "contact_phone": "",
+          "country": "Japan",
+          "currency": "JPY",
+          "date": "2026-10-17",
+          "death": false,
+          "description": "SYNTHETIC demo case: fictional traveller slipped on a wet platform, admitted overnight.",
+          "disability": false,
+          "english_summary": "",
+          "event_type": "",
+          "expenses": 180000.0,
+          "hospital": "SYNTHETIC Tokyo General Hospital",
+          "minor": false,
+          "police_involved": false,
+          "prior_reimbursement": false,
+          "third_party_involved": false,
+          "treatment_type": "inpatient"
+        },
+        "benefit": "outpatient_accident",
+        "evidence": [
+          {
+            "document_id": "doc_0772e93aa2d30bc7bc5410f6",
+            "category": "original_expense",
+            "fields": {
+              "source_date": "2026-10-17"
+            },
+            "name": "SYNTHETIC-original_expense.txt",
+            "exists": true,
+            "recognised": true,
+            "confirmed": true,
+            "sha256": "739275da3564924bd306e1d4fbd772187d528307212a43c64c0281933f585e8e",
+            "synthetic": true,
+            "file_url": "/api/documents/doc_0772e93aa2d30bc7bc5410f6/file"
+          },
+          {
+            "document_id": "doc_1582413c80ac15fff5f9a8fa",
+            "category": "other",
+            "fields": {
+              "ar_step": "plate",
+              "captured_at": "2026-10-17T14:32",
+              "sha256": "8907d94295c9c504"
+            },
+            "name": "SYNTHETIC-ar-plate.png",
+            "exists": true,
+            "recognised": false,
+            "confirmed": true,
+            "sha256": "8907d94295c9c50495dd37d7a186368664ecf23c4ce92c928a952714c1b23945",
+            "synthetic": false,
+            "file_url": "/api/documents/doc_1582413c80ac15fff5f9a8fa/file"
+          },
+          {
+            "document_id": "doc_3e67115fa4b53ac91b9cec0c",
+            "category": "medical_record",
+            "fields": {
+              "source_date": "2026-10-17"
+            },
+            "name": "SYNTHETIC-medical_record.txt",
+            "exists": true,
+            "recognised": true,
+            "confirmed": true,
+            "sha256": "09d4fd1d5b1facd3c83f3d429455e37d7afb674edc7c954b574b79e88087267c",
+            "synthetic": true,
+            "file_url": "/api/documents/doc_3e67115fa4b53ac91b9cec0c/file"
+          },
+          {
+            "document_id": "doc_5b64321b9bd7d7ba39fc4ce0",
+            "category": "claim_form",
+            "fields": {
+              "claim_revision": 1
+            },
+            "name": "claim-application-preparation.pdf",
+            "exists": true,
+            "recognised": true,
+            "confirmed": true,
+            "sha256": "ab15b59e99fdc7b1c2eb434d7125706a6390e0a1e759dce82fe85921deab2cba",
+            "synthetic": true,
+            "file_url": "/api/documents/doc_5b64321b9bd7d7ba39fc4ce0/file"
+          },
+          {
+            "document_id": "doc_8eb154c8378607295545ede5",
+            "category": "travel_proof",
+            "fields": {
+              "source_date": "2026-10-17"
+            },
+            "name": "SYNTHETIC-travel_proof.txt",
+            "exists": true,
+            "recognised": true,
+            "confirmed": true,
+            "sha256": "9647c20e8cb7bcd8a322a709c9a17dab0383623d8d334ee364afb21da4e5791d",
+            "synthetic": true,
+            "file_url": "/api/documents/doc_8eb154c8378607295545ede5/file"
+          },
+          {
+            "document_id": "doc_91a0be3cc92b4c0b412f1109",
+            "category": "other",
+            "fields": {
+              "ar_step": "wide",
+              "captured_at": "2026-10-17T14:32",
+              "sha256": "42b8b1d5a5a46be3"
+            },
+            "name": "SYNTHETIC-ar-wide.png",
+            "exists": true,
+            "recognised": false,
+            "confirmed": true,
+            "sha256": "42b8b1d5a5a46be3a627886f80da52ec5461f0d72555692deb6a846e00909010",
+            "synthetic": false,
+            "file_url": "/api/documents/doc_91a0be3cc92b4c0b412f1109/file"
+          },
+          {
+            "document_id": "doc_9f0196e355f2244e271d0251",
+            "category": "identity",
+            "fields": {
+              "source_date": "2026-10-17"
+            },
+            "name": "SYNTHETIC-identity.txt",
+            "exists": true,
+            "recognised": true,
+            "confirmed": true,
+            "sha256": "a5bd4e3dbc7220d344bbe351aec5068ac12187d1bda1c94c50e394ca9ab4bc45",
+            "synthetic": true,
+            "file_url": "/api/documents/doc_9f0196e355f2244e271d0251/file"
+          },
+          {
+            "document_id": "doc_a30c561fa1eae926b8f7f2a2",
+            "category": "discharge_record",
+            "fields": {
+              "source_date": "2026-10-17"
+            },
+            "name": "SYNTHETIC-discharge_record.txt",
+            "exists": true,
+            "recognised": true,
+            "confirmed": true,
+            "sha256": "c3d9c34cd8a3eaea28e6e21b21aebc8bfa26acd0d2fec031d2b59ec8d6348265",
+            "synthetic": true,
+            "file_url": "/api/documents/doc_a30c561fa1eae926b8f7f2a2/file"
+          },
+          {
+            "document_id": "doc_d1d1d8de34e1bed88374c32f",
+            "category": "other",
+            "fields": {
+              "ar_step": "scene",
+              "captured_at": "2026-10-17T14:32",
+              "sha256": "d21122d098a27639"
+            },
+            "name": "SYNTHETIC-ar-scene.png",
+            "exists": true,
+            "recognised": false,
+            "confirmed": true,
+            "sha256": "d21122d098a276394fe9a9e86d56bb6f037d858d1c553d1dc00f305353542133",
+            "synthetic": false,
+            "file_url": "/api/documents/doc_d1d1d8de34e1bed88374c32f/file"
+          },
+          {
+            "document_id": "doc_dce73eae7bc95a83f19b7a43",
+            "category": "other",
+            "fields": {
+              "ar_step": "damage",
+              "captured_at": "2026-10-17T14:32",
+              "sha256": "576ded85d8cae9c6"
+            },
+            "name": "SYNTHETIC-ar-damage.png",
+            "exists": true,
+            "recognised": false,
+            "confirmed": true,
+            "sha256": "576ded85d8cae9c69f574d3aaf8d0e65d5938e321aa99fc0bdcd12fdeac9db44",
+            "synthetic": false,
+            "file_url": "/api/documents/doc_dce73eae7bc95a83f19b7a43/file"
+          }
+        ],
+        "checklist": [
+          {
+            "category": "policy",
+            "label": "Policy schedule and applicable wording / 保单及适用条款",
+            "required": true,
+            "conditional": false,
+            "condition": null,
+            "accepted_document_ids": [
+              "doc_8694664a9323b42d045246c7",
+              "doc_db47997467525b9ed8efe2ce"
+            ],
+            "uploaded_document_ids": [],
+            "confirmed": true,
+            "missing": false,
+            "source": {
+              "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+              "section": null,
+              "page": null
+            },
+            "rule_status": "reference_only",
+            "where_to_get": "Your issued policy and insurer / 已签发保单及保险公司",
+            "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+          },
+          {
+            "category": "identity",
+            "label": "Identity and applicant authority / 身份及申请权限",
+            "required": true,
+            "conditional": false,
+            "condition": null,
+            "accepted_document_ids": [
+              "doc_9f0196e355f2244e271d0251"
+            ],
+            "uploaded_document_ids": [
+              "doc_9f0196e355f2244e271d0251"
+            ],
+            "confirmed": true,
+            "missing": false,
+            "source": {
+              "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+              "section": null,
+              "page": null
+            },
+            "rule_status": "reference_only",
+            "where_to_get": "Obtain from the issuer or your records; confirm the insurer's exact format / 向出具方获取并核对保险公司格式",
+            "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+          },
+          {
+            "category": "claim_form",
+            "label": "Reviewed application / 已审核申请表",
+            "required": true,
+            "conditional": false,
+            "condition": null,
+            "accepted_document_ids": [
+              "doc_5b64321b9bd7d7ba39fc4ce0"
+            ],
+            "uploaded_document_ids": [
+              "doc_5b64321b9bd7d7ba39fc4ce0"
+            ],
+            "confirmed": true,
+            "missing": false,
+            "source": {
+              "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+              "section": null,
+              "page": null
+            },
+            "rule_status": "reference_only",
+            "where_to_get": "Obtain from the issuer or your records; confirm the insurer's exact format / 向出具方获取并核对保险公司格式",
+            "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+          },
+          {
+            "category": "travel_proof",
+            "label": "Trip and travel dates / 旅程证明",
+            "required": true,
+            "conditional": false,
+            "condition": null,
+            "accepted_document_ids": [
+              "doc_8eb154c8378607295545ede5"
+            ],
+            "uploaded_document_ids": [
+              "doc_8eb154c8378607295545ede5"
+            ],
+            "confirmed": true,
+            "missing": false,
+            "source": {
+              "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+              "section": null,
+              "page": null
+            },
+            "rule_status": "reference_only",
+            "where_to_get": "Obtain from the issuer or your records; confirm the insurer's exact format / 向出具方获取并核对保险公司格式",
+            "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+          },
+          {
+            "category": "medical_record",
+            "label": "Medical record and recorded diagnosis / 病历及诊断",
+            "required": true,
+            "conditional": false,
+            "condition": null,
+            "accepted_document_ids": [
+              "doc_3e67115fa4b53ac91b9cec0c"
+            ],
+            "uploaded_document_ids": [
+              "doc_3e67115fa4b53ac91b9cec0c"
+            ],
+            "confirmed": true,
+            "missing": false,
+            "source": {
+              "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+              "section": null,
+              "page": null
+            },
+            "rule_status": "reference_only",
+            "where_to_get": "Treating hospital / 就诊医疗机构",
+            "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+          },
+          {
+            "category": "original_expense",
+            "label": "Expense evidence and itemisation / 费用凭证及明细",
+            "required": true,
+            "conditional": false,
+            "condition": null,
+            "accepted_document_ids": [
+              "doc_0772e93aa2d30bc7bc5410f6"
+            ],
+            "uploaded_document_ids": [
+              "doc_0772e93aa2d30bc7bc5410f6"
+            ],
+            "confirmed": true,
+            "missing": false,
+            "source": {
+              "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+              "section": null,
+              "page": null
+            },
+            "rule_status": "reference_only",
+            "where_to_get": "Hospital billing desk / 收费处",
+            "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+          },
+          {
+            "category": "discharge_record",
+            "label": "Discharge summary / 出院记录",
+            "required": true,
+            "conditional": true,
+            "condition": "Inpatient treatment",
+            "accepted_document_ids": [
+              "doc_a30c561fa1eae926b8f7f2a2"
+            ],
+            "uploaded_document_ids": [
+              "doc_a30c561fa1eae926b8f7f2a2"
+            ],
+            "confirmed": true,
+            "missing": false,
+            "source": {
+              "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+              "section": null,
+              "page": null
+            },
+            "rule_status": "reference_only",
+            "where_to_get": "Obtain from the issuer or your records; confirm the insurer's exact format / 向出具方获取并核对保险公司格式",
+            "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+          }
+        ],
+        "missing": [],
+        "prescreen": {
+          "result": "insufficient_information",
+          "checks": [
+            {
+              "id": "verified_policy",
+              "status": "pass",
+              "detail": "Policy confirmation and version must still match the case."
+            },
+            {
+              "id": "policy_period",
+              "status": "pass",
+              "detail": "Incident date is within the recorded policy period."
+            },
+            {
+              "id": "waiting_period",
+              "status": "unresolved",
+              "detail": "No source-verified waiting-period number is available for this benefit. No zero-day period is assumed."
+            },
+            {
+              "id": "selected_benefit",
+              "status": "pass",
+              "detail": "The primary schedule contains a reviewed selected accidental-outpatient benefit line."
+            },
+            {
+              "id": "territory",
+              "status": "pass",
+              "detail": "Japan matches the confirmed schedule destination; contract exclusions remain to be checked."
+            },
+            {
+              "id": "reviewed_rule",
+              "status": "unresolved",
+              "detail": "This policy/benefit is outside the deeply reviewed hackathon path. Export a draft and ask the insurer for its checklist."
+            },
+            {
+              "id": "contract_conditions",
+              "status": "unresolved",
+              "detail": "Selected benefits, reasonable/necessary expenses, hospital definition, exclusions and insurer assessment still apply."
+            }
+          ],
+          "waiting_period": {
+            "known": false,
+            "start": "2026-10-15",
+            "eligible_from": null,
+            "incident_date": "2026-10-17",
+            "days": null,
+            "satisfied": null,
+            "source": null
+          },
+          "exclusions": [],
+          "expenses": {
+            "reported": 180000.0,
+            "currency": "JPY",
+            "insurer_pays": null,
+            "notice": "Reported expense is not an eligible or payable amount. No payout is estimated from an unverified limit."
+          },
+          "sources": [
+            {
+              "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+              "section": "4.2-4.3",
+              "pages": [
+                11,
+                12
+              ]
+            }
+          ],
+          "is_approval": false,
+          "notice": "For this wording, outpatient claims should notify assistance as soon as possible within 15 days; inpatient/medical transport needs immediate notice. Contact the insurer to confirm current instructions. Emergency care must not wait for evidence."
+        },
+        "mode": "draft",
+        "action": "export_claim_package",
+        "recipient": "User download only",
+        "not_submitted": true
+      },
+      "recipient": "User download only"
+    },
+    "conversation_id": "conv_fd211a6583009b9b7691e239",
+    "conversation_revision": 1,
+    "trace_id": "tr_c74b50543d84b15e56b22a52",
+    "plan": {
+      "goal": "claim_preview",
+      "source": "deterministic_validated",
+      "steps": [
+        {
+          "id": "s1",
+          "tool": "claim_status_get",
+          "args": {
+            "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+            "claim_id": "clm_350605ff11ca217407fe9f03",
+            "query": "Prepare a claim package",
+            "locale": "en",
+            "document_id": null,
+            "family": "",
+            "country": "Japan",
+            "cost": null,
+            "comparison": null
+          },
+          "depends_on": [],
+          "purpose": "claim_preview"
+        },
+        {
+          "id": "s2",
+          "tool": "claim_export_preview",
+          "args": {
+            "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+            "claim_id": "clm_350605ff11ca217407fe9f03",
+            "query": "Prepare a claim package",
+            "locale": "en",
+            "document_id": null,
+            "family": "",
+            "country": "Japan",
+            "cost": null,
+            "comparison": null
+          },
+          "depends_on": [
+            "s1"
+          ],
+          "purpose": "claim_preview"
+        }
+      ],
+      "missing_slots": [],
+      "confirmations_required": [
+        "exact_export_snapshot"
+      ],
+      "user_visible_summary": "claim_preview: claim_status_get → claim_export_preview"
+    },
+    "state": {
+      "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+      "claim_id": "clm_350605ff11ca217407fe9f03",
+      "goal": "claim_preview",
+      "pending_question": null,
+      "status": "awaiting_confirmation"
+    },
+    "trace": [
+      {
+        "stage": "understand",
+        "status": "ok",
+        "detail": {
+          "intent": "claim_preview",
+          "locale": "en",
+          "slots": {
+            "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+            "claim_id": "clm_350605ff11ca217407fe9f03"
+          },
+          "resumed": false
+        },
+        "at": "2026-10-20T07:10:03.922321+00:00"
+      },
+      {
+        "stage": "routing",
+        "status": "fallback",
+        "detail": {
+          "used": false,
+          "suggestion": null,
+          "engine": "deterministic_fallback",
+          "reason": "retrieval_only",
+          "adopted": false
+        },
+        "at": "2026-10-20T07:10:03.922339+00:00"
+      },
+      {
+        "stage": "plan",
+        "status": "ok",
+        "detail": {
+          "goal": "claim_preview",
+          "source": "deterministic_validated",
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "claim_status_get",
+              "args": {
+                "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+                "claim_id": "clm_350605ff11ca217407fe9f03",
+                "query": "Prepare a claim package",
+                "locale": "en",
+                "document_id": null,
+                "family": "",
+                "country": "Japan",
+                "cost": null,
+                "comparison": null
+              },
+              "depends_on": [],
+              "purpose": "claim_preview"
+            },
+            {
+              "id": "s2",
+              "tool": "claim_export_preview",
+              "args": {
+                "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+                "claim_id": "clm_350605ff11ca217407fe9f03",
+                "query": "Prepare a claim package",
+                "locale": "en",
+                "document_id": null,
+                "family": "",
+                "country": "Japan",
+                "cost": null,
+                "comparison": null
+              },
+              "depends_on": [
+                "s1"
+              ],
+              "purpose": "claim_preview"
+            }
+          ],
+          "missing_slots": [],
+          "confirmations_required": [
+            "exact_export_snapshot"
+          ],
+          "user_visible_summary": "claim_preview: claim_status_get → claim_export_preview"
+        },
+        "at": "2026-10-20T07:10:03.922378+00:00"
+      },
+      {
+        "stage": "execute",
+        "status": "running",
+        "detail": "claim_preview",
+        "at": "2026-10-20T07:10:03.928504+00:00",
+        "tool": "claim_status_get",
+        "step_id": "s1",
+        "tier": "T1",
+        "args_masked": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": "clm_350605ff11ca217407fe9f03",
+          "document_id": null,
+          "locale": "en",
+          "query": "[private user question]",
+          "reviewed_cost_inputs": false,
+          "reviewed_comparison_inputs": false
+        }
+      },
+      {
+        "stage": "execute",
+        "status": "ok",
+        "detail": "Tool returned; no external recipient was contacted.",
+        "at": "2026-10-20T07:10:03.947901+00:00",
+        "tool": "claim_status_get",
+        "step_id": "s1",
+        "latency_ms": 18
+      },
+      {
+        "stage": "execute",
+        "status": "running",
+        "detail": "claim_preview",
+        "at": "2026-10-20T07:10:03.950019+00:00",
+        "tool": "claim_export_preview",
+        "step_id": "s2",
+        "tier": "T2",
+        "args_masked": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": "clm_350605ff11ca217407fe9f03",
+          "document_id": null,
+          "locale": "en",
+          "query": "[private user question]",
+          "reviewed_cost_inputs": false,
+          "reviewed_comparison_inputs": false
+        }
+      },
+      {
+        "stage": "execute",
+        "status": "ok",
+        "detail": "Tool returned; no external recipient was contacted.",
+        "at": "2026-10-20T07:10:03.970164+00:00",
+        "tool": "claim_export_preview",
+        "step_id": "s2",
+        "latency_ms": 18
+      },
+      {
+        "stage": "verify",
+        "status": "ok",
+        "detail": "Owner checks and source validation applied; extractive evidence is not an insurer decision.",
+        "at": "2026-10-20T07:10:03.971725+00:00"
+      },
+      {
+        "stage": "respond",
+        "status": "ok",
+        "detail": "Prepared response and reviewable cards.",
+        "at": "2026-10-20T07:10:03.971737+00:00"
+      }
+    ]
+  },
+  "started_at": "2026-10-20T07:10:03.919123+00:00",
+  "completed_at": "2026-10-20T07:10:03.975767+00:00"
+}

@@ -404,7 +404,9 @@ OUT_OF_SCOPE = re.compile(
     r"|((收款|银行卡|账户|账号|payout|bank\\s+account).{0,12}(改成|改为|换成|改到|修改|更改|变更))"
     r"|((other|another|someone|somebody|their)\s*(person|user|people|customer)?'?s?\s+(policy|claim|record|data|medical)|(wife|husband|spouse|mother|father|boss|colleague|neighbou?r|friend|ex)'?s?\s+(policy|claim|record|data|medical))"
     r"|((妻子|老婆|丈夫|老公|父母|同事|朋友|邻居|他人|别人|其他用户|别的用户|所有用户|全部客户).{0,8}(保单|理赔|资料|信息|病历|记录))"
-    r"|(admin(istrator)?\s+(mode|access|override)|\bsudo\b|管理员(权限|模式)|root\s+access|i\s+am\s+(an?\s+)?(insurer|insurance\s+company)\s+(employee|staff)|保险公司员工|all\s+(users|customers)'?\s*(policies|data|records))"
+    r"|(admin(istrator)?\s+(mode|access|override)|\bsudo\b|管理员(权限|模式)|root\s+access|all\s+(users|customers)'?\s*(policies|data|records))"
+    r"|(\b(i\s+am|i['’]?m|im)\s+(an?\s+|the\s+)?(insurer|insurance(\s+company)?|claims?|underwriting)\s+(employee|staff|agent|officer|adjuster|handler|manager)|我是.{0,4}(保险公司(员工|工作人员|职员)|理赔员|核赔员))"
+    r"|((mark|set|flag|approve|force)\s+(\w+\s+){0,2}claims?\s+(as\s+)?(approved|paid|accepted|settled)|approve\s+(my|this|the|our)\s+(own\s+)?claim|(把|将).{0,8}理赔.{0,6}(标记|改|设)(为|成)?(已)?(批准|通过|赔付)|批准我的理赔)"
     r"|(crypto(currency)?|ethereum|加密货币|炒股|股票推荐|stock\s+tips?|买基金)",
     re.IGNORECASE,
 )

@@ -1,0 +1,693 @@
+{
+  "id": "tr_d00252ba11a8f9510a872f89",
+  "trace_id": "tr_d00252ba11a8f9510a872f89",
+  "conversation_id": "conv_18f15db2cd06616d0bf607e1",
+  "plan": {
+    "goal": "policy_question",
+    "source": "deterministic_validated",
+    "steps": [
+      {
+        "id": "s1",
+        "tool": "policy_get",
+        "args": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": null,
+          "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+          "locale": "en",
+          "document_id": null,
+          "family": "",
+          "country": "Japan",
+          "cost": null,
+          "comparison": null
+        },
+        "depends_on": [],
+        "purpose": "policy_question"
+      },
+      {
+        "id": "s2",
+        "tool": "policy_search_clauses",
+        "args": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": null,
+          "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+          "locale": "en",
+          "document_id": null,
+          "family": "",
+          "country": "Japan",
+          "cost": null,
+          "comparison": null
+        },
+        "depends_on": [
+          "s1"
+        ],
+        "purpose": "policy_question"
+      },
+      {
+        "id": "s3",
+        "tool": "policy_explain",
+        "args": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": null,
+          "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+          "locale": "en",
+          "document_id": null,
+          "family": "",
+          "country": "Japan",
+          "cost": null,
+          "comparison": null
+        },
+        "depends_on": [
+          "s2"
+        ],
+        "purpose": "policy_question"
+      }
+    ],
+    "missing_slots": [],
+    "confirmations_required": [],
+    "user_visible_summary": "policy_question: policy_get → policy_search_clauses → policy_explain"
+  },
+  "events": [
+    {
+      "stage": "understand",
+      "status": "ok",
+      "detail": {
+        "intent": "policy_question",
+        "locale": "en",
+        "slots": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": null
+        },
+        "resumed": false
+      },
+      "at": "2026-10-20T07:10:01.889535+00:00"
+    },
+    {
+      "stage": "routing",
+      "status": "fallback",
+      "detail": {
+        "used": false,
+        "suggestion": null,
+        "engine": "deterministic_fallback",
+        "reason": "retrieval_only",
+        "adopted": false
+      },
+      "at": "2026-10-20T07:10:01.889556+00:00"
+    },
+    {
+      "stage": "plan",
+      "status": "ok",
+      "detail": {
+        "goal": "policy_question",
+        "source": "deterministic_validated",
+        "steps": [
+          {
+            "id": "s1",
+            "tool": "policy_get",
+            "args": {
+              "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+              "claim_id": null,
+              "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+              "locale": "en",
+              "document_id": null,
+              "family": "",
+              "country": "Japan",
+              "cost": null,
+              "comparison": null
+            },
+            "depends_on": [],
+            "purpose": "policy_question"
+          },
+          {
+            "id": "s2",
+            "tool": "policy_search_clauses",
+            "args": {
+              "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+              "claim_id": null,
+              "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+              "locale": "en",
+              "document_id": null,
+              "family": "",
+              "country": "Japan",
+              "cost": null,
+              "comparison": null
+            },
+            "depends_on": [
+              "s1"
+            ],
+            "purpose": "policy_question"
+          },
+          {
+            "id": "s3",
+            "tool": "policy_explain",
+            "args": {
+              "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+              "claim_id": null,
+              "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+              "locale": "en",
+              "document_id": null,
+              "family": "",
+              "country": "Japan",
+              "cost": null,
+              "comparison": null
+            },
+            "depends_on": [
+              "s2"
+            ],
+            "purpose": "policy_question"
+          }
+        ],
+        "missing_slots": [],
+        "confirmations_required": [],
+        "user_visible_summary": "policy_question: policy_get → policy_search_clauses → policy_explain"
+      },
+      "at": "2026-10-20T07:10:01.889596+00:00"
+    },
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "policy_question",
+      "at": "2026-10-20T07:10:01.894147+00:00",
+      "tool": "policy_get",
+      "step_id": "s1",
+      "tier": "T1",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": null,
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:01.909534+00:00",
+      "tool": "policy_get",
+      "step_id": "s1",
+      "latency_ms": 14
+    },
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "policy_question",
+      "at": "2026-10-20T07:10:01.911427+00:00",
+      "tool": "policy_search_clauses",
+      "step_id": "s2",
+      "tier": "T1",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": null,
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:01.921688+00:00",
+      "tool": "policy_search_clauses",
+      "step_id": "s2",
+      "latency_ms": 9
+    },
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "policy_question",
+      "at": "2026-10-20T07:10:01.924759+00:00",
+      "tool": "policy_explain",
+      "step_id": "s3",
+      "tier": "T1",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": null,
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:01.940899+00:00",
+      "tool": "policy_explain",
+      "step_id": "s3",
+      "latency_ms": 15
+    },
+    {
+      "stage": "verify",
+      "status": "ok",
+      "detail": "Owner checks and source validation applied; extractive evidence is not an insurer decision.",
+      "at": "2026-10-20T07:10:01.942557+00:00"
+    },
+    {
+      "stage": "respond",
+      "status": "ok",
+      "detail": "Prepared response and reviewable cards.",
+      "at": "2026-10-20T07:10:01.942570+00:00"
+    }
+  ],
+  "tools": [
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "policy_question",
+      "at": "2026-10-20T07:10:01.894147+00:00",
+      "tool": "policy_get",
+      "step_id": "s1",
+      "tier": "T1",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": null,
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:01.909534+00:00",
+      "tool": "policy_get",
+      "step_id": "s1",
+      "latency_ms": 14
+    },
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "policy_question",
+      "at": "2026-10-20T07:10:01.911427+00:00",
+      "tool": "policy_search_clauses",
+      "step_id": "s2",
+      "tier": "T1",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": null,
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:01.921688+00:00",
+      "tool": "policy_search_clauses",
+      "step_id": "s2",
+      "latency_ms": 9
+    },
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "policy_question",
+      "at": "2026-10-20T07:10:01.924759+00:00",
+      "tool": "policy_explain",
+      "step_id": "s3",
+      "tier": "T1",
+      "args_masked": {
+        "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+        "claim_id": null,
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:01.940899+00:00",
+      "tool": "policy_explain",
+      "step_id": "s3",
+      "latency_ms": 15
+    }
+  ],
+  "safety": [],
+  "evidence": [
+    {
+      "id": "C1",
+      "document_id": "doc_db47997467525b9ed8efe2ce",
+      "page": 12,
+      "quote": "3、境外医疗、境外住院津贴或境外紧急医疗救援保险金\n、境外医疗、境外住院津贴或境外紧急医疗救援保险金\n在申请境外医疗、境外住院津贴或境外紧急医疗救援时，申请人须填写索赔申请表，并提供\n下列证明和资料：\n(1) 被保险人保险单；\n(2) 被保险人、申请人的有效身份证件（护照、身份证等）；\n(3) 被保险人出入境记录或能证明出入境时间的相关凭证（例如护照出入境盖章页、机票登\n机牌等）；\n(4) 由认可医院出具的病历、诊断证明等医疗证明材料以及医疗费用原始凭证；\n(5) 与确认保险事故的性质、原因、损失程度等有关的其他材料，例如警方报告、法医报\n告、第三方见证报告等。\n(6) 仅适用于遗体或骨灰送返、境外丧葬费、境外灵柩费索赔：\n认可医院或警方出具的被保险人死亡证明、火化证明（如在境外遗体火化）、丧葬费及\n灵柩费的发票或收据原件、\n(7) 仅适用于亲属慰问探访费索赔：\n合理且必须的住宿证明、住宿费和交通费发票或收据原件；\n(8) 申请人所能提供的与确认保险事故的性质、原因等有关的其他证明和资料。"
+    },
+    {
+      "id": "C2",
+      "document_id": "doc_db47997467525b9ed8efe2ce",
+      "page": 5,
+      "quote": "国境外期间发生条款约定的医疗费用总额超过\n如果被保险人在中国境外期间发生条款约定的医疗费用总额超过10,000\n10,000\n10,000 元人民币且申请医\n元人民币且申请医\n疗费用担保的，必须立即联系救援机构，告知有关治疗情况并根据救援机构要求提供必要\n的材料。如果属于保险责任范围，救援机构将为被保险人在境外发生条款约定的医疗费用\n提供担保，并直接与医院或其他服务机构结算费用（该担保不包含返回境内的医疗费\n用），但该费用支付以\n用），但该费用支付以保险单\n保险单\n保险单上对应的境外医疗基本保险金额为限；如果救援机构无法安\n上对应的境外医疗基本保险金额为限；如果救援机构无法安\n排中国境外期间发生条款约定的医疗费用的担保事宜，请被保险人先行自付医疗费用，等\n回到中国境内后可申请理赔，经我们确认属于保险责任\n回到中国境内后可申请理赔，经我们确认属于保险责任的，将向被保险人以\n，将向被保险人以\n，将向被保险人以保险单\n保险单\n保险单上的境\n上的境\n外医疗基本保险金额为限支付保险金；\n我们仅承担被保险人发生的合理的住院、门急诊及牙科医疗费用。\n我们仅承担被保险人发生的合理的住院、门急诊及牙科医疗费用。合格的医师提供的处方\n合格的医师提供的处方\n须符合当地政府颁布的医疗保险药品报销范围的规定。合理的住院费指按照合格的医师提\n供医疗咨询和治疗服务时通常收取的医疗诊断费、处方费、手术费、急救车辆费、住院床\n位费、医药费、\n位费、医药费、X 光检查费、护理费和\n光检查费、护理费和\n光检查费、护理费和医疗用品费为准；以上费用以当地政府核准的收费标\n医疗用品费为准；以上费用以当地政府核准的收费标\n"
+    },
+    {
+      "id": "C3",
+      "document_id": "doc_db47997467525b9ed8efe2ce",
+      "page": 9,
+      "quote": "得相应的补偿；\n(11)\n(11) 被保险人拒绝听从合格的医师或救援机构提出的合理建议（例如\n被保险人拒绝听从合格的医师或救援机构提出的合理建议（例如\n被保险人拒绝听从合格的医师或救援机构提出的合理建议（例如:\n:\n: 主治医生或救援机\n主治医生或救援机\n构当时合理地认为被保险人的身体状况适合回到中国后再施行治疗或手术）；\n(12)\n(12) 违背合格的医师提出的建议，自行决定旅行而引起人身伤害；\n违背合格的医师提出的建议，自行决定旅行而引起人身伤害；\n(13)\n(13) 被保险人进行国际旅行的目的是到境外接受医疗服务；\n被保险人进行国际旅行的目的是到境外接受医疗服务；\n(14)\n(14) 接种疫苗费用（因被动物咬伤注射狂犬病疫苗除外）；\n接种疫苗费用（因被动物咬伤注射狂犬病疫苗除外）；\n(15)\n(15) 仅适用于返回境内后的费用的责任免除：\n仅适用于返回境内后的费用的责任免除：\n被保险人在境外遭受意外伤害事故或突发性疾病，经过当地医生诊治，但在回国后进\n行的与本次意外伤害事故或突发性疾病没有直接关系的治疗；\n(16)\n(16) 仅适用于\n仅适用于\n仅适用于境外未\n境外未\n境外未成年子女住院陪同的责任免除：\n成年子女住院陪同的责任免除：\n1）被保险人未取得合格的医师出具的书面病历，以证明当时有必要的医疗原因确实需\n）被保险人未取得合格的医师出具的书面病历，以证明当时有必要的医疗原因确实需\n要被保险人陪同未成年子女住院接受治疗；\n2）未成年子女因接受常规定期发生的治疗或护理而住院；\n）未成年子女因接受常规定期发生的治疗或护理而住院；\n3）未成年子女在中国境内住院。\n）未成年子女"
+    }
+  ],
+  "result": {
+    "engine": "retrieval_only",
+    "citations": [
+      {
+        "id": "C1",
+        "document_id": "doc_db47997467525b9ed8efe2ce",
+        "page": 12,
+        "quote": "3、境外医疗、境外住院津贴或境外紧急医疗救援保险金\n、境外医疗、境外住院津贴或境外紧急医疗救援保险金\n在申请境外医疗、境外住院津贴或境外紧急医疗救援时，申请人须填写索赔申请表，并提供\n下列证明和资料：\n(1) 被保险人保险单；\n(2) 被保险人、申请人的有效身份证件（护照、身份证等）；\n(3) 被保险人出入境记录或能证明出入境时间的相关凭证（例如护照出入境盖章页、机票登\n机牌等）；\n(4) 由认可医院出具的病历、诊断证明等医疗证明材料以及医疗费用原始凭证；\n(5) 与确认保险事故的性质、原因、损失程度等有关的其他材料，例如警方报告、法医报\n告、第三方见证报告等。\n(6) 仅适用于遗体或骨灰送返、境外丧葬费、境外灵柩费索赔：\n认可医院或警方出具的被保险人死亡证明、火化证明（如在境外遗体火化）、丧葬费及\n灵柩费的发票或收据原件、\n(7) 仅适用于亲属慰问探访费索赔：\n合理且必须的住宿证明、住宿费和交通费发票或收据原件；\n(8) 申请人所能提供的与确认保险事故的性质、原因等有关的其他证明和资料。"
+      },
+      {
+        "id": "C2",
+        "document_id": "doc_db47997467525b9ed8efe2ce",
+        "page": 5,
+        "quote": "国境外期间发生条款约定的医疗费用总额超过\n如果被保险人在中国境外期间发生条款约定的医疗费用总额超过10,000\n10,000\n10,000 元人民币且申请医\n元人民币且申请医\n疗费用担保的，必须立即联系救援机构，告知有关治疗情况并根据救援机构要求提供必要\n的材料。如果属于保险责任范围，救援机构将为被保险人在境外发生条款约定的医疗费用\n提供担保，并直接与医院或其他服务机构结算费用（该担保不包含返回境内的医疗费\n用），但该费用支付以\n用），但该费用支付以保险单\n保险单\n保险单上对应的境外医疗基本保险金额为限；如果救援机构无法安\n上对应的境外医疗基本保险金额为限；如果救援机构无法安\n排中国境外期间发生条款约定的医疗费用的担保事宜，请被保险人先行自付医疗费用，等\n回到中国境内后可申请理赔，经我们确认属于保险责任\n回到中国境内后可申请理赔，经我们确认属于保险责任的，将向被保险人以\n，将向被保险人以\n，将向被保险人以保险单\n保险单\n保险单上的境\n上的境\n外医疗基本保险金额为限支付保险金；\n我们仅承担被保险人发生的合理的住院、门急诊及牙科医疗费用。\n我们仅承担被保险人发生的合理的住院、门急诊及牙科医疗费用。合格的医师提供的处方\n合格的医师提供的处方\n须符合当地政府颁布的医疗保险药品报销范围的规定。合理的住院费指按照合格的医师提\n供医疗咨询和治疗服务时通常收取的医疗诊断费、处方费、手术费、急救车辆费、住院床\n位费、医药费、\n位费、医药费、X 光检查费、护理费和\n光检查费、护理费和\n光检查费、护理费和医疗用品费为准；以上费用以当地政府核准的收费标\n医疗用品费为准；以上费用以当地政府核准的收费标\n"
+      },
+      {
+        "id": "C3",
+        "document_id": "doc_db47997467525b9ed8efe2ce",
+        "page": 9,
+        "quote": "得相应的补偿；\n(11)\n(11) 被保险人拒绝听从合格的医师或救援机构提出的合理建议（例如\n被保险人拒绝听从合格的医师或救援机构提出的合理建议（例如\n被保险人拒绝听从合格的医师或救援机构提出的合理建议（例如:\n:\n: 主治医生或救援机\n主治医生或救援机\n构当时合理地认为被保险人的身体状况适合回到中国后再施行治疗或手术）；\n(12)\n(12) 违背合格的医师提出的建议，自行决定旅行而引起人身伤害；\n违背合格的医师提出的建议，自行决定旅行而引起人身伤害；\n(13)\n(13) 被保险人进行国际旅行的目的是到境外接受医疗服务；\n被保险人进行国际旅行的目的是到境外接受医疗服务；\n(14)\n(14) 接种疫苗费用（因被动物咬伤注射狂犬病疫苗除外）；\n接种疫苗费用（因被动物咬伤注射狂犬病疫苗除外）；\n(15)\n(15) 仅适用于返回境内后的费用的责任免除：\n仅适用于返回境内后的费用的责任免除：\n被保险人在境外遭受意外伤害事故或突发性疾病，经过当地医生诊治，但在回国后进\n行的与本次意外伤害事故或突发性疾病没有直接关系的治疗；\n(16)\n(16) 仅适用于\n仅适用于\n仅适用于境外未\n境外未\n境外未成年子女住院陪同的责任免除：\n成年子女住院陪同的责任免除：\n1）被保险人未取得合格的医师出具的书面病历，以证明当时有必要的医疗原因确实需\n）被保险人未取得合格的医师出具的书面病历，以证明当时有必要的医疗原因确实需\n要被保险人陪同未成年子女住院接受治疗；\n2）未成年子女因接受常规定期发生的治疗或护理而住院；\n）未成年子女因接受常规定期发生的治疗或护理而住院；\n3）未成年子女在中国境内住院。\n）未成年子女"
+      }
+    ],
+    "cards": [],
+    "chips": [
+      "What evidence is needed?",
+      "What exclusions matter?",
+      "Prepare claim package"
+    ],
+    "answer": "I found these source passages. This is retrieval-only evidence, not a model-generated personal coverage conclusion:\n\n[C1] p.12: 3、境外医疗、境外住院津贴或境外紧急医疗救援保险金\n、境外医疗、境外住院津贴或境外紧急医疗救援保险金\n在申请境外医疗、境外住院津贴或境外紧急医疗救援时，申请人须填写索赔申请表，并提供\n下列证明和资料：\n(1) 被保险人保险单；\n(2) 被保险人、申请人的有效身份证件（护照、身份证等）；\n(3) 被保险人出入境记录或能证明出入境时间的相关凭证（例如护照出入境盖章页、机票登\n机牌等）；\n(4) 由认可医院出具的病历、诊断证明等医疗证明材料以及医疗费用原始凭证；\n(5) 与确认保险事故的性质、原因、损失程度等有关的其他材料，例如警方报告、法医报\n告、第三方见证报告等。\n(6) 仅适用于遗体或骨灰送返、境外丧葬费、境外灵柩费索赔：\n认可医院或警方出具的被保险人死亡证明、火化证明（如在境外遗体火化）、丧葬费及\n灵柩费的发票或收据原件、\n(7) 仅适用于亲属慰问探访费索赔：\n合理且必须的住宿证明、住宿\n…\n\n[C2] p.5: 国境外期间发生条款约定的医疗费用总额超过\n如果被保险人在中国境外期间发生条款约定的医疗费用总额超过10,000\n10,000\n10,000 元人民币且申请医\n元人民币且申请医\n疗费用担保的，必须立即联系救援机构，告知有关治疗情况并根据救援机构要求提供必要\n的材料。如果属于保险责任范围，救援机构将为被保险人在境外发生条款约定的医疗费用\n提供担保，并直接与医院或其他服务机构结算费用（该担保不包含返回境内的医疗费\n用），但该费用支付以\n用），但该费用支付以保险单\n保险单\n保险单上对应的境外医疗基本保险金额为限；如果救援机构无法安\n上对应的境外医疗基本保险金额为限；如果救援机构无法安\n排中国境外期间发生条款约定的医疗费用的担保事宜，请被保险人先行自付医疗费用，等\n回到中国境内后可申请理赔，经我们确认属于保险责任\n回到中国境内后可申请理赔，经我们确认属于保险责任的，将向被保险人以\n，将向被保险人以\n\n…\n\n[C3] p.9: (13) 被保险人进行国际旅行的目的是到境外接受医疗服务；\n被保险人进行国际旅行的目的是到境外接受医疗服务；\n(14)\n(14) 接种疫苗费用（因被动物咬伤注射狂犬病疫苗除外）；\n接种疫苗费用（因被动物咬伤注射狂犬病疫苗除外）；\n(15)\n(15) 仅适用于返回境内后的费用的责任免除：\n仅适用于返回境内后的费用的责任免除：\n被保险人在境外遭受意外伤害事故或突发性疾病，经过当地医生诊治，但在回国后进\n行的与本次意外伤害事故或突发性疾病没有直接关系的治疗；\n(16)\n(16) 仅适用于\n仅适用于\n仅适用于境外未\n境外未\n境外未成年子女住院陪同的责任免除：\n成年子女住院陪同的责任免除：\n1）被保险人未取得合格的医师出具的书面病历，以证明当时有必要的医疗原因确实需\n）被保险人未取得合格的医师出具的书面病历，以证明当时有必要的医疗原因确实需\n要被保险人陪同未成年子女住院接受治疗；\n2）未成年子女因接\n…\n\nCheck the full wording, endorsements and facts; use the insurer's official channel if anything remains unclear.\n\nThis is preparation and explanation, not an underwriting or claim decision. The insurer reviews the complete contract and facts.",
+    "disclaimer": "This is preparation and explanation, not an underwriting or claim decision. The insurer reviews the complete contract and facts.",
+    "trace": [
+      {
+        "stage": "understand",
+        "status": "ok",
+        "detail": {
+          "intent": "policy_question",
+          "locale": "en",
+          "slots": {
+            "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+            "claim_id": null
+          },
+          "resumed": false
+        },
+        "at": "2026-10-20T07:10:01.889535+00:00"
+      },
+      {
+        "stage": "routing",
+        "status": "fallback",
+        "detail": {
+          "used": false,
+          "suggestion": null,
+          "engine": "deterministic_fallback",
+          "reason": "retrieval_only",
+          "adopted": false
+        },
+        "at": "2026-10-20T07:10:01.889556+00:00"
+      },
+      {
+        "stage": "plan",
+        "status": "ok",
+        "detail": {
+          "goal": "policy_question",
+          "source": "deterministic_validated",
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "policy_get",
+              "args": {
+                "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+                "claim_id": null,
+                "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+                "locale": "en",
+                "document_id": null,
+                "family": "",
+                "country": "Japan",
+                "cost": null,
+                "comparison": null
+              },
+              "depends_on": [],
+              "purpose": "policy_question"
+            },
+            {
+              "id": "s2",
+              "tool": "policy_search_clauses",
+              "args": {
+                "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+                "claim_id": null,
+                "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+                "locale": "en",
+                "document_id": null,
+                "family": "",
+                "country": "Japan",
+                "cost": null,
+                "comparison": null
+              },
+              "depends_on": [
+                "s1"
+              ],
+              "purpose": "policy_question"
+            },
+            {
+              "id": "s3",
+              "tool": "policy_explain",
+              "args": {
+                "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+                "claim_id": null,
+                "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+                "locale": "en",
+                "document_id": null,
+                "family": "",
+                "country": "Japan",
+                "cost": null,
+                "comparison": null
+              },
+              "depends_on": [
+                "s2"
+              ],
+              "purpose": "policy_question"
+            }
+          ],
+          "missing_slots": [],
+          "confirmations_required": [],
+          "user_visible_summary": "policy_question: policy_get → policy_search_clauses → policy_explain"
+        },
+        "at": "2026-10-20T07:10:01.889596+00:00"
+      },
+      {
+        "stage": "execute",
+        "status": "running",
+        "detail": "policy_question",
+        "at": "2026-10-20T07:10:01.894147+00:00",
+        "tool": "policy_get",
+        "step_id": "s1",
+        "tier": "T1",
+        "args_masked": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": null,
+          "document_id": null,
+          "locale": "en",
+          "query": "[private user question]",
+          "reviewed_cost_inputs": false,
+          "reviewed_comparison_inputs": false
+        }
+      },
+      {
+        "stage": "execute",
+        "status": "ok",
+        "detail": "Tool returned; no external recipient was contacted.",
+        "at": "2026-10-20T07:10:01.909534+00:00",
+        "tool": "policy_get",
+        "step_id": "s1",
+        "latency_ms": 14
+      },
+      {
+        "stage": "execute",
+        "status": "running",
+        "detail": "policy_question",
+        "at": "2026-10-20T07:10:01.911427+00:00",
+        "tool": "policy_search_clauses",
+        "step_id": "s2",
+        "tier": "T1",
+        "args_masked": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": null,
+          "document_id": null,
+          "locale": "en",
+          "query": "[private user question]",
+          "reviewed_cost_inputs": false,
+          "reviewed_comparison_inputs": false
+        }
+      },
+      {
+        "stage": "execute",
+        "status": "ok",
+        "detail": "Tool returned; no external recipient was contacted.",
+        "at": "2026-10-20T07:10:01.921688+00:00",
+        "tool": "policy_search_clauses",
+        "step_id": "s2",
+        "latency_ms": 9
+      },
+      {
+        "stage": "execute",
+        "status": "running",
+        "detail": "policy_question",
+        "at": "2026-10-20T07:10:01.924759+00:00",
+        "tool": "policy_explain",
+        "step_id": "s3",
+        "tier": "T1",
+        "args_masked": {
+          "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+          "claim_id": null,
+          "document_id": null,
+          "locale": "en",
+          "query": "[private user question]",
+          "reviewed_cost_inputs": false,
+          "reviewed_comparison_inputs": false
+        }
+      },
+      {
+        "stage": "execute",
+        "status": "ok",
+        "detail": "Tool returned; no external recipient was contacted.",
+        "at": "2026-10-20T07:10:01.940899+00:00",
+        "tool": "policy_explain",
+        "step_id": "s3",
+        "latency_ms": 15
+      },
+      {
+        "stage": "verify",
+        "status": "ok",
+        "detail": "Owner checks and source validation applied; extractive evidence is not an insurer decision.",
+        "at": "2026-10-20T07:10:01.942557+00:00"
+      },
+      {
+        "stage": "respond",
+        "status": "ok",
+        "detail": "Prepared response and reviewable cards.",
+        "at": "2026-10-20T07:10:01.942570+00:00"
+      },
+      {
+        "stage": "authenticate",
+        "status": "ok",
+        "detail": "Private account scope enforced by application code."
+      },
+      {
+        "stage": "route",
+        "status": "ok",
+        "detail": "Deterministic intent: policy_question. JEV not connected."
+      },
+      {
+        "stage": "approved_memory",
+        "status": "ok",
+        "detail": "disabled; 0 approved facts read privately. Only communication style used; contract evidence stays separate."
+      },
+      {
+        "stage": "retrieve",
+        "status": "ok",
+        "detail": "sqlite_fts5_bm25+multilingual_lexical; 5 owner-scoped passages; 0 quarantined chunks excluded."
+      },
+      {
+        "stage": "model",
+        "status": "disabled",
+        "detail": "This deployment enforces retrieval mode; external model calls are disabled."
+      },
+      {
+        "stage": "verify",
+        "status": "ok",
+        "detail": "Every citation matches the current owned document text and page. No insurer action performed."
+      }
+    ],
+    "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+    "policy_revision": 2,
+    "uncertainty": "conditional_insurer_review",
+    "conversation_id": "conv_18f15db2cd06616d0bf607e1",
+    "conversation_revision": 1,
+    "trace_id": "tr_d00252ba11a8f9510a872f89",
+    "plan": {
+      "goal": "policy_question",
+      "source": "deterministic_validated",
+      "steps": [
+        {
+          "id": "s1",
+          "tool": "policy_get",
+          "args": {
+            "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+            "claim_id": null,
+            "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+            "locale": "en",
+            "document_id": null,
+            "family": "",
+            "country": "Japan",
+            "cost": null,
+            "comparison": null
+          },
+          "depends_on": [],
+          "purpose": "policy_question"
+        },
+        {
+          "id": "s2",
+          "tool": "policy_search_clauses",
+          "args": {
+            "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+            "claim_id": null,
+            "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+            "locale": "en",
+            "document_id": null,
+            "family": "",
+            "country": "Japan",
+            "cost": null,
+            "comparison": null
+          },
+          "depends_on": [
+            "s1"
+          ],
+          "purpose": "policy_question"
+        },
+        {
+          "id": "s3",
+          "tool": "policy_explain",
+          "args": {
+            "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+            "claim_id": null,
+            "query": "I was admitted to hospital in Tokyo. Am I covered, and what documents do I need?",
+            "locale": "en",
+            "document_id": null,
+            "family": "",
+            "country": "Japan",
+            "cost": null,
+            "comparison": null
+          },
+          "depends_on": [
+            "s2"
+          ],
+          "purpose": "policy_question"
+        }
+      ],
+      "missing_slots": [],
+      "confirmations_required": [],
+      "user_visible_summary": "policy_question: policy_get → policy_search_clauses → policy_explain"
+    },
+    "state": {
+      "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+      "claim_id": null,
+      "goal": "policy_question",
+      "pending_question": null,
+      "status": "completed"
+    }
+  },
+  "started_at": "2026-10-20T07:10:01.886434+00:00",
+  "completed_at": "2026-10-20T07:10:01.946806+00:00"
+}

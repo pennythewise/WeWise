@@ -1,0 +1,770 @@
+{
+  "id": "clm_350605ff11ca217407fe9f03",
+  "policy_id": "pol_b79ade17f3ec1e4c69e210ac",
+  "policy_revision": 2,
+  "current_policy_revision": 2,
+  "policy_title": "安联境外旅行（畅游版）互联网意外伤害保险 — synthetic Japan",
+  "policy_family": "travel",
+  "revision": 1,
+  "benefit": "outpatient_accident",
+  "incident": {
+    "applicant_role": "insured",
+    "city": "Tokyo",
+    "contact_phone": "",
+    "country": "Japan",
+    "currency": "JPY",
+    "date": "2026-10-17",
+    "death": false,
+    "description": "SYNTHETIC demo case: fictional traveller slipped on a wet platform, admitted overnight.",
+    "disability": false,
+    "english_summary": "",
+    "event_type": "",
+    "expenses": 180000.0,
+    "hospital": "SYNTHETIC Tokyo General Hospital",
+    "minor": false,
+    "police_involved": false,
+    "prior_reimbursement": false,
+    "third_party_involved": false,
+    "treatment_type": "inpatient"
+  },
+  "confirmed_revision": 1,
+  "actual_status": "DRAFT",
+  "status": "DRAFT",
+  "checklist": [
+    {
+      "category": "policy",
+      "label": "Policy schedule and applicable wording / 保单及适用条款",
+      "required": true,
+      "conditional": false,
+      "condition": null,
+      "accepted_document_ids": [
+        "doc_8694664a9323b42d045246c7",
+        "doc_db47997467525b9ed8efe2ce"
+      ],
+      "uploaded_document_ids": [],
+      "confirmed": true,
+      "missing": false,
+      "source": {
+        "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+        "section": null,
+        "page": null
+      },
+      "rule_status": "reference_only",
+      "where_to_get": "Your issued policy and insurer / 已签发保单及保险公司",
+      "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+    },
+    {
+      "category": "identity",
+      "label": "Identity and applicant authority / 身份及申请权限",
+      "required": true,
+      "conditional": false,
+      "condition": null,
+      "accepted_document_ids": [
+        "doc_9f0196e355f2244e271d0251"
+      ],
+      "uploaded_document_ids": [
+        "doc_9f0196e355f2244e271d0251"
+      ],
+      "confirmed": true,
+      "missing": false,
+      "source": {
+        "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+        "section": null,
+        "page": null
+      },
+      "rule_status": "reference_only",
+      "where_to_get": "Obtain from the issuer or your records; confirm the insurer's exact format / 向出具方获取并核对保险公司格式",
+      "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+    },
+    {
+      "category": "claim_form",
+      "label": "Reviewed application / 已审核申请表",
+      "required": true,
+      "conditional": false,
+      "condition": null,
+      "accepted_document_ids": [
+        "doc_5b64321b9bd7d7ba39fc4ce0"
+      ],
+      "uploaded_document_ids": [
+        "doc_5b64321b9bd7d7ba39fc4ce0"
+      ],
+      "confirmed": true,
+      "missing": false,
+      "source": {
+        "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+        "section": null,
+        "page": null
+      },
+      "rule_status": "reference_only",
+      "where_to_get": "Obtain from the issuer or your records; confirm the insurer's exact format / 向出具方获取并核对保险公司格式",
+      "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+    },
+    {
+      "category": "travel_proof",
+      "label": "Trip and travel dates / 旅程证明",
+      "required": true,
+      "conditional": false,
+      "condition": null,
+      "accepted_document_ids": [
+        "doc_8eb154c8378607295545ede5"
+      ],
+      "uploaded_document_ids": [
+        "doc_8eb154c8378607295545ede5"
+      ],
+      "confirmed": true,
+      "missing": false,
+      "source": {
+        "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+        "section": null,
+        "page": null
+      },
+      "rule_status": "reference_only",
+      "where_to_get": "Obtain from the issuer or your records; confirm the insurer's exact format / 向出具方获取并核对保险公司格式",
+      "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+    },
+    {
+      "category": "medical_record",
+      "label": "Medical record and recorded diagnosis / 病历及诊断",
+      "required": true,
+      "conditional": false,
+      "condition": null,
+      "accepted_document_ids": [
+        "doc_3e67115fa4b53ac91b9cec0c"
+      ],
+      "uploaded_document_ids": [
+        "doc_3e67115fa4b53ac91b9cec0c"
+      ],
+      "confirmed": true,
+      "missing": false,
+      "source": {
+        "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+        "section": null,
+        "page": null
+      },
+      "rule_status": "reference_only",
+      "where_to_get": "Treating hospital / 就诊医疗机构",
+      "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+    },
+    {
+      "category": "original_expense",
+      "label": "Expense evidence and itemisation / 费用凭证及明细",
+      "required": true,
+      "conditional": false,
+      "condition": null,
+      "accepted_document_ids": [
+        "doc_0772e93aa2d30bc7bc5410f6"
+      ],
+      "uploaded_document_ids": [
+        "doc_0772e93aa2d30bc7bc5410f6"
+      ],
+      "confirmed": true,
+      "missing": false,
+      "source": {
+        "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+        "section": null,
+        "page": null
+      },
+      "rule_status": "reference_only",
+      "where_to_get": "Hospital billing desk / 收费处",
+      "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+    },
+    {
+      "category": "discharge_record",
+      "label": "Discharge summary / 出院记录",
+      "required": true,
+      "conditional": true,
+      "condition": "Inpatient treatment",
+      "accepted_document_ids": [
+        "doc_a30c561fa1eae926b8f7f2a2"
+      ],
+      "uploaded_document_ids": [
+        "doc_a30c561fa1eae926b8f7f2a2"
+      ],
+      "confirmed": true,
+      "missing": false,
+      "source": {
+        "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+        "section": null,
+        "page": null
+      },
+      "rule_status": "reference_only",
+      "where_to_get": "Obtain from the issuer or your records; confirm the insurer's exact format / 向出具方获取并核对保险公司格式",
+      "note": "Educational starting checklist, not the exact issued contract. Export remains a labelled draft pending insurer-specific review."
+    }
+  ],
+  "evidence": [
+    {
+      "document_id": "doc_0772e93aa2d30bc7bc5410f6",
+      "category": "original_expense",
+      "fields": {
+        "source_date": "2026-10-17"
+      },
+      "name": "SYNTHETIC-original_expense.txt",
+      "exists": true,
+      "recognised": true,
+      "confirmed": true,
+      "sha256": "739275da3564924bd306e1d4fbd772187d528307212a43c64c0281933f585e8e",
+      "synthetic": true,
+      "file_url": "/api/documents/doc_0772e93aa2d30bc7bc5410f6/file"
+    },
+    {
+      "document_id": "doc_1582413c80ac15fff5f9a8fa",
+      "category": "other",
+      "fields": {
+        "ar_step": "plate",
+        "captured_at": "2026-10-17T14:32",
+        "sha256": "8907d94295c9c504"
+      },
+      "name": "SYNTHETIC-ar-plate.png",
+      "exists": true,
+      "recognised": false,
+      "confirmed": true,
+      "sha256": "8907d94295c9c50495dd37d7a186368664ecf23c4ce92c928a952714c1b23945",
+      "synthetic": false,
+      "file_url": "/api/documents/doc_1582413c80ac15fff5f9a8fa/file"
+    },
+    {
+      "document_id": "doc_3e67115fa4b53ac91b9cec0c",
+      "category": "medical_record",
+      "fields": {
+        "source_date": "2026-10-17"
+      },
+      "name": "SYNTHETIC-medical_record.txt",
+      "exists": true,
+      "recognised": true,
+      "confirmed": true,
+      "sha256": "09d4fd1d5b1facd3c83f3d429455e37d7afb674edc7c954b574b79e88087267c",
+      "synthetic": true,
+      "file_url": "/api/documents/doc_3e67115fa4b53ac91b9cec0c/file"
+    },
+    {
+      "document_id": "doc_5b64321b9bd7d7ba39fc4ce0",
+      "category": "claim_form",
+      "fields": {
+        "claim_revision": 1
+      },
+      "name": "claim-application-preparation.pdf",
+      "exists": true,
+      "recognised": true,
+      "confirmed": true,
+      "sha256": "ab15b59e99fdc7b1c2eb434d7125706a6390e0a1e759dce82fe85921deab2cba",
+      "synthetic": true,
+      "file_url": "/api/documents/doc_5b64321b9bd7d7ba39fc4ce0/file"
+    },
+    {
+      "document_id": "doc_8eb154c8378607295545ede5",
+      "category": "travel_proof",
+      "fields": {
+        "source_date": "2026-10-17"
+      },
+      "name": "SYNTHETIC-travel_proof.txt",
+      "exists": true,
+      "recognised": true,
+      "confirmed": true,
+      "sha256": "9647c20e8cb7bcd8a322a709c9a17dab0383623d8d334ee364afb21da4e5791d",
+      "synthetic": true,
+      "file_url": "/api/documents/doc_8eb154c8378607295545ede5/file"
+    },
+    {
+      "document_id": "doc_91a0be3cc92b4c0b412f1109",
+      "category": "other",
+      "fields": {
+        "ar_step": "wide",
+        "captured_at": "2026-10-17T14:32",
+        "sha256": "42b8b1d5a5a46be3"
+      },
+      "name": "SYNTHETIC-ar-wide.png",
+      "exists": true,
+      "recognised": false,
+      "confirmed": true,
+      "sha256": "42b8b1d5a5a46be3a627886f80da52ec5461f0d72555692deb6a846e00909010",
+      "synthetic": false,
+      "file_url": "/api/documents/doc_91a0be3cc92b4c0b412f1109/file"
+    },
+    {
+      "document_id": "doc_9f0196e355f2244e271d0251",
+      "category": "identity",
+      "fields": {
+        "source_date": "2026-10-17"
+      },
+      "name": "SYNTHETIC-identity.txt",
+      "exists": true,
+      "recognised": true,
+      "confirmed": true,
+      "sha256": "a5bd4e3dbc7220d344bbe351aec5068ac12187d1bda1c94c50e394ca9ab4bc45",
+      "synthetic": true,
+      "file_url": "/api/documents/doc_9f0196e355f2244e271d0251/file"
+    },
+    {
+      "document_id": "doc_a30c561fa1eae926b8f7f2a2",
+      "category": "discharge_record",
+      "fields": {
+        "source_date": "2026-10-17"
+      },
+      "name": "SYNTHETIC-discharge_record.txt",
+      "exists": true,
+      "recognised": true,
+      "confirmed": true,
+      "sha256": "c3d9c34cd8a3eaea28e6e21b21aebc8bfa26acd0d2fec031d2b59ec8d6348265",
+      "synthetic": true,
+      "file_url": "/api/documents/doc_a30c561fa1eae926b8f7f2a2/file"
+    },
+    {
+      "document_id": "doc_d1d1d8de34e1bed88374c32f",
+      "category": "other",
+      "fields": {
+        "ar_step": "scene",
+        "captured_at": "2026-10-17T14:32",
+        "sha256": "d21122d098a27639"
+      },
+      "name": "SYNTHETIC-ar-scene.png",
+      "exists": true,
+      "recognised": false,
+      "confirmed": true,
+      "sha256": "d21122d098a276394fe9a9e86d56bb6f037d858d1c553d1dc00f305353542133",
+      "synthetic": false,
+      "file_url": "/api/documents/doc_d1d1d8de34e1bed88374c32f/file"
+    },
+    {
+      "document_id": "doc_dce73eae7bc95a83f19b7a43",
+      "category": "other",
+      "fields": {
+        "ar_step": "damage",
+        "captured_at": "2026-10-17T14:32",
+        "sha256": "576ded85d8cae9c6"
+      },
+      "name": "SYNTHETIC-ar-damage.png",
+      "exists": true,
+      "recognised": false,
+      "confirmed": true,
+      "sha256": "576ded85d8cae9c69f574d3aaf8d0e65d5938e321aa99fc0bdcd12fdeac9db44",
+      "synthetic": false,
+      "file_url": "/api/documents/doc_dce73eae7bc95a83f19b7a43/file"
+    }
+  ],
+  "missing": [],
+  "prescreen": {
+    "result": "insufficient_information",
+    "checks": [
+      {
+        "id": "verified_policy",
+        "status": "pass",
+        "detail": "Policy confirmation and version must still match the case."
+      },
+      {
+        "id": "policy_period",
+        "status": "pass",
+        "detail": "Incident date is within the recorded policy period."
+      },
+      {
+        "id": "waiting_period",
+        "status": "unresolved",
+        "detail": "No source-verified waiting-period number is available for this benefit. No zero-day period is assumed."
+      },
+      {
+        "id": "selected_benefit",
+        "status": "pass",
+        "detail": "The primary schedule contains a reviewed selected accidental-outpatient benefit line."
+      },
+      {
+        "id": "territory",
+        "status": "pass",
+        "detail": "Japan matches the confirmed schedule destination; contract exclusions remain to be checked."
+      },
+      {
+        "id": "reviewed_rule",
+        "status": "unresolved",
+        "detail": "This policy/benefit is outside the deeply reviewed hackathon path. Export a draft and ask the insurer for its checklist."
+      },
+      {
+        "id": "contract_conditions",
+        "status": "unresolved",
+        "detail": "Selected benefits, reasonable/necessary expenses, hospital definition, exclusions and insurer assessment still apply."
+      }
+    ],
+    "waiting_period": {
+      "known": false,
+      "start": "2026-10-15",
+      "eligible_from": null,
+      "incident_date": "2026-10-17",
+      "days": null,
+      "satisfied": null,
+      "source": null
+    },
+    "exclusions": [],
+    "expenses": {
+      "reported": 180000.0,
+      "currency": "JPY",
+      "insurer_pays": null,
+      "notice": "Reported expense is not an eligible or payable amount. No payout is estimated from an unverified limit."
+    },
+    "sources": [
+      {
+        "url": "https://pts.allianz.com.cn/portal/resources/material/clauses/NLC_AXWL02_231.pdf",
+        "section": "4.2-4.3",
+        "pages": [
+          11,
+          12
+        ]
+      }
+    ],
+    "is_approval": false,
+    "notice": "For this wording, outpatient claims should notify assistance as soon as possible within 15 days; inpatient/medical transport needs immediate notice. Contact the insurer to confirm current instructions. Emergency care must not wait for evidence."
+  },
+  "updates": [],
+  "simulation": {
+    "label": "SIMULATED - no insurer connection",
+    "events": [
+      {
+        "id": "sim_f23bfd995457e3cb0d79014a",
+        "stage": "RECEIVED",
+        "note": "SIMULATED receipt; no insurer received this case.",
+        "created_at": "2026-10-20T07:10:04.170714+00:00",
+        "label": "SIMULATED",
+        "is_simulated": true
+      },
+      {
+        "id": "sim_deef921f70822bdf82476d31",
+        "stage": "IN_REVIEW",
+        "note": "SIMULATED document review; the scenario insurer is reviewing the file.",
+        "created_at": "2026-10-21T07:10:04.170714+00:00",
+        "label": "SIMULATED",
+        "is_simulated": true
+      },
+      {
+        "id": "sim_a1606e0f0dba64fa141f8144",
+        "stage": "INFO_REQUESTED",
+        "note": "SIMULATED request: an itemised medical bill is missing from this scenario. Waiting on the user in the simulation.",
+        "created_at": "2026-10-23T07:10:04.170714+00:00",
+        "label": "SIMULATED",
+        "is_simulated": true
+      }
+    ]
+  },
+  "exports": [
+    {
+      "id": "exp_31ac6b468960c71dd53a769c",
+      "mode": "draft",
+      "created_at": "2026-10-20T07:10:04.041567+00:00",
+      "pdf_url": "/api/exports/exp_31ac6b468960c71dd53a769c/pdf",
+      "zip_url": "/api/exports/exp_31ac6b468960c71dd53a769c/zip"
+    }
+  ],
+  "validation": {
+    "inconsistencies": [],
+    "warnings": [],
+    "ready": true
+  },
+  "tracker": {
+    "actual": {
+      "current_stage": "PACKAGE_PREPARED",
+      "actor": "You",
+      "next_action": "Review the frozen package and confirm download.",
+      "stages": [
+        {
+          "id": "POLICY_CONFIRMED",
+          "label": "Confirm policy",
+          "label_zh": "核对保单",
+          "state": "done",
+          "actor": "You",
+          "next_action": "Review the exact policy, period and selected benefits.",
+          "at": "2026-10-20T07:10:01.868881+00:00",
+          "timestamp_source": "Recorded audit / export time",
+          "provenance": "Application preparation records",
+          "is_simulated": false
+        },
+        {
+          "id": "INCIDENT_REVIEWED",
+          "label": "Review incident",
+          "label_zh": "核对事故",
+          "state": "done",
+          "actor": "You",
+          "next_action": "Confirm date, place, narrative and benefit requested.",
+          "at": "2026-10-20T07:10:03.891890+00:00",
+          "timestamp_source": "Recorded audit / export time",
+          "provenance": "Application preparation records",
+          "is_simulated": false
+        },
+        {
+          "id": "DOCUMENTS_READY",
+          "label": "Prepare evidence",
+          "label_zh": "备齐材料",
+          "state": "done",
+          "actor": "You",
+          "next_action": "Resolve missing documents and factual mismatches.",
+          "at": "2026-10-20T07:10:03.851098+00:00",
+          "timestamp_source": "Recorded audit / export time",
+          "provenance": "Application preparation records",
+          "is_simulated": false
+        },
+        {
+          "id": "PACKAGE_PREPARED",
+          "label": "Review and download",
+          "label_zh": "审核并下载",
+          "state": "current",
+          "actor": "You",
+          "next_action": "Review the frozen package and confirm download.",
+          "at": null,
+          "timestamp_source": "Not recorded / incomplete",
+          "provenance": "Application preparation records",
+          "is_simulated": false
+        },
+        {
+          "id": "OFFICIAL_HANDOFF",
+          "label": "Use official insurer channel",
+          "label_zh": "前往官方渠道",
+          "state": "upcoming",
+          "actor": "You / official insurer channel",
+          "next_action": "Submit yourself through the current official channel; an app download is not insurer receipt.",
+          "at": null,
+          "timestamp_source": "Not recorded / incomplete",
+          "provenance": "Application preparation records",
+          "is_simulated": false
+        }
+      ],
+      "is_simulated": false,
+      "submitted": false
+    },
+    "insurer_simulation": {
+      "current_stage": "INFO_REQUESTED",
+      "clock_day": 3,
+      "allowed_next_stages": [
+        "ASSESSMENT"
+      ],
+      "stages": [
+        {
+          "id": "RECEIVED",
+          "label": "Received",
+          "label_zh": "模拟收件",
+          "actor": "Insurer (simulated)",
+          "next_action": "The simulated insurer reviews the evidence.",
+          "state": "done",
+          "at": "2026-10-20T07:10:04.170714+00:00",
+          "provenance": "SIMULATED insurer event",
+          "is_simulated": true
+        },
+        {
+          "id": "IN_REVIEW",
+          "label": "Document review",
+          "label_zh": "模拟材料审核",
+          "actor": "Insurer (simulated)",
+          "next_action": "Wait for the simulated review, or open the explanation.",
+          "state": "done",
+          "at": "2026-10-21T07:10:04.170714+00:00",
+          "provenance": "SIMULATED insurer event",
+          "is_simulated": true
+        },
+        {
+          "id": "INFO_REQUESTED",
+          "label": "More information requested",
+          "label_zh": "模拟待补充",
+          "actor": "You (simulation)",
+          "next_action": "Simulate supplying the requested itemised bill; never delay real official reporting.",
+          "state": "current",
+          "at": "2026-10-23T07:10:04.170714+00:00",
+          "provenance": "SIMULATED insurer event",
+          "is_simulated": true
+        },
+        {
+          "id": "ASSESSMENT",
+          "label": "Assessment",
+          "label_zh": "模拟评估",
+          "actor": "Insurer (simulated)",
+          "next_action": "The simulated insurer evaluates the scenario. No real evaluation occurred.",
+          "state": "upcoming",
+          "at": null,
+          "provenance": "SIMULATED insurer event",
+          "is_simulated": true
+        },
+        {
+          "id": "APPROVED",
+          "label": "Decision: approved",
+          "label_zh": "模拟决定：通过",
+          "actor": "Insurer (simulated)",
+          "next_action": "A simulated approval is separate from simulated payment.",
+          "state": "upcoming",
+          "at": null,
+          "provenance": "SIMULATED insurer event",
+          "is_simulated": true
+        },
+        {
+          "id": "PAID",
+          "label": "Payment shown",
+          "label_zh": "模拟付款",
+          "actor": "Nobody: simulation complete",
+          "next_action": "No money moved. Use real official records for an actual case.",
+          "state": "upcoming",
+          "at": null,
+          "provenance": "SIMULATED insurer event",
+          "is_simulated": true
+        }
+      ],
+      "is_simulated": true,
+      "receipt_reference": "SIM-573740346D55",
+      "events": [
+        {
+          "id": "sim_f23bfd995457e3cb0d79014a",
+          "claim_id": "clm_350605ff11ca217407fe9f03",
+          "user_id": "usr_58763d7f61bc7ab886b3a7c8",
+          "stage": "RECEIVED",
+          "note": "SIMULATED receipt; no insurer received this case.",
+          "created_at": "2026-10-20T07:10:04.170714+00:00",
+          "actor": "Insurer (simulated)",
+          "next_action": "The simulated insurer reviews the evidence.",
+          "source_label": "Synthetic insurer scenario; not official correspondence",
+          "clock_day": 0,
+          "label": "SIMULATED",
+          "is_simulated": true
+        },
+        {
+          "id": "sim_deef921f70822bdf82476d31",
+          "claim_id": "clm_350605ff11ca217407fe9f03",
+          "user_id": "usr_58763d7f61bc7ab886b3a7c8",
+          "stage": "IN_REVIEW",
+          "note": "SIMULATED document review; the scenario insurer is reviewing the file.",
+          "created_at": "2026-10-21T07:10:04.170714+00:00",
+          "actor": "Insurer (simulated)",
+          "next_action": "Wait for the simulated review, or open the explanation.",
+          "source_label": "Synthetic insurer scenario; not official correspondence",
+          "clock_day": 1,
+          "label": "SIMULATED",
+          "is_simulated": true
+        },
+        {
+          "id": "sim_a1606e0f0dba64fa141f8144",
+          "claim_id": "clm_350605ff11ca217407fe9f03",
+          "user_id": "usr_58763d7f61bc7ab886b3a7c8",
+          "stage": "INFO_REQUESTED",
+          "note": "SIMULATED request: an itemised medical bill is missing from this scenario. Waiting on the user in the simulation.",
+          "created_at": "2026-10-23T07:10:04.170714+00:00",
+          "actor": "You (simulation)",
+          "next_action": "Simulate supplying the requested itemised bill; never delay real official reporting.",
+          "source_label": "Synthetic insurer scenario; not official correspondence",
+          "clock_day": 3,
+          "label": "SIMULATED",
+          "is_simulated": true
+        }
+      ],
+      "start_mode": "user_confirmed_demo",
+      "case_revision": 1,
+      "current_revision_matches": true,
+      "notice": "Entire insurer pipeline is simulated. It cannot change actual preparation or prove receipt, decision, appeal or payment."
+    }
+  },
+  "notifications": [
+    {
+      "id": "ntf_76da98d52ba2b35cbe9ae328",
+      "kind": "simulation_stage",
+      "title": "SIMULATED · More information requested",
+      "title_zh": "模拟待补充",
+      "body": "SIMULATED request: an itemised medical bill is missing from this scenario. Waiting on the user in the simulation.",
+      "is_simulated": true,
+      "created_at": "2026-10-20T07:10:04.223239+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_1d6f20335b1fca0021d312e8",
+      "kind": "simulation_stage",
+      "title": "SIMULATED · Document review",
+      "title_zh": "模拟材料审核",
+      "body": "SIMULATED document review; the scenario insurer is reviewing the file.",
+      "is_simulated": true,
+      "created_at": "2026-10-20T07:10:04.223127+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_9f4bdc10be53119ed4feef65",
+      "kind": "simulation_stage",
+      "title": "SIMULATED · Received",
+      "title_zh": "模拟收件",
+      "body": "SIMULATED receipt; no insurer received this case.",
+      "is_simulated": true,
+      "created_at": "2026-10-20T07:10:04.171063+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_ecd33895c1e5bf7322847ea3",
+      "kind": "preparation",
+      "title": "Review and download",
+      "title_zh": "审核并下载",
+      "body": "Review the frozen package and confirm download.",
+      "is_simulated": false,
+      "created_at": "2026-10-20T07:10:03.900462+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_1ef692daca02884e73af1f4c",
+      "kind": "preparation",
+      "title": "Review incident",
+      "title_zh": "核对事故",
+      "body": "Confirm date, place, narrative and benefit requested.",
+      "is_simulated": false,
+      "created_at": "2026-10-20T07:10:03.857580+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_ea593af1328d8d8074aad3c4",
+      "kind": "preparation",
+      "title": "Review incident",
+      "title_zh": "核对事故",
+      "body": "Confirm date, place, narrative and benefit requested.",
+      "is_simulated": false,
+      "created_at": "2026-10-20T07:10:03.715763+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_0fa5a639801f390278633993",
+      "kind": "preparation",
+      "title": "Review incident",
+      "title_zh": "核对事故",
+      "body": "Confirm date, place, narrative and benefit requested.",
+      "is_simulated": false,
+      "created_at": "2026-10-20T07:10:03.683689+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_887cf924a15ef1a63ccc16cb",
+      "kind": "preparation",
+      "title": "Review incident",
+      "title_zh": "核对事故",
+      "body": "Confirm date, place, narrative and benefit requested.",
+      "is_simulated": false,
+      "created_at": "2026-10-20T07:10:03.646192+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_4f5e776d697b71d3d340056a",
+      "kind": "preparation",
+      "title": "Review incident",
+      "title_zh": "核对事故",
+      "body": "Confirm date, place, narrative and benefit requested.",
+      "is_simulated": false,
+      "created_at": "2026-10-20T07:10:03.619070+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_c7872f969089b1473db22ecc",
+      "kind": "preparation",
+      "title": "Review incident",
+      "title_zh": "核对事故",
+      "body": "Confirm date, place, narrative and benefit requested.",
+      "is_simulated": false,
+      "created_at": "2026-10-20T07:10:03.593382+00:00",
+      "read_at": null
+    },
+    {
+      "id": "ntf_c2abe0dae3e409ac54bf98a2",
+      "kind": "preparation",
+      "title": "Review incident",
+      "title_zh": "核对事故",
+      "body": "Confirm date, place, narrative and benefit requested.",
+      "is_simulated": false,
+      "created_at": "2026-10-20T07:10:02.475099+00:00",
+      "read_at": null
+    }
+  ],
+  "created_at": "2026-10-20T07:10:02.469096+00:00",
+  "updated_at": "2026-10-20T07:10:03.891768+00:00",
+  "official_channel_url": "https://sales.allianz.com.cn/ewebsite/pages/quicknav/quicknav_lplc.shtml",
+  "disclosure": "Preparation and educational comparison only. No insurer submission, advice partnership, sale or payout has occurred."
+}

@@ -1,0 +1,395 @@
+{
+  "id": "tr_38339f3fad25803ced5e8762",
+  "trace_id": "tr_38339f3fad25803ced5e8762",
+  "conversation_id": "conv_80d290bed757b4df55a51e8e",
+  "plan": {
+    "goal": "emergency",
+    "source": "deterministic_validated",
+    "steps": [
+      {
+        "id": "s1",
+        "tool": "emergency_contacts",
+        "args": {
+          "policy_id": null,
+          "claim_id": null,
+          "query": "Emergency, I need help now in Tokyo",
+          "locale": "en",
+          "document_id": null,
+          "family": "",
+          "country": "Japan",
+          "cost": null,
+          "comparison": null
+        },
+        "depends_on": [],
+        "purpose": "emergency"
+      }
+    ],
+    "missing_slots": [],
+    "confirmations_required": [],
+    "user_visible_summary": "emergency: emergency_contacts"
+  },
+  "events": [
+    {
+      "stage": "understand",
+      "status": "ok",
+      "detail": {
+        "intent": "emergency",
+        "locale": "en",
+        "slots": {
+          "policy_id": null,
+          "claim_id": null
+        },
+        "resumed": false
+      },
+      "at": "2026-10-20T07:10:02.433284+00:00"
+    },
+    {
+      "stage": "routing",
+      "status": "fallback",
+      "detail": {
+        "used": false,
+        "reason": "deterministic_safety_priority",
+        "engine": "deterministic_allowed_intents",
+        "adopted": false
+      },
+      "at": "2026-10-20T07:10:02.433306+00:00"
+    },
+    {
+      "stage": "plan",
+      "status": "ok",
+      "detail": {
+        "goal": "emergency",
+        "source": "deterministic_validated",
+        "steps": [
+          {
+            "id": "s1",
+            "tool": "emergency_contacts",
+            "args": {
+              "policy_id": null,
+              "claim_id": null,
+              "query": "Emergency, I need help now in Tokyo",
+              "locale": "en",
+              "document_id": null,
+              "family": "",
+              "country": "Japan",
+              "cost": null,
+              "comparison": null
+            },
+            "depends_on": [],
+            "purpose": "emergency"
+          }
+        ],
+        "missing_slots": [],
+        "confirmations_required": [],
+        "user_visible_summary": "emergency: emergency_contacts"
+      },
+      "at": "2026-10-20T07:10:02.433342+00:00"
+    },
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "emergency",
+      "at": "2026-10-20T07:10:02.441352+00:00",
+      "tool": "emergency_contacts",
+      "step_id": "s1",
+      "tier": "T0",
+      "args_masked": {
+        "policy_id": null,
+        "claim_id": null,
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:02.444290+00:00",
+      "tool": "emergency_contacts",
+      "step_id": "s1",
+      "latency_ms": 0
+    },
+    {
+      "stage": "verify",
+      "status": "ok",
+      "detail": "Owner checks and source validation applied; extractive evidence is not an insurer decision.",
+      "at": "2026-10-20T07:10:02.446188+00:00"
+    },
+    {
+      "stage": "respond",
+      "status": "ok",
+      "detail": "Prepared response and reviewable cards.",
+      "at": "2026-10-20T07:10:02.446203+00:00"
+    }
+  ],
+  "tools": [
+    {
+      "stage": "execute",
+      "status": "running",
+      "detail": "emergency",
+      "at": "2026-10-20T07:10:02.441352+00:00",
+      "tool": "emergency_contacts",
+      "step_id": "s1",
+      "tier": "T0",
+      "args_masked": {
+        "policy_id": null,
+        "claim_id": null,
+        "document_id": null,
+        "locale": "en",
+        "query": "[private user question]",
+        "reviewed_cost_inputs": false,
+        "reviewed_comparison_inputs": false
+      }
+    },
+    {
+      "stage": "execute",
+      "status": "ok",
+      "detail": "Tool returned; no external recipient was contacted.",
+      "at": "2026-10-20T07:10:02.444290+00:00",
+      "tool": "emergency_contacts",
+      "step_id": "s1",
+      "latency_ms": 0
+    }
+  ],
+  "safety": [],
+  "evidence": [],
+  "result": {
+    "engine": "deterministic_planned",
+    "citations": [],
+    "cards": [
+      {
+        "type": "emergency",
+        "path": "/emergency",
+        "data": {
+          "country": "Japan",
+          "verified_on": "2026-10-17",
+          "guest_access": true,
+          "history_saved": false,
+          "is_live_transfer": false,
+          "notice": "If there is immediate danger, call local emergency services now. AI does not dispatch help, diagnose, guarantee cover or send this summary. No three-way interpretation or summary receipt is promised.",
+          "contacts": [
+            {
+              "id": "ambulance",
+              "name": "Ambulance / fire · 救护车 / 消防",
+              "number": "119",
+              "dial_uri": "tel:119",
+              "role": "local_emergency",
+              "source_url": "https://www.fdma.go.jp/publication/portal/items/portal001_pamphiet_english.pdf",
+              "verified_on": "2026-10-17"
+            },
+            {
+              "id": "police",
+              "name": "Police · 警察",
+              "number": "110",
+              "dial_uri": "tel:110",
+              "role": "local_emergency",
+              "source_url": "https://www.japan.travel/en/plan/hotline/",
+              "verified_on": "2026-10-17"
+            },
+            {
+              "id": "jnto",
+              "name": "Japan Visitor Hotline · 日本游客热线",
+              "number": "050-3816-2787",
+              "international_number": "+81-50-3816-2787",
+              "dial_uri": "tel:+815038162787",
+              "role": "visitor_assistance",
+              "languages": [
+                "Chinese",
+                "English",
+                "Japanese",
+                "Korean"
+              ],
+              "availability": "24/7/365 per official information; routing not tested",
+              "source_url": "https://www.japan.travel/en/plan/hotline/",
+              "verified_on": "2026-10-17"
+            }
+          ],
+          "insurer_assistance": {
+            "number": null,
+            "instruction": "Use the number printed on your issued policy/service certificate. Product-specific channels differ; no unverified number is substituted.",
+            "source_url": "https://sales.allianz.com.cn/ewebsite/pages/quicknav/quicknav_lplc.shtml"
+          },
+          "official_forms": [
+            {
+              "label": "JNTO medical information form / 医疗信息表",
+              "url": "https://www.jnto.go.jp/emergency/common/pdf/guide_chi02_p7.pdf"
+            },
+            {
+              "label": "JNTO symptom pointing card / 症状指示卡",
+              "url": "https://www.jnto.go.jp/emergency/common/pdf/guide_chi02_p8.pdf"
+            },
+            {
+              "label": "Official medical facility search",
+              "url": "https://www.jnto.go.jp/emergency/eng/mi_guide.html"
+            }
+          ],
+          "cards": [
+            {
+              "zh": "请叫救护车。",
+              "en": "Please call an ambulance.",
+              "ja": "救急車を呼んでください。"
+            },
+            {
+              "zh": "我需要医疗帮助。",
+              "en": "I need medical help.",
+              "ja": "医療の助けが必要です。"
+            },
+            {
+              "zh": "请联系我的保险救援机构。",
+              "en": "Please help me contact my insurer's assistance service.",
+              "ja": "保険会社のアシスタンスサービスへの連絡を手伝ってください。"
+            }
+          ],
+          "steps": [
+            "Get to a safe place and seek appropriate care; do not delay emergency contact.",
+            "When safe, note the time/location and retain original clinical and expense records.",
+            "Contact the assistance provider named on your policy and follow its instructions.",
+            "Review a factual summary before sharing it yourself."
+          ],
+          "translation_notice": "Basic communication support only. Use official reviewed forms and clinicians for medical meaning."
+        }
+      }
+    ],
+    "chips": [],
+    "answer": "Put safety first. Contact local emergency services immediately when urgent; do not wait for insurance or evidence.",
+    "disclaimer": "This is preparation and explanation, not an underwriting or claim decision. The insurer reviews the complete contract and facts.",
+    "conversation_id": "conv_80d290bed757b4df55a51e8e",
+    "conversation_revision": 1,
+    "trace_id": "tr_38339f3fad25803ced5e8762",
+    "plan": {
+      "goal": "emergency",
+      "source": "deterministic_validated",
+      "steps": [
+        {
+          "id": "s1",
+          "tool": "emergency_contacts",
+          "args": {
+            "policy_id": null,
+            "claim_id": null,
+            "query": "Emergency, I need help now in Tokyo",
+            "locale": "en",
+            "document_id": null,
+            "family": "",
+            "country": "Japan",
+            "cost": null,
+            "comparison": null
+          },
+          "depends_on": [],
+          "purpose": "emergency"
+        }
+      ],
+      "missing_slots": [],
+      "confirmations_required": [],
+      "user_visible_summary": "emergency: emergency_contacts"
+    },
+    "state": {
+      "policy_id": null,
+      "claim_id": null,
+      "goal": "emergency",
+      "pending_question": null,
+      "status": "completed"
+    },
+    "trace": [
+      {
+        "stage": "understand",
+        "status": "ok",
+        "detail": {
+          "intent": "emergency",
+          "locale": "en",
+          "slots": {
+            "policy_id": null,
+            "claim_id": null
+          },
+          "resumed": false
+        },
+        "at": "2026-10-20T07:10:02.433284+00:00"
+      },
+      {
+        "stage": "routing",
+        "status": "fallback",
+        "detail": {
+          "used": false,
+          "reason": "deterministic_safety_priority",
+          "engine": "deterministic_allowed_intents",
+          "adopted": false
+        },
+        "at": "2026-10-20T07:10:02.433306+00:00"
+      },
+      {
+        "stage": "plan",
+        "status": "ok",
+        "detail": {
+          "goal": "emergency",
+          "source": "deterministic_validated",
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "emergency_contacts",
+              "args": {
+                "policy_id": null,
+                "claim_id": null,
+                "query": "Emergency, I need help now in Tokyo",
+                "locale": "en",
+                "document_id": null,
+                "family": "",
+                "country": "Japan",
+                "cost": null,
+                "comparison": null
+              },
+              "depends_on": [],
+              "purpose": "emergency"
+            }
+          ],
+          "missing_slots": [],
+          "confirmations_required": [],
+          "user_visible_summary": "emergency: emergency_contacts"
+        },
+        "at": "2026-10-20T07:10:02.433342+00:00"
+      },
+      {
+        "stage": "execute",
+        "status": "running",
+        "detail": "emergency",
+        "at": "2026-10-20T07:10:02.441352+00:00",
+        "tool": "emergency_contacts",
+        "step_id": "s1",
+        "tier": "T0",
+        "args_masked": {
+          "policy_id": null,
+          "claim_id": null,
+          "document_id": null,
+          "locale": "en",
+          "query": "[private user question]",
+          "reviewed_cost_inputs": false,
+          "reviewed_comparison_inputs": false
+        }
+      },
+      {
+        "stage": "execute",
+        "status": "ok",
+        "detail": "Tool returned; no external recipient was contacted.",
+        "at": "2026-10-20T07:10:02.444290+00:00",
+        "tool": "emergency_contacts",
+        "step_id": "s1",
+        "latency_ms": 0
+      },
+      {
+        "stage": "verify",
+        "status": "ok",
+        "detail": "Owner checks and source validation applied; extractive evidence is not an insurer decision.",
+        "at": "2026-10-20T07:10:02.446188+00:00"
+      },
+      {
+        "stage": "respond",
+        "status": "ok",
+        "detail": "Prepared response and reviewable cards.",
+        "at": "2026-10-20T07:10:02.446203+00:00"
+      }
+    ]
+  },
+  "started_at": "2026-10-20T07:10:02.430143+00:00",
+  "completed_at": "2026-10-20T07:10:02.452566+00:00"
+}
