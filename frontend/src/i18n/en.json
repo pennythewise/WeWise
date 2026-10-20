@@ -77,6 +77,10 @@
       "title": "Ask WeWise",
       "desc": "Chat with the assistant: cited answers, cards, quick replies and a composer."
     },
+    "profile": {
+      "title": "Profile",
+      "desc": "Account, assistant permissions, notifications and privacy."
+    },
     "memory": {
       "title": "Memory",
       "desc": "What WeWise remembers and what it accessed, with delete and an on/off switch."

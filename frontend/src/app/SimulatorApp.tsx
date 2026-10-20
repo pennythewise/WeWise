@@ -9,6 +9,7 @@ import { ClaimsList } from '@/features/claims/ClaimsList';
 import { ClaimDetail } from '@/features/claims/ClaimDetail';
 import { ChatView } from '@/features/chat/ChatView';
 import { MemoryPage } from '@/features/settings/MemoryPage';
+import { ProfilePage } from '@/features/settings/ProfilePage';
 import { CaptureEvidence } from '@/features/capture/CaptureEvidence';
 import { About } from '@/features/settings/About';
 import { UploadPage } from '@/features/settings/UploadSheet';
@@ -43,6 +44,7 @@ export default function App() {
               <Route path="/claims/:id" element={<ClaimDetail />} />
               <Route path="/ask" element={<ChatView />} />
               <Route path="/memory" element={<MemoryPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/capture" element={<CaptureEvidence />} />
               <Route path="/about" element={<About />} />
               <Route path="/upload" element={<UploadPage />} />
