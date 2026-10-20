@@ -160,8 +160,6 @@ The customer and the insurer do not fully trust each other, and neither should h
 | `evm` | `ProofRegistry` over JSON-RPC: Sepolia (live), FISCO BCOS web3 RPC, Hardhat or Anvil |
 | `off` | No anchoring |
 
-Design and roadmap (WeIdentity credentials, oracle attestations, FISCO node): [docs/onchainplan.md](docs/onchainplan.md).
-
 ---
 
 ## Architecture
@@ -292,7 +290,7 @@ CI ([`.github/workflows/verify.yml`](.github/workflows/verify.yml)) runs everyth
 | `backend/contracts` | `ProofRegistry.sol`, compiled ABI and bytecode, `deploy.py` |
 | `backend/tests`, `backend/eval` | Test suite, golden-task and attack corpora, evaluation runner |
 | `api/`, `infra/` | Vercel gateway, sandbox launcher and provisioning script |
-| `docs/` | `TECHNICAL_DOCUMENTATION.md` · `SECURITY_SELF_ASSESSMENT.md` · `EXECUTION_EVIDENCE.md` · `AGENT_ARCHITECTURE.md` · `onchainplan.md` · `evidence/` |
+| `docs/` | `AGENT_ARCHITECTURE.md` |
 
 ---
 
