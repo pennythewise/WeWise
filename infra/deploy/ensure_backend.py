@@ -32,7 +32,15 @@ def ready() -> bool:
 
 def main() -> None:
     DATA.mkdir(parents=True, exist_ok=True)
-    memory_environment = ensure_memory()
+    # A lite preview (operator marker file) runs without the optional memory sidecar and local embeddings,
+    # falling back to lexical retrieval. The full team preview keeps both as hard requirements.
+    lite = (DATA / 'allow-lite').is_file()
+    try:
+        memory_environment = ensure_memory()
+    except RuntimeError:
+        if not lite:
+            raise
+        memory_environment = {}
     with (DATA / 'backend-start.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         if ready():
@@ -54,9 +62,10 @@ def main() -> None:
         # Runtime installation is an operator action. Requests only resume the
         # pinned local services and never download weights or package source.
         embedding_dir = DATA / 'models/multilingual-e5-small'
-        if not (embedding_dir / 'model_quantized.onnx').is_file() or not (embedding_dir / 'tokenizer.json').is_file():
+        if (embedding_dir / 'model_quantized.onnx').is_file() and (embedding_dir / 'tokenizer.json').is_file():
+            environment['WEWISE_EMBEDDING_DIR'] = str(embedding_dir)
+        elif not lite:
             raise RuntimeError('Pinned local embedding assets require operator installation.')
-        environment['WEWISE_EMBEDDING_DIR'] = str(embedding_dir)
         environment.update(memory_environment)
         # On-chain proofs: the operator places CHAIN_* settings (mode 0600) on the VM; the key never enters Git or the browser.
         chain_env = DATA / 'chain.env'

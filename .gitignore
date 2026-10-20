@@ -23,3 +23,6 @@ tobe_deleted/
 
 # Editor workspace
 *.code-workspace
+
+# Vercel CLI link
+.vercel/
