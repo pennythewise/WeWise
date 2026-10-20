@@ -26,7 +26,7 @@ def optional_module(name):
 def create_app():
     workflows = optional_module("workflows")
     memory = optional_module("memory")
-    feature_modules = [module for name in ("document_analysis", "lifecycle", "agent_foundation") if (module := optional_module(name))]
+    feature_modules = [module for name in ("document_analysis", "lifecycle", "agent_foundation", "voice_callback") if (module := optional_module(name))]
 
     @asynccontextmanager
     async def lifespan(app):

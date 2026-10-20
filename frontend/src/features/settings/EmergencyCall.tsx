@@ -53,29 +53,50 @@ function DialRow({ label, number, confirm }: { label: string; number: string; co
   );
 }
 
-/** Ask the AI voice line to ring the user's phone (needs a small backend; see docs/EMERGENCY_CALL.md). */
+/** Default backend endpoint (backend/app/voice_callback.py, Vapi). VITE_AI_CALLBACK_URL can point elsewhere. */
+const CALLBACK_URL = AI_CALLBACK_URL || '/api/voice-callback';
+
+/** Ask the AI voice line (Vapi) to ring the user's phone. The key stays on the backend. */
 function CallMeBack({ city }: { city: string }) {
   const { tx, lang } = useTx();
   const [phone, setPhone] = useState('');
+  const [consent, setConsent] = useState(false);
   const [state, setState] = useState<'idle' | 'sending' | 'ok' | 'error'>('idle');
+  const [message, setMessage] = useState('');
   const send = async () => {
-    setState('sending');
+    setState('sending'); setMessage('');
     try {
-      const r = await fetch(AI_CALLBACK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, lang, city }) });
-      setState(r.ok ? 'ok' : 'error');
+      const r = await fetch(CALLBACK_URL, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, lang, city, consent }) });
+      const data = await r.json().catch(() => ({}));
+      if (r.ok) { setState('ok'); setMessage(data.to ?? ''); } else { setState('error'); setMessage(typeof data.detail === 'string' ? data.detail : ''); }
     } catch { setState('error'); }
   };
-  if (state === 'ok') return <p className="flex items-center gap-2 text-[13px] text-ok"><AppIcon name="check" size={16} />{tx(L('Calling you now. Keep your phone nearby.', '正在给您打电话，请保持手机在身边。'))}</p>;
+  if (state === 'ok') return <p className="flex items-center gap-2 text-[13px] text-ok" data-testid="callback-ok"><AppIcon name="check" size={16} />{tx(L(`Calling ${message} now. Answer to talk to the WeWise assistant.`, `正在拨打 ${message}，请接听与微晓助手通话。`))}</p>;
   return (
     <div className="space-y-2">
-      <label className="block text-xs font-medium text-muted" htmlFor="cb-phone">{tx(L('Your phone number (with country code)', '您的手机号（含国家区号）'))}</label>
+      <label className="block text-xs font-medium text-muted" htmlFor="cb-phone">{tx(L('Your phone number (with country code, e.g. +65)', '您的手机号（含国家区号，如 +65）'))}</label>
       <div className="flex gap-2">
-        <input id="cb-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+86 138 0000 0000" value={phone} onChange={(e) => setPhone(e.target.value)} className="min-h-[44px] min-w-0 flex-1 rounded-input border border-line px-3 text-[15px] text-ink" />
-        <button type="button" className="btn-primary btn-compact shrink-0" disabled={phone.replace(/\D/g, '').length < 8 || state === 'sending'} onClick={() => void send()}>{state === 'sending' ? '…' : tx(L('Call me', '给我回电'))}</button>
+        <input id="cb-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+65 9123 4567" value={phone} onChange={(e) => setPhone(e.target.value)} className="min-h-[44px] min-w-0 flex-1 rounded-input border border-line px-3 text-[15px] text-ink" />
+        <button type="button" className="btn-primary btn-compact shrink-0" disabled={phone.replace(/\D/g, '').length < 8 || !consent || state === 'sending'} onClick={() => void send()} data-testid="call-me">{state === 'sending' ? '…' : tx(L('Call me', '给我回电'))}</button>
       </div>
-      {state === 'error' && <p className="text-[13px] text-danger">{tx(L('Couldn\'t reach the call service. Use the numbers below.', '无法连接呼叫服务，请使用下方电话。'))}</p>}
+      <label className="flex items-start gap-2 text-[13px] text-body">
+        <input type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--wb-primary)]" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
+        {tx(L('I agree to receive an AI call from WeWise. The call is handled by Vapi and may be transcribed.', '我同意接听微晓的 AI 来电。通话由 Vapi 处理，可能被转写。'))}
+      </label>
+      {state === 'error' && <p className="text-[13px] text-danger">{message || tx(L('Couldn\'t reach the call service. Use the numbers below.', '无法连接呼叫服务，请使用下方电话。'))}</p>}
+      <p className="text-xs text-muted">{tx(L('If anyone is hurt, call local emergency services first. Do not wait for the AI call.', '如有人受伤，请先拨打当地急救电话，不要等待 AI 来电。'))}</p>
     </div>
   );
+}
+
+/** Whether the backend has Vapi configured (GET /api/voice-callback). */
+function useCallbackReady() {
+  const [ready, setReady] = useState(!!AI_CALLBACK_URL);
+  useEffect(() => {
+    if (AI_CALLBACK_URL) return;
+    fetch('/api/voice-callback').then((r) => r.json()).then((d) => setReady(!!d.configured)).catch(() => setReady(false));
+  }, []);
+  return ready;
 }
 
 /**
@@ -88,6 +109,7 @@ export function EmergencyCall() {
   const { tx, lang } = useTx();
   const navigate = useNavigate();
   const { cityId } = useLocationStore();
+  const callbackReady = useCallbackReady();
   const script = t('emergency.script', { returnObjects: true }) as string[];
   const city = cityId ? cityById(cityId) : null;
   const inc = incidentFor(city?.country ?? 'CN');
@@ -158,13 +180,13 @@ export function EmergencyCall() {
       </CardShell>
 
       <CardShell title={tx(L('Talk to the AI on a real phone call', '用真实电话与 AI 通话'))} icon="bell">
-        {AI_HOTLINE || AI_CALLBACK_URL ? (
+        {AI_HOTLINE || callbackReady ? (
           <div className="space-y-3">
             {AI_HOTLINE && <a href={tel(AI_HOTLINE)} className="btn-primary w-full" data-testid="ai-hotline"><AppIcon name="bell" size={18} />{tx(L('Call the WeWise AI line', '拨打微晓 AI 热线'))} · {AI_HOTLINE}</a>}
-            {AI_CALLBACK_URL && <CallMeBack city={city?.id ?? ''} />}
+            {callbackReady && <CallMeBack city={city?.id ?? ''} />}
           </div>
         ) : (
-          <Notice tone="info">{tx(L('The real AI phone line isn\'t connected in this build. Set VITE_AI_HOTLINE (a phone number answered by the AI voice agent) or VITE_AI_CALLBACK_URL (the AI rings you). See docs/EMERGENCY_CALL.md.', '本版本未接入真实 AI 电话。请设置 VITE_AI_HOTLINE（由 AI 语音助手接听的号码）或 VITE_AI_CALLBACK_URL（由 AI 给您回电），详见 docs/EMERGENCY_CALL.md。'))}</Notice>
+          <Notice tone="info">{tx(L('The real AI phone line isn\'t connected in this build. Start the backend with VAPI_API_KEY, VAPI_ASSISTANT_ID and VAPI_PHONE_NUMBER_ID in .env, or set VITE_AI_HOTLINE.', '本版本未接入真实 AI 电话。请在 .env 中配置 VAPI_API_KEY、VAPI_ASSISTANT_ID、VAPI_PHONE_NUMBER_ID 并启动后端，或设置 VITE_AI_HOTLINE。'))}</Notice>
         )}
       </CardShell>
 
