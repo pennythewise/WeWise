@@ -75,8 +75,12 @@ def test_pep_blocks_unbound_tools_roles_dependencies_and_foreign_ownership(clien
         assert pep_validate(db, user, plan, step, set())["tier"] == "T1"
         with pytest.raises(HTTPException, match="DENY:TOOL_ROLE"):
             pep_validate(db, user, plan, step, set(), role="document_reader")
-        with pytest.raises(HTTPException, match="DENY:UNBOUND_INTENT"):
+        # A policy read smuggled into a buying turn is stopped by the specialist role before intent binding.
+        with pytest.raises(HTTPException, match="DENY:TOOL_ROLE"):
             pep_validate(db, user, plan.model_copy(update={"goal": "buying"}), step, set())
+        # Same specialist, but a goal this tool is not bound to.
+        with pytest.raises(HTTPException, match="DENY:UNBOUND_INTENT"):
+            pep_validate(db, user, plan.model_copy(update={"goal": "portfolio"}), step, set())
         altered = step.model_copy(update={"depends_on": ["not_completed"]})
         with pytest.raises(HTTPException, match="DENY:DEPENDENCIES"):
             pep_validate(db, user, plan.model_copy(update={"steps": [altered]}), altered, set())

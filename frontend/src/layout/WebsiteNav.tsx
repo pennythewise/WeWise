@@ -59,7 +59,8 @@ export function WebsiteNav({ variant, onNavigate }: { variant: NavVariant; onNav
         </div>
       )}
 
-      <ul className={`flex flex-col gap-1 ${rail ? 'p-2' : 'p-3'}`}>
+      {/* Desktop and tablet sidebars show only the logo and the scenario list; the phone menu keeps the site sections. */}
+      {variant === 'sheet' && <ul className={`flex flex-col gap-1 ${rail ? 'p-2' : 'p-3'}`}>
         {main.map((item) => {
           const current = isCurrent(item);
           return (
@@ -76,7 +77,7 @@ export function WebsiteNav({ variant, onNavigate }: { variant: NavVariant; onNav
             </li>
           );
         })}
-      </ul>
+      </ul>}
 
       {variant === 'sheet' && (
         <ul className="border-t border-cardline p-3">
@@ -96,7 +97,7 @@ export function WebsiteNav({ variant, onNavigate }: { variant: NavVariant; onNav
       )}
 
       {variant === 'full' && !record && (
-        <div className="min-h-0 flex-1 overflow-y-auto border-t border-cardline p-3">
+        <div className="min-h-0 flex-1 overflow-y-auto p-3">
           <h2 className="px-2.5 pb-1.5 text-xs font-semibold uppercase tracking-wide text-muted">{t('stage.scenario')}</h2>
           <ScenarioPicker vertical />
         </div>

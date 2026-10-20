@@ -22,13 +22,13 @@ async function gate(id: number) {
 }
 
 async function typeText(text: string, id: number) {
-  const cps = 35 * ui().speed;
+  const cps = 20 * ui().speed; // a person typing, not a paste
   for (let i = 1; i <= text.length; i++) {
     if (id !== runId) return false;
     agent().setDraft(text.slice(0, i));
     await sleep(1000 / cps);
   }
-  await sleep(250 / ui().speed);
+  await sleep(500 / ui().speed);
   return id === runId;
 }
 
@@ -52,7 +52,7 @@ async function runSteps(n: number, id: number) {
     }
     await agent().waitIdle();
     if (id !== runId) return;
-    await sleep(900 / ui().speed);
+    await sleep(1600 / ui().speed); // reading time before the next step
   }
 }
 

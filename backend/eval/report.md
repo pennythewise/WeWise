@@ -1,14 +1,14 @@
 # WeWise executable evaluation
 
-Measured 2026-10-19T18:40:55.769250+00:00. Base commit `e426e262e020fc1d77364d5a02a7f22002874280`; working tree dirty: True.
+Measured 2026-10-20T13:20:34.504792+00:00. Base commit `1bee5207df651253f0601054e8d0d0c291ce939b`; working tree dirty: False.
 
 | Corpus | Passed | Failed | Skipped | Not run |
 |---|---:|---:|---:|---:|
-| task | 164 | 0 | 2 | 0 |
-| attack | 158 | 0 | 1 | 0 |
-| support | 0 | 0 | 0 | 0 |
+| task | 167 | 0 | 2 | 0 |
+| attack | 180 | 0 | 1 | 0 |
+| support | 24 | 0 | 0 | 0 |
 
-Total measured suite time: 137.775 seconds.
+Total measured suite time: 258.509 seconds.
 
 ## Interpretation
 

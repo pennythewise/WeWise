@@ -11,14 +11,12 @@ import { TopBar } from '@/layout/TopBar';
 import { useBreakpoint } from '@/layout/useBreakpoint';
 import { WebsiteNav } from '@/layout/WebsiteNav';
 import { Sheet } from '@/components/Sheet';
-import { StageControls } from '@/features/stage/StageControls';
-import { LanguageSwitch } from '@/features/settings/LanguageSwitch';
 import { useUiStore } from '@/store';
 
 export function AppShell() {
   const mode = useBreakpoint();
   const { t } = useTranslation();
-  const { navSheetOpen, setNavSheetOpen, record } = useUiStore();
+  const { navSheetOpen, setNavSheetOpen } = useUiStore();
   const navigate = useNavigate();
   useEffect(() => { setNavigate(navigate); }, [navigate]);
   useStageShortcuts(mode === 'showcase');
@@ -35,8 +33,6 @@ export function AppShell() {
               <span className="block font-semibold text-brand">{t('brand.taglineZh')}</span>
               {t('brand.tagline')}
             </p>
-            {!record && <LanguageSwitch />}
-            {!record && <StageControls />}
           </div>
         </Sheet>
         <InspectorSheet />

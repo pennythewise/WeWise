@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui';
 import { CLAIMS } from '@/mock/claims';
 import { policyById } from '@/mock/policies';
 import { useTx } from '@/i18n/useTx';
+import { L } from '@/engine/l';
 import { useClaimView } from './useClaimView';
 import { ClaimStatusBadge } from './ClaimStatusBadge';
 import { useXbProgress } from './CrossBorderClaim';
@@ -17,7 +18,7 @@ function Row({ id }: { id: string }) {
   const pol = policyById(v.claim.policyId);
   return (
     <li>
-      <Link to={`/claims/${id}`} className="card flex items-center gap-3 !p-3.5">
+      <Link to={`/claims/${id}`} className="card flex items-center gap-3 !p-3.5 shadow-card">
         <span className="min-w-0 flex-1">
           <span className="block text-[15px] font-semibold text-ink">{tx(v.claim.title)}</span>
           <span className="block text-xs text-muted">{pol ? tx(pol.product) : ''} · {date(v.claim.updated)}</span>
@@ -35,14 +36,24 @@ function Row({ id }: { id: string }) {
 
 export function ClaimsList() {
   const { t } = useTranslation();
+  const { tx } = useTx();
   const { started } = useXbProgress();
   // The cross-border claim (S3) appears once the assistant has opened a case for it.
-  const order = [...(started ? ['clm_mei_004'] : []), 'clm_mei_001', 'clm_mei_002', 'clm_mei_003'];
+  const order = [...(started ? ['clm_mei_004'] : []), 'clm_mei_001', 'clm_mei_002', 'clm_mei_003'].filter((id) => CLAIMS.some((c) => c.id === id));
+  const waiting = order.filter((id) => CLAIMS.find((c) => c.id === id)?.waitingOn === 'user');
+  const rest = order.filter((id) => !waiting.includes(id));
+  const group = (title: L, ids: string[]) => ids.length > 0 && (
+    <section>
+      <h3 className="mb-2 text-[13px] font-semibold text-muted">{tx(title)}</h3>
+      <ul className="space-y-3">{ids.map((id) => <Row key={id} id={id} />)}</ul>
+    </section>
+  );
   return (
-    <div className="space-y-3" data-screen="claims">
+    <div className="space-y-5" data-screen="claims">
       <p className="text-[13px] leading-relaxed text-body">{t('claims.listIntro')}</p>
       <Link to="/capture" className="btn-secondary w-full"><AppIcon name="scan" size={18} />{t('claims.captureLink')}</Link>
-      <ul className="space-y-3">{order.filter((id) => CLAIMS.some((c) => c.id === id)).map((id) => <Row key={id} id={id} />)}</ul>
+      {group(L('Needs your action', '需要您处理'), waiting)}
+      {group(L('In progress and closed', '进行中与已结束'), rest)}
     </div>
   );
 }

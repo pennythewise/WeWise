@@ -19,6 +19,7 @@ import { ReportInsightsCard } from './ReportInsightsCard';
 import { OverlapReportCard } from './OverlapReportCard';
 import { SwitchCheckCard } from '../switch/SwitchCheck';
 import { LocationPermissionCard, LocationSuggestCard } from '../location/LocationCards';
+import { ChainProofCard } from './ChainProofCard';
 
 /** Exhaustive switch over the card union: adding a card kind without a renderer fails to compile. */
 export function CardView({ card, messageId }: { card: Card; messageId?: string }) {
@@ -47,5 +48,6 @@ function renderCard(card: Card, messageId?: string) {
     case 'SwitchCheckCard': return <SwitchCheckCard />;
     case 'LocationPermissionCard': return <LocationPermissionCard />;
     case 'LocationSuggestCard': return <LocationSuggestCard cityId={card.data.cityId} messageId={messageId} />;
+    case 'ChainProofCard': return <ChainProofCard {...card.data} />;
   }
 }

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useUiStore } from '@/store';
 import { tokenize, useTypingStore } from './typingStore';
 
-const TICK_MS = 34;
+const TICK_MS = 55;
 /** Types the segments out token by token, like a model streaming. Skipped at high stage speed, with reduced motion, or once the message has been shown. */
 export function useTypedReveal(id: string, segments: string[], enabled: boolean) {
   const speed = useUiStore((s) => s.speed);

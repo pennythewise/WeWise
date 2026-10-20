@@ -4,12 +4,51 @@ import { bothLangs, type Locale } from './l';
 import { TURNS, fallbackOos, turnById } from './scenarios';
 import { s5Owner, s5Payout, s5Privilege } from './scenarios/attacks/s5_overreach';
 import { resetCardSeq, resetToolSeq, type TimedEvent, type TurnCtx, type TurnScript } from './script';
+import { delegationEvents } from './scenarios/agents';
 import type { Claim, ClaimSummary, FileRef, MockFile, Portfolio, TraceEvent } from './types';
 import { CLAIMS } from '@/mock/claims';
 import { portfolio } from '@/mock';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
+
+/** Deterministic 0..1 from a string, so paced replays stay identical. */
+const unit = (s: string) => { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return ((h >>> 0) % 1000) / 1000; };
+
+/**
+ * Realistic pacing for scripted turns. Content is unchanged; only timing is. A live agent spends time
+ * understanding the request, reasoning before it plans, waiting on tools and composing the answer, and an
+ * on-chain anchor waits for a block. Tool latencies shown in the Inspector match the paced timeline.
+ */
+const PACE = 2.2;
+const THINK = { understand: 700, plan: 1100, verify: 500, answer: 900 };
+function pace(events: TimedEvent[]): TimedEvent[] {
+  const callAt = new Map<string, { t: number; tool: string }>();
+  let prevAt = 0, now = 0;
+  return events.map((e) => {
+    const b = e.body;
+    let t = now + (e.at - prevAt) * PACE;
+    if (b.type === 'understand.done') t += THINK.understand;
+    else if (b.type === 'plan.created' || b.type === 'plan.replanned') t += THINK.plan;
+    else if (b.type === 'verify.result') t += THINK.verify;
+    else if (b.type === 'message.final') t += THINK.answer;
+    let body = b;
+    if (b.type === 'tool.call') callAt.set(b.callId, { t, tool: b.tool });
+    if (b.type === 'tool.result') {
+      const call = callAt.get(b.callId);
+      if (call) {
+        const latency = call.tool.startsWith('proof_')
+          ? 2600 + unit(b.callId + call.tool) * 1400 // block confirmation
+          : Math.max(260, b.latencyMs * PACE * (0.75 + unit(b.callId + call.tool) * 0.6));
+        t = Math.max(t, call.t + latency);
+        body = { ...b, latencyMs: Math.round(t - call.t) };
+      }
+    }
+    prevAt = e.at;
+    now = t;
+    return { at: Math.round(t), body };
+  });
+}
 
 /** Deterministic scenario player + keyword router. Same interface the HTTP client will implement. */
 export class MockAgentClient implements AgentClient {
@@ -61,10 +100,11 @@ export class MockAgentClient implements AgentClient {
     const epoch = this.epoch;
     const turnId = `turn_${++this.turnSeq}`;
     yield { type: 'turn.started', turnId, t: 0, userText };
-    const events: TimedEvent[] = turn.events(ctx).map((e, i) => ({ ...e, _i: i }) as TimedEvent & { _i: number });
+    const events: TimedEvent[] = [...turn.events(ctx), ...delegationEvents(turn.id)].map((e, i) => ({ ...e, _i: i }) as TimedEvent & { _i: number });
     events.sort((a, b) => a.at - b.at || (a as { _i?: number })._i! - (b as { _i?: number })._i!);
+    const timeline = this.speed < 50 ? pace(events) : events;
     let prev = 0;
-    for (const e of events) {
+    for (const e of timeline) {
       if (this.speed < 50) await sleep((e.at - prev) / this.speed);
       if (epoch !== this.epoch) return;
       prev = e.at;

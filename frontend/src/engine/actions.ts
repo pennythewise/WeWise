@@ -1,6 +1,7 @@
 import { L } from './l';
 import { at, done, step, tool, type TimedEvent } from './script';
 import { s3SubmitDone } from './scenarios/s3_claim';
+import { SIM_PROOFS, anchorEvents } from './scenarios/chain';
 import type { TurnCtx } from './script';
 
 type Outcome = (ctx: TurnCtx) => TimedEvent[];
@@ -13,8 +14,9 @@ export const ACTIONS: Record<string, { confirm: Outcome; reject: Outcome }> = {
       at(300, { type: 'plan.step.started', stepId: 'send' }),
       ...tool(340, 'handoff_send', 'T3', { agent: 'ag_chen', items: ['name', 'phone', 'needs', 'comparison'], masked: true }, L('Shared. Ticket WW-20418', '已分享，工单号 WW-20418'), 600),
       at(1000, { type: 'plan.step.done', stepId: 'send' }),
-      at(1100, { type: 'message.final', text: L('Shared with Daniel Chen. Your ticket is WW-20418, and you should hear back in about 15 minutes. You can see what I shared on the Memory page.', '已分享给陈大伟顾问，工单号 WW-20418，预计约 15 分钟内回复。您可以在“记忆”页面查看我分享了什么。') }),
-      done(1150),
+      ...anchorEvents(1010, SIM_PROOFS.s2),
+      at(1300, { type: 'message.final', text: L('Shared with Daniel Chen. Your ticket is WW-20418, and you should hear back in about 15 minutes. You can see what I shared on the Memory page.', '已分享给陈大伟顾问，工单号 WW-20418，预计约 15 分钟内回复。您可以在“记忆”页面查看我分享了什么。') }),
+      done(1350),
     ],
     reject: () => [
       at(200, { type: 'message.final', text: L('No problem. Nothing was shared.', '没问题，没有分享任何信息。') }),
@@ -28,8 +30,9 @@ export const ACTIONS: Record<string, { confirm: Outcome; reject: Outcome }> = {
       at(300, { type: 'plan.step.started', stepId: 'export' }),
       ...tool(340, 'crossborder_kit_export', 'T3', { claim: 'xb_001', recipient: 'user_download_only', external_delivery: false }, L('Kit saved for download. Nothing sent to the insurer', '资料包已保存供下载，未发送给保险公司'), 520),
       at(900, { type: 'plan.step.done', stepId: 'export' }),
-      at(950, { type: 'message.final', text: L('Your claim kit is ready to download. It contains the English summary, the Thai originals, the translations and a pre-filled claim form. Nothing was sent to your insurer. When you are ready, submit it through your insurer\'s official channel.', '您的理赔资料包已可下载，包含英文摘要、泰文原件、译文和预填的理赔表格。没有任何内容发送给保险公司，准备好后请通过保险公司官方渠道提交。'), chips: [{ label: L('How long will it take?', '这个需要多久？'), send: L('How long will it take?', '这个需要多久？') }] }),
-      done(1000),
+      ...anchorEvents(910, SIM_PROOFS.s3),
+      at(1200, { type: 'message.final', text: L('Your claim kit is ready to download. It contains the English summary, the Thai originals, the translations and a pre-filled claim form. Nothing was sent to your insurer. When you are ready, submit it through your insurer\'s official channel.', '您的理赔资料包已可下载，包含英文摘要、泰文原件、译文和预填的理赔表格。没有任何内容发送给保险公司，准备好后请通过保险公司官方渠道提交。'), chips: [{ label: L('How long will it take?', '这个需要多久？'), send: L('How long will it take?', '这个需要多久？') }] }),
+      done(1250),
     ],
     reject: () => [
       at(200, { type: 'message.final', text: L('No problem. Nothing was saved or sent.', '没问题，没有保存或发送任何内容。') }),

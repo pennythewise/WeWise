@@ -4,9 +4,8 @@ import { AppIcon } from '@/components/AppIcon';
 import { CardShell, EmptyState } from '@/components/ui';
 import { POLICIES } from '@/mock/policies';
 import { CLAIMS } from '@/mock/claims';
-import { portfolio } from '@/mock';
+import { portfolio, daysUntil } from '@/mock';
 import { useTx } from '@/i18n/useTx';
-import { useAgentStore } from '@/agentStore';
 import { useClaimView } from '../claims/useClaimView';
 import { ClaimStatusBadge } from '../claims/ClaimStatusBadge';
 import { CoverageDonut } from './CoverageDonut';
@@ -24,7 +23,8 @@ function OpenClaimRow({ id }: { id: string }) {
   const v = useClaimView(id)!;
   return (
     <li>
-      <Link to={`/claims/${id}`} className="flex min-h-touch items-center gap-3 py-2">
+      <Link to={`/claims/${id}`} className="flex min-h-touch items-center gap-3 py-2.5">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-bluewash text-brand"><AppIcon name="file" size={18} /></span>
         <span className="min-w-0 flex-1"><span className="block truncate text-[14px] font-semibold text-ink">{tx(v.claim.title)}</span>{v.claim.waitingOn === 'user' && <span className="text-xs text-warn">{t('claims.waitingOn.user')}</span>}</span>
         <ClaimStatusBadge status={v.claim.status} />
         <AppIcon name="chevron" size={16} />
@@ -38,22 +38,48 @@ export function PortfolioHome() {
   const { money, tx, date } = useTx();
   const navigate = useNavigate();
   const pf = portfolio();
-  const gaps = [
-    { label: t('home.gaps.outpatient'), prompt: t('home.gaps.outpatientSend') },
-    { label: t('home.gaps.ci'), prompt: t('chat.chips.gapSend') },
-    { label: t('home.gaps.child'), prompt: t('chat.chips.compareSend') },
-  ];
-  const ask = (prompt: string) => { useAgentStore.getState().setDraft(prompt); navigate('/ask'); };
 
   if (POLICIES.length === 0) {
     return <EmptyState icon="shield" title={t('home.emptyTitle')} text={t('home.emptyText')} action={<button className="btn-primary" onClick={() => navigate('/upload')}>{t('home.addPolicy')}</button>} />;
   }
   return (
     <div className="space-y-5" data-screen="home">
-      <section className="rounded-card bg-gradient-to-br from-brand to-primary p-5 text-white">
+      <section className="rounded-card bg-gradient-to-br from-brand to-primary p-5 text-white shadow-card">
         <p className="text-[13px] opacity-90">{t('brand.taglineZh')}</p>
         <h2 className="mt-1 text-[22px] font-semibold leading-tight">{t('home.hero')}</h2>
-        <p className="mt-1 text-[13px] opacity-90">{t('brand.tagline')}</p>
+        <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[13px] font-medium">
+          <AppIcon name="clock" size={14} />
+          {tx(L(`${POLICIES.length} policies · next renewal in ${daysUntil(pf.nextRenewal.date)} days`, `${POLICIES.length} 份保单 · ${daysUntil(pf.nextRenewal.date)} 天后续保`))}
+        </p>
+      </section>
+
+      <ul className="grid grid-cols-3 gap-2.5" aria-label={tx(L('Quick actions', '快捷操作'))}>
+        {([
+          { to: '/ask', icon: 'chat', label: L('Ask WeWise', '问微晓') },
+          { to: '/upload', icon: 'scan', label: L('Add a document', '添加文件') },
+          { to: '/claims', icon: 'file', label: L('Prepare a claim', '准备理赔') },
+        ] as { to: string; icon: IconName; label: L }[]).map((a) => (
+          <li key={a.to}>
+            <Link to={a.to} className="flex min-h-[88px] flex-col items-start justify-between rounded-card border border-cardline bg-white p-3 shadow-card active:bg-bluewash">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-bluewash text-brand"><AppIcon name={a.icon} size={20} /></span>
+              <span className="text-[13px] font-semibold leading-tight text-ink">{tx(a.label)}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <section aria-label={tx(L('Needs your attention', '需要您关注'))}>
+        <h3 className="mb-2 text-[16px] font-semibold text-ink">{tx(L('Needs your attention', '需要您关注'))}</h3>
+        <ul className="divide-y divide-cardline rounded-card border border-cardline bg-white px-4 shadow-card">
+          <li>
+            <Link to="/policies" className="flex min-h-touch items-center gap-3 py-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--wb-warning-bg)] text-warn"><AppIcon name="clock" size={18} /></span>
+              <span className="min-w-0 flex-1"><span className="block truncate text-[14px] font-semibold text-ink">{tx(POLICIES[0].product)}</span><span className="text-xs text-warn">{t('home.renewsIn', { n: daysUntil(POLICIES[0].renewal) })}</span></span>
+              <AppIcon name="chevron" size={16} />
+            </Link>
+          </li>
+          {CLAIMS.filter((c) => c.waitingOn === 'user').slice(0, 1).map((c) => <OpenClaimRow key={c.id} id={c.id} />)}
+        </ul>
       </section>
 
       <HomeLocation />
@@ -70,17 +96,12 @@ export function PortfolioHome() {
 
       <section aria-label={t('home.policies')}>
         <div className="mb-2 flex items-center justify-between"><h3 className="text-[16px] font-semibold text-ink">{t('home.policies')}</h3><button type="button" className="min-h-touch text-[13px] font-semibold text-primary" onClick={() => navigate('/upload')}>+ {t('home.addPolicy')}</button></div>
-        <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" tabIndex={0} role="region" aria-label={t('home.policies')}>
+        <div className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" tabIndex={0} role="region" aria-label={t('home.policies')}>
           {POLICIES.map((p) => <PolicyTwinCard key={p.id} policy={p} />)}
         </div>
       </section>
 
       <section aria-label={t('home.alerts')}><h3 className="mb-2 text-[16px] font-semibold text-ink">{t('home.alerts')}</h3><RenewalList /></section>
-
-      <section aria-label={t('home.gapsTitle')}>
-        <h3 className="mb-2 text-[16px] font-semibold text-ink">{t('home.gapsTitle')}</h3>
-        <div className="flex flex-wrap gap-2">{gaps.map((g) => <button key={g.label} type="button" onClick={() => ask(g.prompt)} className="min-h-[40px] rounded-full border border-secline bg-white px-3.5 text-[13px] font-medium text-primary">{g.label}</button>)}</div>
-      </section>
 
       <section aria-label={tx(L('Check-ups', '检查工具'))}>
         <h3 className="mb-2 text-[16px] font-semibold text-ink">{tx(L('Check-ups', '检查工具'))}</h3>
@@ -99,11 +120,6 @@ export function PortfolioHome() {
             </li>
           ))}
         </ul>
-      </section>
-
-      <section aria-label={t('home.openClaims')}>
-        <h3 className="mb-1 text-[16px] font-semibold text-ink">{t('home.openClaims')}</h3>
-        <ul className="divide-y divide-cardline rounded-card border border-cardline bg-white px-3">{CLAIMS.filter((c) => c.status !== 'DECLINED').map((c) => <OpenClaimRow key={c.id} id={c.id} />)}</ul>
       </section>
 
       <p className="pb-2 text-center text-xs leading-relaxed text-muted">{tx(INSURER_DISCLAIMER)}</p>

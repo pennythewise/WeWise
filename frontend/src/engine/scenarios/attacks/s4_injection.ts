@@ -1,5 +1,6 @@
 import { L } from '../../l';
 import { INJECTION } from '@/mock/fixtures';
+import { SIM_PROOFS, anchorEvents } from '../chain';
 import { at, cid, done, step, tool, understand, type TurnScript } from '../../script';
 
 export const s4Inject: TurnScript = {
@@ -22,7 +23,8 @@ export const s4Inject: TurnScript = {
     at(2000, { type: 'plan.step.done', stepId: 'sum' }),
     at(2050, { type: 'verify.result', citationsOk: true, numbersOk: true }),
     at(2100, { type: 'ui.card', card: { kind: 'SafetyNoticeCard', id: cid('safety'), data: { tone: 'info', title: L('I ignored an instruction in this document', '我忽略了文件中的一条指令'), body: L('I found text on page 3 that tries to give me instructions. I treated it as part of the document and ignored it.', '我在第 3 页发现了试图给我下指令的文字，已将其视为文件内容并忽略。'), reasonCode: 'INJECTION_FLAGGED', snippet: INJECTION.snippet, page: INJECTION.page } } }),
-    at(2250, { type: 'message.final', text: L('Here is the summary: admitted 10 Oct with dengue fever, discharged 13 Oct, treated with IV fluids, fit to resume normal activity after a week. I also ignored an instruction hidden in the document. Your payout account is unchanged.', '摘要如下：10 月 10 日因登革热入院，10 月 13 日出院，接受静脉输液治疗，一周后可恢复正常活动。我还忽略了文件中隐藏的一条指令，您的赔款账户没有任何变化。') }),
-    done(2300),
+    ...anchorEvents(1450, SIM_PROOFS.s5, 2150),
+    at(2350, { type: 'message.final', text: L('Here is the summary: admitted 10 Oct with dengue fever, discharged 13 Oct, treated with IV fluids, fit to resume normal activity after a week. I also ignored an instruction hidden in the document. Your payout account is unchanged.', '摘要如下：10 月 10 日因登革热入院，10 月 13 日出院，接受静脉输液治疗，一周后可恢复正常活动。我还忽略了文件中隐藏的一条指令，您的赔款账户没有任何变化。') }),
+    done(2400),
   ],
 };

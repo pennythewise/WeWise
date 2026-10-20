@@ -2,6 +2,9 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppIcon } from '@/components/AppIcon';
 import { Badge } from '@/components/ui';
+import { clauseById } from '@/mock/clauses';
+import { policyById } from '@/mock/policies';
+import { L } from '@/engine/l';
 import { CardView } from '../cards/CardView';
 import { RichText } from './CitationChip';
 import { TypingIndicator } from './TypingIndicator';
@@ -32,7 +35,7 @@ export function UserBubble({ m }: { m: ChatMessage }) {
 
 export function AssistantBubble({ m }: { m: ChatMessage }) {
   const { t } = useTranslation();
-  const { lang: uiLang } = useTx();
+  const { lang: uiLang, tx } = useTx();
   const mode = useBreakpoint();
   const [override, setOverride] = useState<Locale | null>(null);
   const lang = override ?? uiLang;
@@ -57,7 +60,7 @@ export function AssistantBubble({ m }: { m: ChatMessage }) {
         {m.status === 'streaming' && !m.text && <TypingIndicator progress={m.progress} />}
         {(m.text || m.cards.length > 0) && m.status === 'streaming' && m.progress && <TypingIndicator progress={m.progress} />}
         {m.text && (
-          <div className={`rounded-[16px] rounded-tl-[4px] border bg-white px-3.5 py-3 text-[14px] leading-[1.7] text-body ${selected ? 'border-primary' : 'border-cardline'}`}>
+          <div className={`rounded-[18px] rounded-tl-[6px] border bg-white px-4 py-3.5 text-[15px] leading-[1.75] text-body shadow-card ${selected ? 'border-primary' : 'border-cardline'}`}>
             {v && <p className="mb-2"><Badge tone={v.tone} icon={v.icon}>{t(`chat.verdict.${m.verdict}`)}</Badge></p>}
             <p><RichText text={reveal.visible[0]} messageId={m.id} />{caret(0)}</p>
             {m.bullets && (
@@ -69,6 +72,25 @@ export function AssistantBubble({ m }: { m: ChatMessage }) {
               <button type="button" className="mt-2 min-h-touch text-[13px] font-semibold text-primary" onClick={() => void useAgentStore.getState().send(t('cards.verdict.talkSend'))}>{t('chat.askAgent')}</button>
             ) : null}
           </div>
+        )}
+        {m.status === 'done' && reveal.done && m.citations.length > 0 && (
+          <section aria-label={tx(L('Sources', '来源'))}>
+            <p className="mb-1.5 text-xs font-semibold text-muted">{tx(L('Sources', '来源'))} · {m.citations.length}</p>
+            <div className="flex snap-x gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
+              {m.citations.map((id) => {
+                const c = clauseById(id);
+                if (!c) return null;
+                const pol = policyById(c.policyId);
+                return (
+                  <button key={id} type="button" onClick={howIKnow} className="w-[200px] shrink-0 snap-start rounded-card border border-cardline bg-white p-3 text-left shadow-card active:bg-bluewash">
+                    <span className="block text-xs font-semibold text-brand">{id} · p.{c.page}</span>
+                    <span className="mt-0.5 line-clamp-2 block text-[13px] font-semibold leading-snug text-ink">{tx(c.title)}</span>
+                    <span className="mt-1 block truncate text-xs text-muted">{pol ? tx(pol.product) : ''}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
         )}
         {m.cards.map((c) => <CardView key={c.id} card={c} messageId={m.id} />)}
         {m.status === 'done' && m.text && reveal.done && (

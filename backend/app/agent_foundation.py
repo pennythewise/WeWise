@@ -3,6 +3,12 @@
 This is a real execution coordinator, not a claim of LLM reasoning. Plans have a
 fixed allowlist; neither documents nor generated text may introduce new tools.
 External insurer delivery and money operations do not exist in this registry.
+
+Role-scoped specialists: the orchestrator routes each goal to exactly one specialist
+agent (policy, claims, buying, records). Each specialist owns a disjoint tool set and
+receives only the identifiers its role needs. The PEP rejects any tool outside the
+delegated role (DENY:TOOL_ROLE) and any identifier outside its context
+(DENY:CONTEXT_SCOPE), so a manipulated buying turn cannot reach claim tools or data.
 """
 from __future__ import annotations
 
@@ -22,7 +28,7 @@ from .workflows import CostEstimate, CompareRequest
 
 router = APIRouter(prefix="/api", tags=["bounded plans and conversations"])
 TOOLS = {
-    "policy_get": {"tier": "T1", "goals": {"policy_question", "coverage_analysis", "claim_status", "claim_preview"}, "role": "orchestrator"},
+    "policy_get": {"tier": "T1", "goals": {"policy_question", "coverage_analysis"}, "role": "orchestrator"},
     "policy_search_clauses": {"tier": "T1", "goals": {"policy_question"}, "role": "orchestrator"},
     "policy_explain": {"tier": "T1", "goals": {"policy_question"}, "role": "orchestrator"},
     "coverage_analyze": {"tier": "T1", "goals": {"coverage_analysis"}, "role": "orchestrator"},
@@ -40,6 +46,33 @@ for _name, _goal in {
     "agent_directory": "buying", "sales_pattern_check": "sales_check", "cost_estimator": "cost_estimate", "product_compare": "buying",
 }.items():
     TOOLS[_name] = {"tier": "T0" if _name in {"incident_types_list", "product_catalog", "agent_directory", "sales_pattern_check"} else "T2" if _name == "product_compare" else "T1", "goals": {_goal}, "role": "orchestrator"}
+AGENTS = {
+    "policy_agent": {"label": "Policy agent", "purpose": "Read, search and explain the user's own policies, coverage, terms, reports and premiums.", "context": {"policy_id"}},
+    "claims_agent": {"label": "Claims agent", "purpose": "Track, pre-screen and prepare the user's own claims, incidents and emergency guidance.", "context": {"claim_id"}},
+    "buying_agent": {"label": "Buying agent", "purpose": "Capture stated needs, compare sourced products, estimate costs and check sales wording.", "context": set()},
+    "records_agent": {"label": "Records agent", "purpose": "Show the user's memory, document vault and audit history.", "context": set()},
+}
+_SPECIALIST_TOOLS = {
+    "policy_agent": {"policy_get", "policy_search_clauses", "policy_explain", "coverage_analyze", "policy_list", "portfolio_summary", "policy_terms_get", "policy_clauses_get",
+                     "policy_summary", "document_get", "report_analysis", "reports_list", "renewal_alerts_list", "premium_history_get"},
+    "claims_agent": {"claim_status_get", "claim_export_preview", "claim_list", "claim_prescreen", "claim_checklist", "claim_notifications", "claim_explanation", "crossborder_kit",
+                     "incident_types_list", "emergency_contacts"},
+    "buying_agent": {"needs_defaults", "needs_capture", "product_catalog", "agent_directory", "sales_pattern_check", "cost_estimator", "product_compare"},
+    "records_agent": {"memory_read", "vault_list", "audit_read"},
+}
+for _agent, _names in _SPECIALIST_TOOLS.items():
+    for _name in _names:
+        TOOLS[_name]["role"] = _agent
+assert all(spec["role"] in AGENTS for spec in TOOLS.values()), "every tool belongs to exactly one specialist"
+GOAL_AGENT = {goal: spec["role"] for spec in TOOLS.values() for goal in spec["goals"]}
+assert all(GOAL_AGENT[g] == spec["role"] for spec in TOOLS.values() for g in spec["goals"]), "each goal is served by one specialist"
+
+
+def agent_for(goal: str) -> str:
+    """Goals without tools (outside scope) stay with the orchestrator, which holds no tools at all."""
+    return GOAL_AGENT.get(goal, "orchestrator")
+
+
 REQUIRED_ARGS = {
     **{name: {"policy_id"} for name in ("policy_get", "policy_search_clauses", "policy_explain", "policy_terms_get", "policy_clauses_get", "policy_summary", "premium_history_get")},
     **{name: {"claim_id"} for name in ("claim_status_get", "claim_export_preview", "claim_prescreen", "claim_checklist", "claim_notifications", "claim_explanation", "crossborder_kit")},
@@ -83,6 +116,7 @@ class Step(Strict):
 
 class Plan(Strict):
     goal: str
+    agent: str | None = None
     source: Literal["deterministic_validated"] = "deterministic_validated"
     steps: list[Step] = Field(max_length=8)
     missing_slots: list[str] = Field(default_factory=list)
@@ -101,11 +135,15 @@ def safe_args(args):
     return {"policy_id": args.policy_id, "claim_id": args.claim_id, "document_id": args.document_id, "locale": args.locale, "query": "[private user question]" if args.query else "", "reviewed_cost_inputs": bool(args.cost), "reviewed_comparison_inputs": bool(args.comparison)}
 
 
-def pep_validate(db, user, plan: Plan, step: Step, completed: set[str], role="orchestrator"):
-    """The single gate used by all coordinator tool adapters."""
+def pep_validate(db, user, plan: Plan, step: Step, completed: set[str], role: str | None = None):
+    """The single gate used by all coordinator tool adapters. The caller's role is the delegated specialist."""
+    role = role or plan.agent or agent_for(plan.goal)
     spec = TOOLS.get(step.tool)
     if not spec or spec["role"] != role:
         raise HTTPException(403, "DENY:TOOL_ROLE")
+    scope = AGENTS.get(role, {}).get("context", set())
+    if any(getattr(step.args, field) and field not in scope for field in ("policy_id", "claim_id")):
+        raise HTTPException(403, "DENY:CONTEXT_SCOPE")
     bound = next((s for s in plan.steps if s.id == step.id), None)
     if not bound or bound != step or plan.goal not in spec["goals"]:
         raise HTTPException(403, "DENY:UNBOUND_INTENT")
@@ -125,7 +163,10 @@ def pep_validate(db, user, plan: Plan, step: Step, completed: set[str], role="or
 
 
 def make_plan(goal, policy_id, claim_id, message, locale):
-    args = ToolArgs(policy_id=policy_id, claim_id=claim_id, query=message, locale=locale)
+    agent = agent_for(goal)
+    scope = AGENTS.get(agent, {}).get("context", set())
+    # The specialist receives only the identifiers its role needs.
+    args = ToolArgs(policy_id=policy_id if "policy_id" in scope else None, claim_id=claim_id if "claim_id" in scope else None, query=message, locale=locale)
     names = {
         "policy_question": ["policy_get", "policy_search_clauses", "policy_explain"] if policy_id else [],
         "coverage_analysis": ["coverage_analyze"],
@@ -146,7 +187,7 @@ def make_plan(goal, policy_id, claim_id, message, locale):
     }.get(goal, [])
     missing = ["policy_id"] if goal in {"policy_question", "policy_terms", "policy_summary", "premium_history"} and not policy_id else ["claim_id"] if goal in {"claim_status", "claim_preview", "crossborder", "claim_checklist", "claim_explanation"} and not claim_id else []
     steps = [Step(id=f"s{i+1}", tool=name, args=args, depends_on=[f"s{i}"] if i else [], purpose=goal) for i, name in enumerate(names)]
-    return Plan(goal=goal, steps=steps, missing_slots=missing, confirmations_required=["exact_export_snapshot"] if goal == "claim_preview" else [], user_visible_summary=f"{goal}: " + ("ask for " + ", ".join(missing) if missing else " → ".join(names) or "respond without data tools"))
+    return Plan(goal=goal, agent=agent, steps=steps, missing_slots=missing, confirmations_required=["exact_export_snapshot"] if goal == "claim_preview" else [], user_visible_summary=f"{goal}: " + ("ask for " + ", ".join(missing) if missing else " → ".join(names) or "respond without data tools"))
 
 
 def detect_goal(message, base_route):
@@ -264,8 +305,16 @@ async def invoke_tool(step, plan, completed, user):
     if step.tool == "cost_estimator":
         return workflows.cost_estimate(args.cost, user)
     if step.tool == "product_compare":
-        return workflows.compare_products(args.comparison, user)
+        from . import advocates
+        return await advocates.debate(workflows.compare_products(args.comparison, user))
     raise HTTPException(403, "DENY:UNKNOWN_TOOL")
+
+
+def delegation(plan: Plan) -> dict:
+    agent = plan.agent or "orchestrator"
+    spec = AGENTS.get(agent, {"label": "Orchestrator", "purpose": "Answers without data tools.", "context": set()})
+    return {"from": "orchestrator", "to": agent, "label": spec["label"], "purpose": spec["purpose"],
+            "allowed_tools": sorted(n for n, t in TOOLS.items() if t["role"] == agent), "context": sorted(spec["context"])}
 
 
 def event(stage, status, detail, **extra):
@@ -340,7 +389,8 @@ async def stream_turn(payload, user):
     # PII stays in private messages. Inspector arguments and operational logs omit it.
     for item in (event("understand", "ok", {"intent": goal, "locale": payload.locale, "slots": {"policy_id": policy_id, "claim_id": claim_id}, "resumed": resumed}),
                  event("routing", "advisory_used" if advice.get("adopted") else "advisory_ignored" if advice.get("used") else "fallback", advice),
-                 event("plan", "ok", plan.model_dump())):
+                 event("plan", "ok", plan.model_dump()),
+                 event("delegate", "ok", delegation(plan))):
         record(item)
         yield {"type": "event", "event": item, "conversation_id": conversation_id, "trace_id": turn_id}
     if correction or resumed:
@@ -353,7 +403,7 @@ async def stream_turn(payload, user):
         if time.monotonic() - started > 45:
             failure = "turn_time_budget"
             break
-        item = event("execute", "running", step.purpose, tool=step.tool, step_id=step.id, tier=TOOLS[step.tool]["tier"], args_masked=safe_args(step.args))
+        item = event("execute", "running", step.purpose, tool=step.tool, step_id=step.id, tier=TOOLS[step.tool]["tier"], agent=plan.agent, args_masked=safe_args(step.args))
         record(item)
         yield {"type": "event", "event": item}
         tool_start = time.monotonic()
@@ -500,6 +550,15 @@ def get_trace(identifier: str, user=Depends(core.current_user)):
             "result": result, "started_at": row["started_at"], "completed_at": row["completed_at"]}
 
 
+@router.get("/agents")
+def agents_catalog(user=Depends(core.current_user)):
+    """The orchestrator and its role-scoped specialists, with the exact tools and identifiers each may use."""
+    return {"orchestrator": {"tools": [], "routes": {goal: GOAL_AGENT[goal] for goal in sorted(GOAL_AGENT)}},
+            "specialists": [{"id": agent, **{k: v for k, v in spec.items() if k != "context"}, "context": sorted(spec["context"]),
+                             "tools": sorted(n for n, t in TOOLS.items() if t["role"] == agent)} for agent, spec in AGENTS.items()],
+            "enforcement": ["DENY:TOOL_ROLE for a tool outside the delegated specialist", "DENY:CONTEXT_SCOPE for an identifier outside its context"]}
+
+
 @router.get("/tools")
 def tools_catalog(user=Depends(core.current_user)):
     return {"tools": [{"name": name, **spec, "goals": sorted(spec["goals"]), "required_arguments": sorted(REQUIRED_ARGS.get(name, set()))} for name, spec in TOOLS.items()], "arguments_schema": ToolArgs.model_json_schema(), "maximum_calls_per_turn": 8, "maximum_seconds_per_turn": 45, "no_external_delivery": True, "no_money_tools": True}
@@ -517,14 +576,18 @@ async def explicit_read_tool(payload: DirectTool, user=Depends(core.current_user
     if not spec or spec["tier"] not in {"T0", "T1"}:
         raise HTTPException(403, "DENY:READ_ONLY_TOOL_ADAPTER")
     goal = sorted(spec["goals"])[0]
-    step = Step(id="explicit_read", tool=payload.tool, args=payload.args, purpose="Explicit authenticated read request")
-    plan = Plan(goal=goal, steps=[step], user_visible_summary="Execute the requested allowlisted read/computation only.")
+    # Like the orchestrator, hand the specialist only the identifiers its role may see.
+    scope = AGENTS[spec["role"]]["context"]
+    dropped = [f for f in ("policy_id", "claim_id") if getattr(payload.args, f) and f not in scope]
+    args = payload.args.model_copy(update={f: None for f in dropped})
+    step = Step(id="explicit_read", tool=payload.tool, args=args, purpose="Explicit authenticated read request")
+    plan = Plan(goal=goal, agent=spec["role"], steps=[step], user_visible_summary="Execute the requested allowlisted read/computation only.")
     with core.get_db() as db:
         pep_validate(db, user, plan, step, set())
     result = await invoke_tool(step, plan, set(), user)
     with core.get_db() as db:
-        core.audit(db, user["id"], "explicit_guarded_tool_read", "tool", payload.tool, {"tier": spec["tier"], "argument_names": sorted(payload.args.model_fields_set)})
-    return {"tool": payload.tool, "tier": spec["tier"], "result": result, "no_external_delivery": True}
+        core.audit(db, user["id"], "explicit_guarded_tool_read", "tool", payload.tool, {"tier": spec["tier"], "agent": spec["role"], "argument_names": sorted(payload.args.model_fields_set), "out_of_scope_dropped": dropped})
+    return {"tool": payload.tool, "tier": spec["tier"], "agent": spec["role"], "result": result, "no_external_delivery": True}
 
 
 class ConfirmAction(Strict):

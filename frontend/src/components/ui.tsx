@@ -32,7 +32,7 @@ export function Notice({ tone = 'info', children, icon }: { tone?: Tone; childre
 
 export function CardShell({ title, icon, right, children, tone, className = '' }: { title?: ReactNode; icon?: IconName; right?: ReactNode; children: ReactNode; tone?: Tone; className?: string }) {
   return (
-    <section className={`rounded-card border bg-white ${tone === 'danger' ? 'border-[#F6CBC6]' : 'border-cardline'} ${className}`}>
+    <section className={`rounded-card border bg-white shadow-card ${tone === 'danger' ? 'border-[#F6CBC6]' : 'border-cardline'} ${className}`}>
       {title && (
         <header className="flex items-center gap-2 border-b border-cardline px-4 py-3">
           {icon && <span className="text-brand"><AppIcon name={icon} size={18} /></span>}
@@ -90,4 +90,58 @@ export function EmptyState({ icon = 'spark', title, text, action }: { icon?: Ico
 
 export function Skeleton({ className = '' }: { className?: string }) {
   return <div className={`animate-pulse rounded-input bg-[#E7ECF5] ${className}`} aria-hidden="true" />;
+}
+
+/** Label muted on the left, value bold on the right, hairline between rows (Lloyds, Shopee policy detail). */
+export function KeyValueList({ rows, className = '' }: { rows: { k: ReactNode; v: ReactNode }[]; className?: string }) {
+  return (
+    <dl className={`divide-y divide-cardline text-[14px] ${className}`}>
+      {rows.map((r, i) => (
+        <div key={i} className="flex items-baseline justify-between gap-4 py-3">
+          <dt className="text-muted">{r.k}</dt>
+          <dd className="text-right font-semibold text-ink">{r.v}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+/** Pill segmented control (GoPay, Monzo). Controlled; each option is a button with aria-pressed. */
+export function Segmented<T extends string>({ value, onChange, options, label }: { value: T; onChange: (v: T) => void; options: { id: T; label: ReactNode }[]; label: string }) {
+  return (
+    <div role="group" aria-label={label} className="flex rounded-full bg-[#E9EEF8] p-1">
+      {options.map((o) => (
+        <button key={o.id} type="button" aria-pressed={value === o.id} onClick={() => onChange(o.id)}
+          className={`min-h-[38px] flex-1 rounded-full px-3 text-[13px] font-medium transition-colors ${value === o.id ? 'bg-white font-semibold text-ink shadow-card' : 'text-muted'}`}>
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Bottom action bar: a short summary on the left, one clear action on the right (Booking, Trip.com, Zalando). */
+export function StickyActionBar({ summary, children }: { summary?: ReactNode; children: ReactNode }) {
+  return (
+    <div className="sticky bottom-0 -mx-4 -mb-4 mt-5 flex items-center gap-3 border-t border-cardline bg-white/95 px-4 pb-[15px] pt-3 backdrop-blur">
+      {summary && <div className="min-w-0 flex-1 text-[13px] leading-tight text-muted">{summary}</div>}
+      <div className={`flex gap-2.5 ${summary ? 'shrink-0' : 'flex-1'}`}>{children}</div>
+    </div>
+  );
+}
+
+/** Large status number with a caption: "244 days remaining" (Lloyds), "Spent $15" (Revolut). */
+export function BigStat({ value, caption, tone = 'neutral' }: { value: ReactNode; caption: ReactNode; tone?: Tone }) {
+  const color = tone === 'warn' ? 'text-warn' : tone === 'danger' ? 'text-danger' : tone === 'ok' ? 'text-ok' : 'text-ink';
+  return (
+    <div className="text-right">
+      <p className={`text-[28px] font-semibold leading-none tabular-nums ${color}`}>{value}</p>
+      <p className="mt-1 text-xs text-muted">{caption}</p>
+    </div>
+  );
+}
+
+/** Horizontal scrolling row that bleeds to the screen edge (chips, source cards, tiles). */
+export function ScrollRow({ children, label }: { children: ReactNode; label?: string }) {
+  return <div role={label ? 'group' : undefined} aria-label={label} className="-mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">{children}</div>;
 }

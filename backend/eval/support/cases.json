@@ -1,1 +1,146 @@
-[]
+[
+  {
+    "id": "tests/test_chain.py::test_merkle_proofs_verify_for_every_leaf[1]",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.0002889159986807499
+  },
+  {
+    "id": "tests/test_chain.py::test_merkle_proofs_verify_for_every_leaf[2]",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.0002462920019752346
+  },
+  {
+    "id": "tests/test_chain.py::test_merkle_proofs_verify_for_every_leaf[3]",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.00027658399994834326
+  },
+  {
+    "id": "tests/test_chain.py::test_merkle_proofs_verify_for_every_leaf[4]",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.00030008300382178277
+  },
+  {
+    "id": "tests/test_chain.py::test_merkle_proofs_verify_for_every_leaf[5]",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.00034579200291773304
+  },
+  {
+    "id": "tests/test_chain.py::test_merkle_proofs_verify_for_every_leaf[8]",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.0004681249993154779
+  },
+  {
+    "id": "tests/test_chain.py::test_merkle_proofs_verify_for_every_leaf[13]",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.0007590409986732993
+  },
+  {
+    "id": "tests/test_chain.py::test_merkle_is_domain_separated_and_order_sensitive",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.0001595839967194479
+  },
+  {
+    "id": "tests/test_chain.py::test_reexport_creates_new_version_and_old_package_is_flagged",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.8852427919955517
+  },
+  {
+    "id": "tests/test_chain.py::test_verify_rejects_non_zip_and_unanchored_archives",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.7001831249981478
+  },
+  {
+    "id": "tests/test_chain.py::test_deleting_a_case_forgets_its_salt",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.8181436669983668
+  },
+  {
+    "id": "tests/test_chain.py::test_consent_changes_are_anchored",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.7171540850031306
+  },
+  {
+    "id": "tests/test_chain.py::test_local_ledger_hash_links_detect_history_rewrite",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.839005959998758
+  },
+  {
+    "id": "tests/test_chain.py::test_proofs_are_owner_scoped",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.7032688740000594
+  },
+  {
+    "id": "tests/test_chain.py::test_contract_anchor_verify_and_versions",
+    "group": "support",
+    "status": "passed",
+    "seconds": 1.3143051249971904
+  },
+  {
+    "id": "tests/test_chain.py::test_contract_rejects_unauthorised_writers_and_has_no_payable_surface",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.09988708299715654
+  },
+  {
+    "id": "tests/test_chain.py::test_evm_mode_runs_the_whole_export_flow",
+    "group": "support",
+    "status": "passed",
+    "seconds": 1.0074023749984917
+  },
+  {
+    "id": "tests/test_chain.py::test_evm_ledger_refuses_mainnets",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.0003098339984717313
+  },
+  {
+    "id": "tests/test_specialists.py::test_every_tool_belongs_to_exactly_one_specialist_and_each_goal_to_one_agent",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.00029049900331301615
+  },
+  {
+    "id": "tests/test_specialists.py::test_orchestrator_scopes_context_when_delegating",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.0002739179981290363
+  },
+  {
+    "id": "tests/test_specialists.py::test_agents_catalog_is_published",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.7143825419989298
+  },
+  {
+    "id": "tests/test_specialists.py::test_advocate_claims_are_checked_against_source_facts",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.000295999001536984
+  },
+  {
+    "id": "tests/test_specialists.py::test_debate_without_a_model_keeps_code_generated_advocates",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.0004965410007571336
+  },
+  {
+    "id": "tests/test_specialists.py::test_debate_with_a_model_uses_separate_checked_calls_and_keeps_the_rule_judge",
+    "group": "support",
+    "status": "passed",
+    "seconds": 0.0006482090029749088
+  }
+]

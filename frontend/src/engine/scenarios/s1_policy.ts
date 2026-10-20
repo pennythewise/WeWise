@@ -1,3 +1,4 @@
+import { SIM_PROOFS, anchorEvents } from './chain';
 import { L } from '../l';
 import { SAMPLE_POLICY_FIELDS } from '@/mock/fixtures';
 import { at, chip, cid, done, step, tool, understand, type TurnScript } from '../script';
@@ -47,14 +48,15 @@ export const s1Confirm: TurnScript = {
       at(1000, { type: 'plan.step.done', stepId: 'reindex' }),
       at(1050, { type: 'verify.result', citationsOk: true, numbersOk: true, citations: ['HS-4.1'] }),
       at(1100, { type: 'ui.card', card: { kind: 'PolicySummaryCard', id: cid('summary'), data: { policyId: 'pol_mei_health_01' } } }),
-      at(1250, {
+      ...anchorEvents(1120, SIM_PROOFS.s1),
+      at(1450, {
         type: 'message.final',
         text: corrected
           ? L('Thanks. I updated the annual limit to ¥2,000,000 and I\'ll use it in every answer.', '谢谢。我已把年度限额更正为 ¥2,000,000，之后所有回答都会采用。')
           : L('All fields confirmed. I\'ll use them in every answer.', '全部字段已确认，之后所有回答都会采用。'),
         chips: [chip(L('Am I covered for dengue hospitalisation?', '登革热住院在保障范围内吗？'), L('Am I covered for dengue hospitalisation?', '登革热住院在保障范围内吗？')), chip(L('Check my gaps', '检查我的保障缺口'), L('Check my gaps', '检查我的保障缺口'))],
       }),
-      done(1300),
+      done(1500),
     ];
   },
 };

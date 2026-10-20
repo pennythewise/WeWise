@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import * as Tabs from '@radix-ui/react-tabs';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Badge, CardShell, EmptyState, Notice } from '@/components/ui';
+import { Badge, BigStat, CardShell, EmptyState, KeyValueList, Notice, Segmented } from '@/components/ui';
+import { daysUntil } from '@/mock';
+import { L } from '@/engine/l';
 import { InsurerMark } from '@/components/InsurerMark';
 import { INSURER_DISCLAIMER, insurerById } from '@/mock/insurers';
 import { policyById } from '@/mock/policies';
@@ -25,37 +26,42 @@ export function PolicyDetail() {
   const [q, setQ] = useState('');
   const [ctype, setCtype] = useState<ClauseType | 'all'>('all');
   const [open, setOpen] = useState<string | null>(null);
+  const [tabId, setTabId] = useState<'summary' | 'clauses' | 'gaps'>('summary');
+  const [copied, setCopied] = useState(false);
   if (!p) return <EmptyState icon="file" title={t('policies.notFound')} text={t('policies.notFoundText')} />;
   const clauses = clausesFor(p.id).filter((c) => (ctype === 'all' || c.type === ctype) && (q === '' || (tx(c.title) + tx(c.text) + c.id).toLowerCase().includes(q.toLowerCase())));
   const ask = () => {
     useAgentStore.getState().setDraft(p.type === 'medical' ? t('policies.askMedical') : t('policies.askGeneric', { name: tx(p.product) }));
     navigate('/ask');
   };
-  const tab = 'min-h-touch flex-1 border-b-2 border-transparent text-[14px] font-medium text-muted data-[state=active]:border-primary data-[state=active]:font-semibold data-[state=active]:text-primary';
   return (
     <div className="space-y-4" data-screen="policyDetail">
-      <div className="flex items-center gap-3">
-        <InsurerMark id={p.insurerId} size={44} />
-        <div className="min-w-0"><h2 className="text-[18px] font-semibold leading-tight text-ink">{tx(p.product)}</h2><p className="text-xs text-muted">{lang === 'zh' ? insurerById(p.insurerId).zh : insurerById(p.insurerId).name} · {p.policyNo}</p></div>
-      </div>
-      <button type="button" className="btn-primary w-full" onClick={ask}>{t('policies.ask')}</button>
-      <Tabs.Root defaultValue="summary">
-        <Tabs.List className="flex border-b border-cardline bg-white" aria-label={tx(p.product)}>
-          {(['summary', 'clauses', 'gaps'] as const).map((k) => <Tabs.Trigger key={k} value={k} className={tab}>{t(`policies.tabs.${k}`)}</Tabs.Trigger>)}
-        </Tabs.List>
-
-        <Tabs.Content value="summary" className="space-y-3 pt-4 outline-none">
+      <section className="card space-y-4 shadow-card">
+        <div className="flex items-start gap-3">
+          <InsurerMark id={p.insurerId} size={44} />
+          <div className="min-w-0 flex-1"><h2 className="text-[18px] font-semibold leading-tight text-ink">{tx(p.product)}</h2><p className="text-xs text-muted">{lang === 'zh' ? insurerById(p.insurerId).zh : insurerById(p.insurerId).name}</p></div>
+          <BigStat value={Math.max(0, daysUntil(p.renewal))} tone={daysUntil(p.renewal) <= 60 ? 'warn' : 'neutral'} caption={tx(L('days remaining', '天后到期'))} />
+        </div>
+        <div className="flex items-center justify-between rounded-input bg-wash px-3 py-2.5 text-[13px]">
+          <span className="min-w-0"><span className="block text-xs text-muted">{tx(L('Policy number', '保单号'))}</span><span className="font-semibold tabular-nums text-ink">{p.policyNo}</span></span>
+          <button type="button" className="min-h-touch px-2 text-[13px] font-semibold text-primary" onClick={() => { void navigator.clipboard?.writeText(p.policyNo); setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{copied ? tx(L('Copied', '已复制')) : tx(L('Copy', '复制'))}</button>
+        </div>
+        <button type="button" className="btn-primary w-full" onClick={ask}>{t('policies.ask')}</button>
+      </section>
+      <Segmented label={tx(p.product)} value={tabId} onChange={setTabId} options={(['summary', 'clauses', 'gaps'] as const).map((k) => ({ id: k, label: t(`policies.tabs.${k}`) }))} />
+      <div>
+        {tabId === 'summary' && <div className="space-y-3 pt-1">
           <CardShell>
-            <dl className="divide-y divide-cardline text-[13px]">
-              {p.keyTerms.map((k, i) => <div key={i} className="flex justify-between gap-3 py-2"><dt className="text-muted">{tx(k.label)}</dt><dd className="text-right font-semibold text-ink">{tx(k.value)}</dd></div>)}
-              <div className="flex justify-between gap-3 py-2"><dt className="text-muted">{t(p.status === 'upcoming' ? 'policies.coverPeriod' : 'policies.renews')}</dt><dd className="text-right font-semibold text-ink">{p.status === 'upcoming' ? `${date(p.inception, false)} – ${date(p.renewal)}` : date(p.renewal)}</dd></div>
-            </dl>
+            <KeyValueList rows={[
+              ...p.keyTerms.map((k) => ({ k: tx(k.label), v: tx(k.value) })),
+              { k: t(p.status === 'upcoming' ? 'policies.coverPeriod' : 'policies.renews'), v: p.status === 'upcoming' ? `${date(p.inception, false)} – ${date(p.renewal)}` : date(p.renewal) },
+            ]} />
           </CardShell>
           <p className="text-[11px] leading-snug text-muted">{tx(INSURER_DISCLAIMER)}</p>
           {p.type === 'travel' && <TravelLocal />}
-        </Tabs.Content>
+        </div>}
 
-        <Tabs.Content value="clauses" className="space-y-3 pt-4 outline-none">
+        {tabId === 'clauses' && <div className="space-y-3 pt-1">
           <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('policies.search')} aria-label={t('policies.search')} className="min-h-[44px] w-full rounded-input border border-line bg-white px-3 text-[14px]" />
           <div className="flex flex-wrap gap-1.5" role="group" aria-label={t('policies.filterClause')}>
             {(['all', ...CLAUSE_TYPES] as const).map((x) => <button key={x} type="button" aria-pressed={ctype === x} onClick={() => setCtype(x)} className={`min-h-[36px] rounded-full border px-3 text-xs font-medium ${ctype === x ? 'border-primary bg-primary text-white' : 'border-secline bg-white text-primary'}`}>{x === 'all' ? t('policies.all') : t(`policies.clauseType.${x}`)}</button>)}
@@ -72,13 +78,13 @@ export function PolicyDetail() {
             ))}
           </ul>
           {clauses.length === 0 && <p className="text-center text-[13px] text-muted">{t('policies.noClauses')}</p>}
-        </Tabs.Content>
+        </div>}
 
-        <Tabs.Content value="gaps" className="space-y-3 pt-4 outline-none">
+        {tabId === 'gaps' && <div className="space-y-3 pt-1">
           {p.gap ? <Notice tone="warn">{tx(p.gap)}</Notice> : <Notice tone="ok">{t('policies.noGap')}</Notice>}
           <button type="button" className="btn-secondary w-full" onClick={() => { useAgentStore.getState().setDraft(t('chat.chips.gapSend')); navigate('/ask'); }}>{t('policies.gapCheck')}</button>
-        </Tabs.Content>
-      </Tabs.Root>
+        </div>}
+      </div>
     </div>
   );
 }

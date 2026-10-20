@@ -4,10 +4,12 @@ import { AppIcon } from '@/components/AppIcon';
 import { matchRoute } from '@/app/routes';
 import type { LayoutMode } from './useBreakpoint';
 import { useUiStore } from '@/store';
+import logo from '@/assets/webank-logo.png';
 
 /** In-app header: ☰ (phone) / back, title, ⓘ (phone). */
 export function AppHeader({ mode }: { mode: LayoutMode }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const zh = i18n.language === 'zh';
   const { pathname } = useLocation();
   const meta = matchRoute(pathname);
   const { setNavSheetOpen, setInspectorOpen } = useUiStore();
@@ -26,9 +28,24 @@ export function AppHeader({ mode }: { mode: LayoutMode }) {
             <AppIcon name="back" />
           </Link>
         )}
-        <h1 className={`min-w-0 flex-1 py-1 text-[17px] font-semibold leading-tight text-ink ${phone || meta.parent ? '' : 'pl-3'}`}>
-          {t(`screens.${meta.key}.title`)}
+        <h1 className={`flex min-w-0 flex-1 items-center gap-2 py-1 text-[17px] font-semibold leading-tight text-ink ${phone || meta.parent ? '' : 'pl-3'}`}>
+          {meta.key === 'home' && (
+            <>
+              <img src={logo} alt="WeBank 微众银行" className="h-5 w-auto shrink-0 object-contain" />
+              <span className="shrink-0 rounded-full bg-wash px-2 py-0.5 text-[13px] font-semibold text-primary">微晓</span>
+            </>
+          )}
+          <span className={meta.key === 'home' ? 'sr-only' : 'truncate'}>{t(`screens.${meta.key}.title`)}</span>
         </h1>
+        <button type="button" onClick={() => i18n.changeLanguage(zh ? 'en' : 'zh')} aria-label={zh ? 'Switch to English' : '切换到中文'}
+          className="min-h-touch shrink-0 rounded-full border border-line px-2.5 text-[13px] font-semibold text-primary" lang={zh ? 'en' : 'zh-CN'}>
+          {zh ? 'EN' : '中文'}
+        </button>
+        {meta.key !== 'profile' && (
+          <Link to="/profile" className="icon-btn" aria-label={t('screens.profile.title')}>
+            <span aria-hidden="true" className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-[13px] font-semibold text-white">M</span>
+          </Link>
+        )}
         {phone && (
           <button type="button" className="icon-btn text-primary" aria-label={t('header.inspector')} onClick={() => setInspectorOpen(true)}>
             <AppIcon name="info" />

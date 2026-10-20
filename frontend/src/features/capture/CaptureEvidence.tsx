@@ -86,18 +86,20 @@ export function CaptureEvidence() {
           {!ready && <span className="absolute inset-x-6 top-0 h-0.5 animate-scan bg-[#8CA3EF] shadow-[0_0_12px_#8CA3EF]" />}
           <span className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/80" />
         </div>
+        <p className="pointer-events-none absolute inset-x-4 bottom-4 rounded-full bg-black/55 px-4 py-2 text-center text-[13px] leading-snug text-white backdrop-blur" aria-hidden="true">{done ? t('capture.allDone') : tx(step.guide)}</p>
         {flash && <div className="absolute inset-0 bg-white" />}
       </div>
 
-      <p className="rounded-input border border-secline bg-bluewash px-3 py-2 text-[13px] leading-snug text-ink" aria-live="polite"><strong>{done ? '' : `${tx(step.title)} · `}</strong>{done ? t('capture.allDone') : tx(step.guide)}</p>
+      <p className="rounded-input border border-secline bg-bluewash px-3 py-2 text-[13px] leading-snug text-ink" aria-live="polite"><strong>{done ? t('capture.allDone') : tx(step.title)}</strong>{!done && <span className="sr-only"> · {tx(step.guide)}</span>}</p>
 
       {msg && <Notice tone="warn">{msg}</Notice>}
 
       {!done ? (
-        <div className="flex gap-2">
-          <button type="button" onClick={shutter} className="btn-primary flex-1"><AppIcon name="scan" size={18} />{t('capture.shoot')}</button>
+        <div className="flex items-center justify-between rounded-card bg-ink px-6 py-4">
           <input ref={fileInput} type="file" accept="image/*" className="hidden" onChange={upload} aria-label={t('capture.upload')} />
-          <button type="button" onClick={() => fileInput.current?.click()} className="btn-secondary"><AppIcon name="file" size={18} />{t('capture.upload')}</button>
+          <button type="button" onClick={() => fileInput.current?.click()} className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 text-white" aria-label={t('capture.upload')}><AppIcon name="file" size={22} /></button>
+          <button type="button" onClick={shutter} aria-label={t('capture.shoot')} className="flex h-[72px] w-[72px] items-center justify-center rounded-full border-4 border-white p-1 active:scale-95 transition-transform"><span className={`block h-full w-full rounded-full ${ready ? 'bg-white' : 'bg-white/60'}`} /></button>
+          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 text-[13px] font-semibold tabular-nums text-white">{Math.min(okIds.length + 1, STEPS.length)}/{STEPS.length}</span>
         </div>
       ) : null}
 
