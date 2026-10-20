@@ -29,8 +29,11 @@ try {
   console.log(`Created sandbox ${NAME}`);
 }
 
-await run(sandbox, 'Directories and system libraries',
-  'mkdir -p /vercel/WeWise /vercel/wewise-data && chown -R "${SUDO_USER:-vercel-sandbox}" /vercel/WeWise /vercel/wewise-data; '
+const who = await sandbox.runCommand({ cmd: 'id', args: ['-un'] });
+const user = (await who.stdout()).trim();
+if (!/^[a-z_][a-z0-9_-]*$/.test(user)) throw new Error(`Unexpected sandbox user: ${user}`);
+await run(sandbox, `Directories (owned by ${user}) and system libraries`,
+  `mkdir -p /vercel/WeWise /vercel/wewise-data && chown -R ${user} /vercel/WeWise /vercel/wewise-data; `
   + '(command -v dnf >/dev/null && dnf install -y -q git mesa-libGL glib2 >/dev/null) || (command -v apt-get >/dev/null && apt-get update -qq && apt-get install -y -qq git libgl1 libglib2.0-0 >/dev/null) || true',
   { sudo: true });
 await run(sandbox, `Checkout ${revision}`,
