@@ -5,11 +5,12 @@ import { AppIcon } from '@/components/AppIcon';
 import { Badge, CardShell, Notice } from '@/components/ui';
 import { useTx } from '@/i18n/useTx';
 import { useClaimStore } from '../claims/claimStore';
-import { EvidenceScene } from './EvidenceScene';
+import { queryFlags } from '@/lib';
+import { MockCamera, mockShot } from './MockCamera';
 import { READY_AFTER_MS, STEPS } from './captureSteps';
 import { useCaptureStore } from './captureStore';
 
-/** C8 AR-assisted evidence capture (frontend mock): guided shots over a synthetic scene or the device camera. */
+/** C8 AR-assisted evidence capture (frontend mock): guided shots over the device camera, or AI-generated stand-in photos when there is no camera or ?mockcam=1. */
 export function CaptureEvidence() {
   const { t } = useTranslation();
   const { tx } = useTx();
@@ -33,16 +34,16 @@ export function CaptureEvidence() {
   }, [step.id]);
   useEffect(() => { if (video.current && cam) video.current.srcObject = cam; }, [cam]);
   const fileInput = useRef<HTMLInputElement>(null);
-  // Open the device camera as soon as the screen opens; the synthetic scene stays as the fallback when it is denied or missing.
+  // Open the device camera as soon as the screen opens (unless ?mockcam=1); the stand-in photos are the fallback when it is denied or missing.
   const alive = useRef(true);
-  useEffect(() => { alive.current = true; void useCamera(); return () => { alive.current = false; }; }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { alive.current = true; if (!queryFlags.mockCam()) void useCamera(); return () => { alive.current = false; }; }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => () => cam?.getTracks().forEach((tr) => tr.stop()), [cam]);
 
   const shutter = () => {
     setFlash(true); setTimeout(() => setFlash(false), 140);
     const time = '14:3' + (2 + okIds.length);
-    if (!ready) { add({ stepId: step.id, ok: false, time, reason: 'early' }); setMsg(t('capture.blurry')); return; }
-    add({ stepId: step.id, ok: true, time, src: frame() }); setMsg(null);
+    if (!ready) { add({ stepId: step.id, ok: false, time, reason: 'early', src: cam ? frame() : mockShot(step.id) }); setMsg(t('capture.blurry')); return; }
+    add({ stepId: step.id, ok: true, time, src: cam ? frame() : mockShot(step.id) }); setMsg(null);
   };
   /** Snapshot of the live camera view, kept small for the thumbnail. */
   const frame = () => {
@@ -63,13 +64,13 @@ export function CaptureEvidence() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
       if (alive.current) setCam(stream); else stream.getTracks().forEach((tr) => tr.stop()); // screen closed while the permission prompt was open
-    } catch { setMsg(t('capture.noCamera')); }
+    } catch { /* no camera or permission denied: the stand-in photos are used */ }
   };
   const attachAll = () => { attach(); useClaimStore.getState().addEvidence(okIds.length); };
 
   return (
     <div className="space-y-4" data-screen="capture">
-      <Notice tone="info">{t('capture.demo')}</Notice>
+      <Notice tone="info">{t(cam ? 'capture.demoCamera' : 'capture.demo')}</Notice>
 
       <div className="flex items-center justify-between gap-2">
         <Badge tone={ready ? 'ok' : 'warn'} icon={ready ? 'check' : 'clock'}>{ready ? tx(step.ready) : t('capture.holdSteady')}</Badge>
@@ -77,7 +78,7 @@ export function CaptureEvidence() {
       </div>
 
       <div className="relative aspect-[4/5] overflow-hidden rounded-card border border-cardline bg-ink" data-testid="ar-viewport">
-        {cam ? <video ref={video} autoPlay playsInline muted className="h-full w-full object-cover" /> : <EvidenceScene {...step.zoom} />}
+        {cam ? <video ref={video} autoPlay playsInline muted className="h-full w-full object-cover" /> : <MockCamera stepId={step.id} ready={ready} />}
         {/* AR overlay */}
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           {['left-4 top-4 border-l-4 border-t-4', 'right-4 top-4 border-r-4 border-t-4', 'bottom-4 left-4 border-b-4 border-l-4', 'bottom-4 right-4 border-b-4 border-r-4'].map((c) => (
@@ -109,7 +110,7 @@ export function CaptureEvidence() {
             const shot = shots.find((x) => x.stepId === s.id);
             return (
               <li key={s.id} className="overflow-hidden rounded-input border border-cardline bg-white" data-shot={s.id} data-ok={shot?.ok ? '1' : shot ? '0' : ''}>
-                <div className="relative h-20 overflow-hidden bg-wash">{shot ? (shot.src ? <img src={shot.src} alt="" className="h-full w-full object-cover" /> : <EvidenceScene {...s.zoom} className="!transition-none" />) : <span className="absolute inset-0 flex items-center justify-center text-muted"><AppIcon name="scan" size={22} /></span>}
+                <div className="relative h-20 overflow-hidden bg-wash">{shot ? <img src={shot.src ?? mockShot(s.id)} alt="" className={`h-full w-full object-cover ${shot.ok ? '' : 'blur-[3px]'}`} /> : <span className="absolute inset-0 flex items-center justify-center text-muted"><AppIcon name="scan" size={22} /></span>}
                   {shot && !shot.ok && <span className="absolute inset-0 bg-white/60 backdrop-blur-sm" />}</div>
                 <div className="space-y-1 px-2.5 py-2">
                   <p className="text-xs font-semibold text-ink">{tx(s.title)}</p>
